@@ -510,7 +510,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, GoogleAuthProvider, signInWithRedirect } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getDatabase, ref, query, limitToLast, push, onChildAdded, onChildRemoved, set, child, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
     // Your web app's Firebase configuration
@@ -563,26 +563,26 @@
 
     // event
     sign_google.addEventListener("click", () => {
-      signInWithPopup(getAuth(), new GoogleAuthProvider())
+      signInWithRedirect(auth, provider);
+      getRedirectResult(auth)
         .then((result) => {
-          // User signed in successfully
-          console.log(result);
-        })
-        .catch((error) => {
-          if (error.code === "auth/account-exists-with-different-credential") {
-            // The pending Google credential.
-            let pendingCred = error.credential;
-            console.log(pendingCred);
+          // This gives you a Google Access Token. You can use it to access Google APIs.
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
 
-            // Step 3: Save the pending credential in temporary storage.
-
-            // Step 4: Let the user know that they already have an account
-            // but with a different provider, and let them choose another
-            // sign-in method.
-          } else {
-            // Handle other errors
-            console.error(error);
-          }
+          // The signed-in user info.
+          const user = result.user;
+          // IdP data available using getAdditionalUserInfo(result)
+          // ...
+        }).catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.customData.email;
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          // ...
         });
     });
     sign_action.addEventListener("click", () => {
