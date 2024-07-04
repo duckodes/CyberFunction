@@ -30,6 +30,7 @@
           <div class="sign-switcher">Register</div>
         </div>
         <div class="sign-action">Sign in</div>
+        <div class="sign-google">Sign in with google</div>
       </div>
     </div>
     <div class="canvas">
@@ -509,7 +510,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getDatabase, ref, query, limitToLast, push, onChildAdded, onChildRemoved, set, child, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
     // Your web app's Firebase configuration
@@ -526,6 +527,7 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
     const db = getDatabase();
 
     // data
@@ -542,6 +544,7 @@
     const password = document.querySelector('.password');
     const sign_switcher = document.querySelector('.sign-switcher');
     const sign_action = document.querySelector('.sign-action');
+    const sign_google = document.querySelector('.sign-google');
     const canvas = document.querySelector('.canvas');
     const lobby = document.querySelector('.lobby');
     const messages = document.getElementById("messages");
@@ -555,9 +558,33 @@
     // var
     let sign_status = false;
 
+    // set language
+    auth.useDeviceLanguage();
+
     // event
+    sign_google.addEventListener("click", () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;
+          // IdP data available using getAdditionalUserInfo(result)
+          // ...
+        }).catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.customData.email;
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          // ...
+        });
+    });
     sign_action.addEventListener("click", () => {
-      sign_status?createUser():signIn();
+      sign_status ? createUser() : signIn();
     });
     sign_switcher.addEventListener("click", () => {
       if (!sign_status) {
@@ -581,7 +608,7 @@
     document.body.addEventListener("keyup", (e) => {
       if (e.key === "Enter") {
         if (document.querySelector('.sign-action')) {
-          sign_status?createUser():signIn();
+          sign_status ? createUser() : signIn();
         } else if (lobby.style.display === 'flex') {
           sendMessage();
         }

@@ -110,6 +110,22 @@ body {
   border: 1px solid #fff5;
 }
 
+.sign-google {
+  cursor: pointer;
+  color: #fff;
+  text-align: center;
+  border: 1px solid #fff7;
+  padding: 5px;
+}
+
+.sign-google:hover {
+  color: #befffa;
+}
+
+.sign-google:active {
+  border: 1px solid #fff5;
+}
+
 .canvas {
   display: none;
   position: fixed;
