@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="js/p5.js"></script>
+  <script src="js/circuitboardgenerator.js"></script>
+
+  <title>Cyber Func Online</title>
+
+  <!-- HTML -->
+
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/default.css">
+  <link rel="stylesheet" href="css/circuitboardgenerator.css">
+  <link rel="stylesheet" href="https://lib.duckode.com/css/contextmenuutils.css">
+</head>
+
+<body>
+  <app>
+    <div class="sign-container">
+      <div class="sign">
+        <input class="account" type="text" placeholder="Email/Username..">
+        <input class="password" type="password" placeholder="password..">
+        <div class="sign-switch">
+          <div class="sign-switcher">Register</div>
+        </div>
+        <div class="sign-action">Sign in</div>
+      </div>
+    </div>
+    <div class="canvas">
+      <div class="nav">
+        <div class="nav-username">
+          用戶名稱<br>
+          <div class="en-set">
+            USER NAME
+          </div>
+        </div>
+        <div class="nav-wallet">
+          <div class="nav-wallet-btc-data">
+            0
+          </div>
+          &ensp;BTC&emsp;
+          <div class="nav-wallet-etc-data">
+            0
+          </div>
+          &ensp;ETC
+        </div>
+        <div class="nav-guide">
+          嚮導 / GUIDELINES
+        </div>
+      </div>
+      <div class="content">
+        <div class="map" id="idrag-map">
+          <div class="map-b">
+            <div class="map-circle">
+              ◯
+            </div>
+            <div class="map-me">
+              ◭
+            </div>
+            <div class="map-enemies"></div>
+            <div class="map-enemies"></div>
+            <div class="map-enemies"></div>
+            <div class="map-enemies"></div>
+            <div class="map-enemies"></div>
+            <div class="map-info">
+              <div class="map-info-border">
+                <div class="map-info-avt"></div>
+                <div class="map-info-title">MS-NAME</div>
+              </div>
+            </div>
+            <div class="gameover">
+              <div class="gameover-border">
+                GAMEOVER
+              </div>
+              <div class="gameover-info">
+                GAME INFO
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="battle" id="idrag-battle">
+          <div class="battle-top-block"></div>
+          <div class="battle-bg"></div>
+          <div class="battle-exit">&#60;&#45; 逃跑</div>
+          <div class="container">
+            <div class="enemy-hp">
+              <div class="enemy-ui-hp-base">
+              </div>
+              <div class="enemy-ui-hp">
+              </div>
+            </div>
+            <div class="battle-enemy">
+            </div>
+            <div class="reroll">
+              <input type="range" min="0" max="10" step="any" value="0">
+              <div>
+                &#45;&#62; 拆除晶片
+              </div>
+            </div>
+            <div class="battle-me-boxes">
+              <div class="battle-me-box">
+                <div class="player-dmg en-set">
+                  0%
+                </div>
+                頭盔
+                <div class="en-set">
+                  HELMET
+                </div>
+                <div class="battle-helmet">
+                  N/A
+                </div>
+              </div>
+              <div class="battle-me-box">
+                <div class="player-dmg en-set">
+                  0%
+                </div>
+                上衣
+                <div class="en-set">
+                  JACKET
+                </div>
+                <div class="battle-jacket">
+                  N/A
+                </div>
+              </div>
+              <div class="battle-me-box">
+                <div class="player-dmg en-set">
+                  0%
+                </div>
+                左手
+                <div class="en-set">
+                  LEFT WEAPON
+                </div>
+                <div class="battle-weapon-l">
+                  N/A
+                </div>
+              </div>
+              <div class="battle-me-box">
+                <div class="player-dmg en-set">
+                  0%
+                </div>
+                右手
+                <div class="en-set">
+                  RIGHT WEAPON
+                </div>
+                <div class="battle-weapon-r">
+                  N/A
+                </div>
+              </div>
+              <div class="battle-me-box">
+                <div class="player-dmg en-set">
+                  0%
+                </div>
+                腿掛
+                <div class="en-set">
+                  LEGSTRAP
+                </div>
+                <div class="battle-legstrap">
+                  N/A
+                </div>
+              </div>
+              <div class="battle-me-box">
+                <div class="player-dmg en-set">
+                  0%
+                </div>
+                靴子
+                <div class="en-set">
+                  BOOTS
+                </div>
+                <div class="battle-boots">
+                  N/A
+                </div>
+              </div>
+            </div>
+            <div class="roll-container">
+              <div class="roll">載入晶片 X 2</div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-all-btn">
+            <div>
+              裝備<br>
+              <div class="en-set">
+                EQUIP
+              </div>
+            </div>
+          </div>
+          <div class="item-all-btn">
+            <div>
+              物品百科<br>
+              <div class="en-set">
+                ITEMS ENCYCLOPEDIA
+              </div>
+            </div>
+          </div>
+          <div class="item-all-btn">
+            <div>
+              商城<br>
+              <div class="en-set">
+                MALL
+              </div>
+            </div>
+          </div>
+          <div class="item-all-btn">
+            <div>
+              販賣機<br>
+              <div class="en-set">
+                VENDING MACHINE
+              </div>
+            </div>
+          </div>
+          <div class="equip">
+            <div class="en-set color-0">
+              頭盔
+              HELMET
+            </div>
+            <div class="en-set color-0">
+              上衣
+              JACKET
+            </div>
+            <div class="en-set color-0">
+              左手
+              LEFT WEAPON
+            </div>
+            <div class="en-set color-0">
+              右手
+              RIGHT WEAPON
+            </div>
+            <div class="en-set color-0">
+              腿掛
+              LEGSTRAP
+            </div>
+            <div class="en-set color-0">
+              靴子
+              BOOTS
+            </div>
+          </div>
+          <div class="encyclopedia">
+            <div class="item-all-btn">
+              <div>
+                頭盔<br>
+                <div class="en-set">
+                  HELMET
+                </div>
+              </div>
+            </div>
+            <div class="item-all-btn">
+              <div>
+                上衣<br>
+                <div class="en-set">
+                  JACKET
+                </div>
+              </div>
+            </div>
+            <div class="item-all-btn">
+              <div>
+                武器<br>
+                <div class="en-set">
+                  WEAPON
+                </div>
+              </div>
+            </div>
+            <div class="item-all-btn">
+              <div>
+                腿掛<br>
+                <div class="en-set">
+                  LEG STRAP
+                </div>
+              </div>
+            </div>
+            <div class="item-all-btn">
+              <div>
+                靴子<br>
+                <div class="en-set">
+                  BOOTS
+                </div>
+              </div>
+            </div>
+            <div class="back-btn">
+              &#60;&#45;
+            </div>
+          </div>
+
+          <div class="e-helmet">
+            <div class="item-all-btn">
+              <div>
+                初級普通頭盔<br>
+                <div class="en-set">
+                  BASIC STANDARD HELMET
+                </div>
+              </div>
+            </div>
+            <div class="item-all-btn">
+              <div>
+                克羅爾ㄧ型鋼盔<br>
+                <div class="en-set">
+                  KROLL TYPE I STEEL HELMET
+                </div>
+              </div>
+            </div>
+            <div class="back-btn">
+              &#60;&#45;
+            </div>
+          </div>
+
+          <div class="e-jacket">
+            <div class="item-all-btn">
+              <div>
+                初級普通戰甲<br>
+                <div class="en-set">
+                  BASIC STANDARD ARMOR
+                </div>
+              </div>
+            </div>
+
+            <div class="back-btn">
+              &#60;&#45;
+            </div>
+          </div>
+
+          <div class="e-weapon">
+            <div class="item-all-btn">
+              <div>
+                方圓十字盾<br>
+                <div class="en-set">
+                  SQUARE AND ROUND CROSS SHIELD
+                </div>
+              </div>
+            </div>
+            <div class="item-all-btn">
+              <div>
+                輕便水果刀<br>
+                <div class="en-set">
+                  LIGHTWEIGHT PARING KNIFE
+                </div>
+              </div>
+            </div>
+            <div class="item-all-btn">
+              <div>
+                中式文武菜刀<br>
+                <div class="en-set">
+                  CHINESE STYLE CHEF’S KNIFE
+                </div>
+              </div>
+            </div>
+            <div class="item-all-btn">
+              <div>
+                低伏電擊棒<br>
+                <div class="en-set">
+                  LOW-VOLTAGE STUN BATON
+                </div>
+              </div>
+            </div>
+            <div class="item-all-btn">
+              <div>
+                輕便手榴彈<br>
+                <div class="en-set">
+                  LIGHTWEIGHT GRENADE
+                </div>
+              </div>
+            </div>
+
+            <div class="back-btn">
+              &#60;&#45;
+            </div>
+          </div>
+
+          <div class="e-legstrap">
+            <div class="item-all-btn">
+              <div>
+                補損口服藥<br>
+                <div class="en-set">
+                  ORAL RESTORATIVE MEDICATION
+                </div>
+              </div>
+            </div>
+            <div class="item-all-btn">
+              <div>
+                止損帶<br>
+                <div class="en-set">
+                  STOP-LOSS BELT
+                </div>
+              </div>
+            </div>
+
+            <div class="back-btn">
+              &#60;&#45;
+            </div>
+          </div>
+
+          <div class="e-boots">
+            <div class="item-all-btn">
+              <div>
+                初級普通戰靴<br>
+                <div class="en-set">
+                  BASIC STANDARD COMBAT BOOTS
+                </div>
+              </div>
+            </div>
+
+            <div class="back-btn">
+              &#60;&#45;
+            </div>
+          </div>
+
+          <div class="e-info">
+            <div class="e-info-top">
+              <div class="e-info-img"></div>
+              <div class="e-info-type"></div>
+            </div>
+            <div class="back-btn e-info-back">
+              &#60;&#45;
+            </div>
+          </div>
+
+        </div>
+        <div class="stat">
+          <img src="/img/human.png" alt="" class="content-stat" draggable="false">
+          <div class="s-helmet"></div>
+          <div class="s-jacket"></div>
+          <div class="s-weapon-r"></div>
+          <div class="s-weapon-l"></div>
+          <div class="s-legstrap"></div>
+          <div class="s-boots"></div>
+        </div>
+        <div class="lobby">
+          <div id="messages"></div>
+          <div class="type-in">
+            <input id="message" placeholder="輸入訊息.." autocomplete="off">
+            <button id="submit">傳送</button>
+          </div>
+        </div>
+        <div class="settings">
+          <div class="settings-username">
+            <div>代號</div>
+            <input type="text">
+            <div class="username-update">✓</div>
+          </div>
+          <div class="logout">
+            登出
+            <div class="en-set">
+              LOGOUT
+            </div>
+          </div>
+        </div>
+        <!--content end-->
+      </div>
+
+      <div class="footer-container">
+        <div class="footer">
+          <div class="menu-btn">
+            <div>
+              地圖<br>
+              <div class="en-set">
+                MAP
+              </div>
+            </div>
+          </div>
+          <div class="menu-btn">
+            <div>
+              物品<br>
+              <div class="en-set">
+                ITEM
+              </div>
+            </div>
+          </div>
+          <div class="menu-btn">
+            <div>
+              狀態<br>
+              <div class="en-set">
+                STATE
+              </div>
+            </div>
+          </div>
+          <div class="menu-btn">
+            <div>
+              大廳<br>
+              <div class="en-set">
+                LOBBY
+              </div>
+            </div>
+          </div>
+          <div class="menu-btn">
+            <div>
+              設定<br>
+              <div class="en-set">
+                SETTINGS
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </app>
+  <script src="https://lib.duckode.com/js/storageutils.min.js"></script>
+  <script src="https://lib.duckode.com/js/dateutils.min.js"></script>
+  <script src="https://lib.duckode.com/js/contextmenuutils.min.js"></script>
+  <!-- Project -->
+  <script src="main.js"></script>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getDatabase, ref, query, limitToLast, push, onChildAdded, onChildRemoved, set, child, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyD1HnXKHrNIsSGJo7KaooVtZYbowuHR8uo",
+      authDomain: "source-c3817.firebaseapp.com",
+      databaseURL: "https://source-c3817-default-rtdb.firebaseio.com",
+      projectId: "source-c3817",
+      storageBucket: "source-c3817.appspot.com",
+      messagingSenderId: "262948457201",
+      appId: "1:262948457201:web:bae1b685432d4bed84b750"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase();
+
+    // data
+    let userID = null;
+    let username = null;
+
+    // ref
+    const lobbyRef = ref(db, 'lobby');
+    const limitlobbyRef = query(lobbyRef, limitToLast(10));
+
+    // element
+    const sign_container = document.querySelector('.sign-container');
+    const account = document.querySelector('.account');
+    const password = document.querySelector('.password');
+    const sign_switcher = document.querySelector('.sign-switcher');
+    const sign_action = document.querySelector('.sign-action');
+    const canvas = document.querySelector('.canvas');
+    const lobby = document.querySelector('.lobby');
+    const messages = document.getElementById("messages");
+    const message = document.getElementById("message");
+    const submit = document.getElementById("submit");
+    const logout = document.querySelector('.logout');
+    const username_update = document.querySelector('.username-update');
+    const settings_username_input = document.querySelector('.settings-username input[type=text]');
+    const nav_username = document.querySelector('.nav-username');
+
+    // var
+    let sign_status = false;
+
+    // event
+    sign_action.addEventListener("click", () => {
+      sign_status?createUser():signIn();
+    });
+    sign_switcher.addEventListener("click", () => {
+      if (!sign_status) {
+        sign_switcher.textContent = 'Sign in';
+        sign_action.textContent = 'Register';
+        sign_status = true;
+      } else {
+        sign_switcher.textContent = 'Register';
+        sign_action.textContent = 'Sign in';
+        sign_status = false;
+      }
+    });
+    message.addEventListener("focus", () => {
+      message.setAttribute('placeholder', '輸入訊息..');
+      message.style.setProperty('--message-placeholder-color', '');
+      message.style.setProperty('--message-placeholder-opacity', '0.5');
+    });
+    submit.addEventListener("click", () => {
+      sendMessage();
+    });
+    document.body.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        if (document.querySelector('.sign-action')) {
+          sign_status?createUser():signIn();
+        } else if (lobby.style.display === 'flex') {
+          sendMessage();
+        }
+      }
+    });
+    settings_username_input.addEventListener("input", () => {
+      if (auth.currentUser.displayName !== settings_username_input.value) {
+        username_update.style.display = 'flex';
+      } else {
+        username_update.style.display = '';
+      }
+    });
+    username_update.addEventListener("click", () => {
+      UpdateProfile(settings_username_input.value);
+      username_update.style.display = '';
+    });
+    logout.addEventListener("click", () => {
+      signOutUser();
+    });
+
+    // check if login
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+
+        userID = uid;
+        username = user.displayName;
+
+        sign_container.remove();
+        updateMessage();
+        canvas.style.display = 'block';
+
+        settings_username_input.value = user.displayName;
+        nav_username.innerHTML = `${user.displayName}<br><div class="en-set">USER NAME</div>`;
+
+        console.log(user);
+      } else {
+        // User is signed out
+      }
+    });
+
+    // use login function
+    function signIn() {
+      signInWithEmailAndPassword(auth, account.value, password.value)
+        .then((userCredential) => {
+          const user = userCredential.user;
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode);
+        });
+    }
+    function createUser() {
+      createUserWithEmailAndPassword(auth, account.value, password.value)
+        .then((userCredential) => {
+          UpdateProfile(auth.currentUser.email.replace(/@.*?(?=@|$)/g, ''));
+          signOutUser();
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode);
+        });
+    }
+    function signOutUser() {
+      signOut(auth).then(() => {
+        location.reload();
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+    function UpdateProfile(displayName) {
+      updateProfile(auth.currentUser, {
+        displayName: displayName
+      }).then(() => {
+        // Profile updated!
+        username = auth.currentUser.displayName;
+        settings_username_input.value = auth.currentUser.displayName;
+        nav_username.innerHTML = `${auth.currentUser.displayName}<br><div class="en-set">USER NAME</div>`;
+        console.log('Profile updated!');
+        // ...
+      }).catch((error) => {
+        // An error occurred
+        // ...
+        console.log(error);
+      });
+    }
+
+    // use message function
+    function updateMessage() {
+      // Listen on child List
+      onChildAdded(limitlobbyRef, (snapshot) => {
+        const data = snapshot.val();
+
+        if (data.uid !== userID) {
+          messages.innerHTML += `<div id='${snapshot.key}'><div class="msg-id">${data.who}</div><div class="msg-row"><div class="msg-msg">${data.message}</div><div class="msg-report">⚠︎</div></div></div>`;
+        } else {
+          messages.innerHTML += `<div id='${snapshot.key}'><div class="msg-id">*${data.who}</div><div class="msg-row"><div class="msg-msg">${data.message}</div><div class="msg-del">␐</div></div></div>`;
+        }
+        document.querySelectorAll(".msg-del").forEach(element => {
+          element.addEventListener("click", () => {
+            remove(child(lobbyRef, element.parentElement.parentElement.id));
+          });
+        });
+      });
+      onChildRemoved(limitlobbyRef, (snapshot) => {
+        document.getElementById(snapshot.key).innerHTML = '>>> SYSTEM DELETE';
+        setTimeout(() => {
+          document.getElementById(snapshot.key).remove();
+        }, 1000);
+      });
+    }
+    function setMessageData() {
+      set(push(lobbyRef), {
+        uid: userID,
+        who: username,
+        message: message.value
+      });
+      message.value = '';
+    }
+    function sendMessage() {
+      message.blur();
+      checkMessage(document.getElementById("message")).then(valid => {
+        if (valid) {
+          setMessageData();
+          lobby.scrollTo({
+            top: lobby.scrollHeight,
+            behavior: 'smooth'
+          });
+        }
+      }).catch(error => {
+        message.value = '';
+        message.style.setProperty('--message-placeholder-opacity', '1');
+        console.log(error);
+        message.setAttribute('placeholder', error);
+      });
+    }
+    function checkMessage(input) {
+      return new Promise((resolve, reject) => {
+        if (userID === null) {
+          reject('[⚠︎] please login account');
+          message.style.setProperty('--message-placeholder-color', '#f7d967');
+        } else if (/^\s+$/.test(input.value)) {
+          reject('[error] cannot consist solely of spaces');
+          message.style.setProperty('--message-placeholder-color', '#f00');
+        } else if (input.value.trim() === "") {
+          reject('[error] cannot be blank');
+          message.style.setProperty('--message-placeholder-color', '#f00');
+        } else {
+          resolve(true);
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
