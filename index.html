@@ -515,7 +515,7 @@
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyD1HnXKHrNIsSGJo7KaooVtZYbowuHR8uo",
+      apiKey: "AIzaSyA8hXpj7Jqo84IYASvibOT46r71WMSbN88",
       authDomain: "source-c3817.firebaseapp.com",
       databaseURL: "https://source-c3817-default-rtdb.firebaseio.com",
       projectId: "source-c3817",
@@ -563,43 +563,25 @@
 
     // event
     sign_google.addEventListener("click", () => {
-      try {
-        // Step 1: User tries to sign in using Google.
-        let result = signInWithPopup(getAuth(), new GoogleAuthProvider());
-      } catch (error) {
-        // Step 2: User's email already exists.
-        if (error.code === "auth/account-exists-with-different-credential") {
-          // The pending Google credential.
-          let pendingCred = error.credential;
-
-          // Step 3: Save the pending credential in temporary storage.
-
-          // Step 4: Let the user know that they already have an account
-          // but with a different provider, and let them choose another
-          // sign-in method.
-        }
-      }
-
-      // ...
-
-      try {
-        // Step 5: Sign the user in using their chosen method.
-        let result = signInWithPopup(getAuth(), userSelectedProvider);
-
-        // Step 6: Link to the Google credential.
-        // TODO: implement `retrievePendingCred` for your app.
-        let pendingCred = retrievePendingCred();
-
-        if (pendingCred !== null) {
-          // As you have access to the pending credential, you can directly call the
-          // link method.
-          let user = linkWithCredential(result.user, pendingCred);
-        }
-
-        // Step 7: Continue to app.
-      } catch (error) {
-        // ...
-      }
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;
+          // IdP data available using getAdditionalUserInfo(result)
+          // ...
+        }).catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.customData.email;
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          // ...
+        });
     });
     sign_action.addEventListener("click", () => {
       sign_status ? createUser() : signIn();
