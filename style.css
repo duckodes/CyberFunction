@@ -112,10 +112,15 @@ body {
 
 .sign-google {
   cursor: pointer;
+  background: rgb(100, 155, 255);
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: smaller;
   color: #fff;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid #fff7;
-  padding: 5px;
+  margin-top: 10px;
 }
 
 .sign-google:hover {
