@@ -573,6 +573,8 @@
           // The signed-in user info.
           const user = result.user;
           // IdP data available using getAdditionalUserInfo(result)
+          console.log(user);
+          UpdateProfile(auth.currentUser.email.replace(/@.*?(?=@|$)/g, ''));
           // ...
         }).catch((error) => {
           // Handle Errors here.
