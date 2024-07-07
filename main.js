@@ -29,6 +29,7 @@ var apputils = (function () {
     })
     evt.click('.menu-btn', 3, () => {
       showmenu(3);
+      document.querySelector('.lobby-hint').style.display = '';
     })
     evt.click('.menu-btn', 4, () => {
       showmenu(4);

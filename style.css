@@ -141,9 +141,9 @@ body {
 }
 
 .nav {
-  background: linear-gradient(to bottom, #c24347, transparent);
+  background: linear-gradient(to left, #c24347, transparent);
   color: #f7d967;
-  padding: 20px;
+  padding: 10px;
   margin-top: 5px;
   margin-left: 5px;
   margin-right: 5px;
@@ -182,7 +182,7 @@ body {
 
 .content {
   width: 100%;
-  height: 90dvh;
+  height: 100dvh;
   display: flex;
   justify-content: center;
 }
@@ -399,7 +399,7 @@ body {
 
 .battle-enemies-name {
   position: fixed;
-  top: 90px;
+  top: 70px;
   z-index: 2;
 }
 
@@ -985,4 +985,38 @@ body {
   text-shadow: 1px 1px 5px #3db3d0, 1px 1px 5px #c24347;
   width: 100%;
   text-align: center;
+}
+
+.lobby-hint {
+  display: none;
+  width: 10px;
+  height: 10px;
+  position: fixed;
+  bottom: 15px;
+  right: 30%;
+}
+
+.lobby-hint div {
+  background: #ffd95e;
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+  animation-name: lobby-hint;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes lobby-hint {
+  0% {
+    
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
