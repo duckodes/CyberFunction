@@ -1515,7 +1515,7 @@ const scrollmousedrag = (function () {
       isDragging = false;
     });
 
-    scrollContainer.addEventListener('touchstart', (e) => {
+    /*scrollContainer.addEventListener('touchstart', (e) => {
       isDragging = true;
       startX = e.touches[0].clientX - scrollContainer.getBoundingClientRect().left;
       startY = e.touches[0].clientY - scrollContainer.getBoundingClientRect().top;
@@ -1533,7 +1533,7 @@ const scrollmousedrag = (function () {
 
     document.addEventListener('touchend', () => {
       isDragging = false;
-    });
+    });*/
   }
 }())
 scrollmousedrag.idrag('idrag-map');
