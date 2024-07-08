@@ -141,7 +141,7 @@ body {
 }
 
 .nav {
-  background: linear-gradient(to left, #c24347, transparent);
+  background: linear-gradient(to bottom, #c24347, transparent);
   color: #f7d967;
   padding: 10px;
   margin-top: 5px;
