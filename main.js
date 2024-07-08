@@ -1181,7 +1181,7 @@ var apputils = (function () {
           display('.lobby', 0, '');
           display('.settings', 0, '');
 
-          textShadow('.menu-btn', 0, '1px 1px 5px #f7d967, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 0, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
           textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -1196,7 +1196,7 @@ var apputils = (function () {
           display('.lobby', 0, '');
           display('.settings', 0, '');
 
-          textShadow('.menu-btn', 0, '1px 1px 5px #f7d967, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 0, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
           textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -1214,7 +1214,7 @@ var apputils = (function () {
         display('.settings', 0, '');
 
         textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 1, '1px 1px 5px #f7d967, 1px 1px 5px #c24347');
+        textShadow('.menu-btn', 1, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
         textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -1238,7 +1238,7 @@ var apputils = (function () {
 
         textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 2, '1px 1px 5px #f7d967, 1px 1px 5px #c24347');
+        textShadow('.menu-btn', 2, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
         textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
@@ -1255,7 +1255,7 @@ var apputils = (function () {
         textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 3, '1px 1px 5px #f7d967, 1px 1px 5px #c24347');
+        textShadow('.menu-btn', 3, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
         textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
         textContent('.nav-guide', 0, '「大廳 Lobby」');
@@ -1272,7 +1272,7 @@ var apputils = (function () {
         textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 4, '1px 1px 5px #f7d967, 1px 1px 5px #c24347');
+        textShadow('.menu-btn', 4, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
 
         textContent('.nav-guide', 0, '「設定 Settings」');
         break;

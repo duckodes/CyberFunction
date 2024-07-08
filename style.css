@@ -135,6 +135,7 @@ body {
   display: none;
   position: fixed;
   background: linear-gradient(to right, #191325, #3db3d050, #191325);
+  background: linear-gradient(to right, #191325, #353535, #191325);
   width: 100dvw;
   height: 97.5dvh;
   border-radius: 10px;
@@ -142,6 +143,7 @@ body {
 
 .nav {
   background: linear-gradient(to bottom, #c24347, transparent);
+  background: linear-gradient(to bottom, #191325, transparent);
   color: #f7d967;
   padding: 10px;
   margin-top: 5px;
