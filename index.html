@@ -546,7 +546,9 @@
             </div>
           </div>
 
-          <div class="lobby-hint"><div></div></div>
+          <div class="lobby-hint">
+            <div></div>
+          </div>
         </div>
       </div>
 
@@ -562,7 +564,7 @@
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getDatabase, ref, query, limitToLast, push, onChildAdded, onChildRemoved, set, child, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import { getDatabase, ref, query, limitToFirst, limitToLast, push, onChildAdded, onChildRemoved, set, child, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
@@ -768,7 +770,7 @@
           <div id='${snapshot.key}'>
             <div class="msg-id">${data.who}</div>
             <div class="msg-row">
-              <div class="msg-msg">${data.message}</div>
+              <div class="msg-msg"></div>
               <div class="msg-report">⚠︎</div>
             </div>
             <div class="msg-time">${ToAMPMYMD(data.time)}</div>
@@ -778,12 +780,13 @@
           <div id='${snapshot.key}'>
             <div class="msg-id">*${data.who}</div>
             <div class="msg-row">
-              <div class="msg-msg">${data.message}</div>
+              <div class="msg-msg"></div>
               <div class="msg-del">␐</div>
             </div>
             <div class="msg-time">${ToAMPMYMD(data.time)}</div>
           </div>`;
         }
+        document.querySelector(`#${snapshot.key} .msg-row .msg-msg`).textContent = data.message;
         document.querySelectorAll(".msg-del").forEach(element => {
           element.addEventListener("click", () => {
             remove(child(lobbyRef, element.parentElement.parentElement.id));
@@ -792,25 +795,26 @@
       });
       onChildRemoved(limitlobbyRef, (snapshot) => {
         document.getElementById(snapshot.key).innerHTML = '>>> SYSTEM DELETE';
+        remove(child(lobbyRef, snapshot.key));
         setTimeout(() => {
           document.getElementById(snapshot.key).remove();
         }, 1000);
       });
     }
-    function setMessageData() {
+    function setMessageData(value) {
       set(push(lobbyRef), {
         time: Date.now(),
         uid: userID,
         who: username,
-        message: message.value
+        message: value
       });
-      message.value = '';
     }
     function sendMessage() {
       message.blur();
-      checkMessage(document.getElementById("message")).then(valid => {
-        if (valid) {
-          setMessageData();
+      checkMessage(message.value).then(value => {
+        if (value) {
+          setMessageData(value);
+          message.value = '';
           lobby.scrollTo({
             top: lobby.scrollHeight,
             behavior: 'smooth'
@@ -823,34 +827,24 @@
         message.setAttribute('placeholder', error);
       });
     }
-    function checkMessage(input) {
+    function checkMessage(value) {
       return new Promise((resolve, reject) => {
         if (userID === null) {
           reject('[⚠︎] please login account');
           message.style.setProperty('--message-placeholder-color', '#f7d967');
-        } else if (/^\s+$/.test(input.value)) {
+        } else if (/^\s+$/.test(value)) {
           reject('[error] cannot consist solely of spaces');
           message.style.setProperty('--message-placeholder-color', '#f00');
-        } else if (input.value.trim() === "") {
+        } else if (value.trim() === "") {
           reject('[error] cannot be blank');
           message.style.setProperty('--message-placeholder-color', '#f00');
         } else {
-          resolve(true);
+          resolve(value);
         }
       });
     }
 
     // use other function
-    function ToAMPM(timestamp) {
-      const date = new Date(timestamp);
-      let hours = date.getHours();
-      let minutes = date.getMinutes();
-      const period = hours >= 12 ? '下午' : '上午';
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      return `${period} ${hours}:${minutes}`;
-    }
     function ToAMPMYMD(timestamp) {
       const date = new Date(timestamp);
 
