@@ -302,7 +302,7 @@ body {
   background: linear-gradient(to bottom, #191338, #3db3d030, #191338);
   border: 2px solid #3db3d070;
   border-radius: 3px;
-  width: 150px;
+  width: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -319,13 +319,14 @@ body {
 
 .map-info-title {
   color: #c24347;
+  text-shadow: 1px 1px 5px #b32429, 1px 1px 5px #ff6f74;
   background-image: url('img/circuit_board.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   width: 100%;
   word-wrap: break-word;
-  font-size: 10px;
+  font-size: 16px;
 }
 
 .gameover {
@@ -431,6 +432,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 30px;
+  min-height: fit-content;
 }
 
 .enemy-hp {
@@ -480,6 +482,34 @@ body {
   font-size: 17px;
   font-family: SdglitchdemoRegular-YzROj, CyberwarRegular-7BX0E;
   padding-bottom: 3px;
+}
+
+.battle-me-info {
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('img/battle_me_info_512xw.png');
+  width: 70dvw;
+  height: 70dvw;
+  max-width: 500px;
+  max-height: 500px;
+  opacity: 0.2;
+  margin-bottom: 200px;
+  z-index: 1;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px;
+}
+
+.battle-me-info div {
+  width: 50%;
+  height: 50%;
+  font-size: 20px;
+  word-break: break-word;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-y: auto;
 }
 
 .roll-container {
@@ -543,7 +573,6 @@ body {
   max-width: 300px;
   height: 50px;
   margin: 10px;
-  margin-bottom: 200px;
   color: #1e588d;
   display: flex;
   align-items: center;
@@ -915,6 +944,15 @@ body {
 }
 
 .lan-en:hover {
+  background: #fff5;
+}
+
+.lan-jp {
+  font-size: x-small;
+  width: 100%;
+}
+
+.lan-jp:hover {
   background: #fff5;
 }
 

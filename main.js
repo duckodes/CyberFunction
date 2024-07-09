@@ -8,14 +8,15 @@ var apputils = (function () {
 
   var isBattle = false;
   function def() {
-    // set the first login num of menu
-    showmenu(JSON.parse(storageutils.get('menunum', JSON.stringify(4))));
 
     // settings language
-    fetch('lan/' + storageutils.get('apputils_lan', 'zh') + '.json')
+    fetch('lan/' + storageutils.get('apputils_lan', 'en') + '.json')
       .then(response => response.json())
       .then(data => {
         language_data = data;
+        // set the first login num of menu
+        showmenu(JSON.parse(storageutils.get('menunum', JSON.stringify(4))), data);
+
         document.querySelectorAll('.menu-btn-text')[0].textContent = data.footer.menuBtnText["0"];
         document.querySelectorAll('.menu-btn-text')[1].textContent = data.footer.menuBtnText["1"];
         document.querySelectorAll('.menu-btn-text')[2].textContent = data.footer.menuBtnText["2"];
@@ -63,6 +64,7 @@ var apputils = (function () {
         document.querySelector('.lan-now').textContent = data.settings.language.now;
         document.querySelector('.lan-zh').textContent = data.settings.language.options.zh;
         document.querySelector('.lan-en').textContent = data.settings.language.options.en;
+        document.querySelector('.lan-jp').textContent = data.settings.language.options.jp;
         document.querySelector('.logout').textContent = data.settings.logout;
 
         document.querySelectorAll('.battle-weapon-name')[0].textContent = data.item.equip.helmet;
@@ -75,8 +77,11 @@ var apputils = (function () {
         document.querySelector('.battle-exit').innerHTML = data.battle.exit + '&#60;';
         document.querySelector('.reroll div').innerHTML = '&#62; ' + data.battle.reroll;
         update_rolltimes_btn();
+        document.querySelector('.battle-me-info div').innerHTML = language_data.battle.loading;
 
         showEncyclopediaINFO(data);
+
+        equipItem(language_data);
 
         showItems(data);
       })
@@ -105,6 +110,12 @@ var apputils = (function () {
       document.querySelector('.lan-options').style.display = '';
       location.reload();
     });
+    document.querySelector('.lan-jp').addEventListener('click', () => {
+      setLanguage('jp');
+      document.querySelector('.lan-triangle').textContent = '▲';
+      document.querySelector('.lan-options').style.display = '';
+      location.reload();
+    });
 
     // events
     evt.click('.menu-btn', 0, () => {
@@ -113,13 +124,36 @@ var apputils = (function () {
       isBattle ? background_setup_loop.start() : background_setup_loop.stop();
     })
     evt.click('.menu-btn', 1, () => {
-      showmenu(1);
-      display('.e-helmet', 0, '');
-      display('.e-jacket', 0, '');
-      display('.e-weapon', 0, '');
-      display('.e-legstrap', 0, '');
-      display('.e-boots', 0, '');
-      display('.e-info', 0, '');
+      if (document.querySelector('.item').style.display === 'flex') {
+        showmenu(1);
+        display('.e-helmet', 0, '');
+        display('.e-jacket', 0, '');
+        display('.e-weapon', 0, '');
+        display('.e-legstrap', 0, '');
+        display('.e-boots', 0, '');
+        display('.e-info', 0, '');
+      } else {
+        display('.battle', 0, '');
+        display('.map', 0, '');
+        display('.item', 0, 'flex');
+        display('.stat', 0, '');
+        display('.lobby', 0, '');
+        display('.settings', 0, '');
+
+        document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#7ea4c1');
+        document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+
+        textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+        textShadow('.menu-btn', 1, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
+        textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+        textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+        textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+
+        textContent('.nav-guide', 0, language_data.nav.guide.item);
+      }
     })
     evt.click('.menu-btn', 2, () => {
       showmenu(2);
@@ -154,7 +188,7 @@ var apputils = (function () {
       display('.item-all-btn', 3, 'none');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, '「物品百科 ITEMS ENCYCLOPEDIA」');
+      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
     })
     evt.click('.back-btn', 0, () => {
       showmenu(1);
@@ -166,65 +200,65 @@ var apputils = (function () {
       display('.encyclopedia', 0, '');
       display('.e-helmet', 0, 'flex');
 
-      textContent('.nav-guide', 0, '「頭盔 HELMET」');
+      textContent('.nav-guide', 0, language_data.nav.guide.helmet);
     })
     evt.click('.back-btn', 1, () => {
       display('.e-helmet', 0, '');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, '「物品百科 ITEMS ENCYCLOPEDIA」');
+      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
     })
     // e-jacket
     evt.click('.item-all-btn', 1 + item_nums, () => {
       display('.encyclopedia', 0, '');
       display('.e-jacket', 0, 'flex');
 
-      textContent('.nav-guide', 0, '「上衣 JACKET」');
+      textContent('.nav-guide', 0, language_data.nav.guide.jacket);
     })
     evt.click('.back-btn', 2, () => {
       display('.e-jacket', 0, '');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, '「物品百科 ITEMS ENCYCLOPEDIA」');
+      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
     })
     // e-weapon
     evt.click('.item-all-btn', 2 + item_nums, () => {
       display('.encyclopedia', 0, '');
       display('.e-weapon', 0, 'flex');
 
-      textContent('.nav-guide', 0, '「武器 WEAPON」');
+      textContent('.nav-guide', 0, language_data.nav.guide.weapon);
     })
     evt.click('.back-btn', 3, () => {
       display('.e-weapon', 0, '');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, '「物品百科 ITEMS ENCYCLOPEDIA」');
+      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
     })
     // e-legstrap
     evt.click('.item-all-btn', 3 + item_nums, () => {
       display('.encyclopedia', 0, '');
       display('.e-legstrap', 0, 'flex');
 
-      textContent('.nav-guide', 0, '「腿掛 LEG STRAP」');
+      textContent('.nav-guide', 0, language_data.nav.guide.legStrap);
     })
     evt.click('.back-btn', 4, () => {
       display('.e-legstrap', 0, '');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, '「物品百科 ITEMS ENCYCLOPEDIA」');
+      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
     })
     // e-boots
     evt.click('.item-all-btn', 4 + item_nums, () => {
       display('.encyclopedia', 0, '');
       display('.e-boots', 0, 'flex');
 
-      textContent('.nav-guide', 0, '「靴子 BOOTS」');
+      textContent('.nav-guide', 0, language_data.nav.guide.boots);
     })
     evt.click('.back-btn', 5, () => {
       display('.e-boots', 0, '');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, '「物品百科 ITEMS ENCYCLOPEDIA」');
+      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
     })
 
     function showEncyclopediaINFO(languageData) {
@@ -273,27 +307,27 @@ var apputils = (function () {
             case '0':
               display('.e-helmet', 0, 'flex');
 
-              textContent('.nav-guide', 0, '「頭盔 HELMET」');
+              textContent('.nav-guide', 0, language_data.nav.guide.helmet);
               break;
             case '1':
               display('.e-jacket', 0, 'flex');
 
-              textContent('.nav-guide', 0, '「上衣 JACKET」');
+              textContent('.nav-guide', 0, language_data.nav.guide.jacket);
               break;
             case '2':
               display('.e-weapon', 0, 'flex');
 
-              textContent('.nav-guide', 0, '「武器 WEAPON」');
+              textContent('.nav-guide', 0, language_data.nav.guide.weapon);
               break;
             case '3':
               display('.e-legstrap', 0, 'flex');
 
-              textContent('.nav-guide', 0, '「腿掛 LEG STRAP」');
+              textContent('.nav-guide', 0, language_data.nav.guide.legStrap);
               break;
             case '4':
               display('.e-boots', 0, 'flex');
 
-              textContent('.nav-guide', 0, '「靴子 BOOTS」');
+              textContent('.nav-guide', 0, language_data.nav.guide.boots);
               break;
 
             default:
@@ -381,7 +415,7 @@ var apputils = (function () {
           defaultset(c);
           c.addEventListener('click', () => {
             display('.map-info', 0, 'flex');
-            document.querySelector('.map-info-title').innerHTML = language_data.enemies.name[randomEnemiesNum] + '<br>' + language_data.enemies.info[randomEnemiesNum] + '<br><br>' + '\'' + language_data.map.enemies.info.chipCode + '：<br>\'' + JSON.stringify(enemies_items[enemies_id], null, 2).toUpperCase().replace(/],/g, '],<br><br>').replace(/:/g, ' >>>').replace('{', '').replace('}', '<br><br>>> SYSTEM LOAD..');
+            document.querySelector('.map-info-title').innerHTML = language_data.enemies.name[randomEnemiesNum] + '<br>' + language_data.enemies.info[randomEnemiesNum] + '<br><br>' + '\'' + language_data.map.enemies.info.chipCode + '：<br>\'' + JSON.stringify(enemies_items[enemies_id], null, 2).toUpperCase().replace(/],/g, '],<br><br>').replace(/:/g, ' >>>').replace('{', '').replace('}', '<br><br>>> ' + language_data.map.enemies.info.loading);
           })
         })
         function defaultset(c) {
@@ -409,6 +443,7 @@ var apputils = (function () {
         isBattle = true;
         showmenu(0);
 
+        set_get_dmg_default();
         enemyRoll();
         ability_ui_update();
         update_ui_e_hp();
@@ -422,7 +457,6 @@ var apputils = (function () {
         document.querySelector('.p5Canvas').classList.add('inout');
         cellSize = Math.floor(Math.random() * 10) + 10;
         wireLength = Math.floor(Math.random() * 15) + 15;
-        console.log(cellSize + ':' + wireLength);
         recreate();
         setTimeout(() => {
           document.querySelector('.p5Canvas').classList.remove('inout');
@@ -513,8 +547,15 @@ var apputils = (function () {
       legstrap: ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'],
       boots: ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'],
     };
+    let currentEquipName = {
+      helmet: '',
+      jacket: '',
+      lweapon: '',
+      rweapon: '',
+      legstrap: '',
+      boots: ''
+    };
     let equip_data = JSON.parse(storageutils.get('equip_data', JSON.stringify([0, -1, -1, 1, -1, -1])));
-    equipItem();
     let battle_arr_data = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     let rolltimes = 2;
     let checkreroll_input = false;
@@ -744,8 +785,11 @@ var apputils = (function () {
     function gameover() {
       isBattle = false;
       showmenu(0);
+      if (document.getElementById(`asciiArt${enemies_id}`)) {
+        document.getElementById(`asciiArt${enemies_id}`).remove();
+      }
       enemies_id = -1;
-      get_dmg = [checkArr(item_data.helmet, 'N/A') ? -1 : 0, checkArr(item_data.jacket, 'N/A') ? -1 : 0, checkArr(item_data.lweapon, 'N/A') ? -1 : 0, checkArr(item_data.rweapon, 'N/A') ? -1 : 0, checkArr(item_data.legstrap, 'N/A') ? -1 : 0, checkArr(item_data.boots, 'N/A') ? -1 : 0];
+      set_get_dmg_default();
       get_dmg_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
       get_def_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
       get_rd_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
@@ -775,8 +819,8 @@ var apputils = (function () {
     function save_equipdata(n, n1) {
       equip_data[n] = n1;
       storageutils.set('equip_data', JSON.stringify(equip_data));
-      equipItem();
-      get_dmg = [checkArr(item_data.helmet, 'N/A') ? -1 : 0, checkArr(item_data.jacket, 'N/A') ? -1 : 0, checkArr(item_data.lweapon, 'N/A') ? -1 : 0, checkArr(item_data.rweapon, 'N/A') ? -1 : 0, checkArr(item_data.legstrap, 'N/A') ? -1 : 0, checkArr(item_data.boots, 'N/A') ? -1 : 0];
+      equipItem(language_data);
+      set_get_dmg_default();
       dmg_ui_update();
     }
     function setItemData(t, n, n1, n2, n3, n4, n5) {
@@ -794,7 +838,8 @@ var apputils = (function () {
     });
     let get_dmg_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     let get_def_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
-    let get_dmg = [checkArr(item_data.helmet, 'N/A') ? -1 : 0, checkArr(item_data.jacket, 'N/A') ? -1 : 0, checkArr(item_data.lweapon, 'N/A') ? -1 : 0, checkArr(item_data.rweapon, 'N/A') ? -1 : 0, checkArr(item_data.legstrap, 'N/A') ? -1 : 0, checkArr(item_data.boots, 'N/A') ? -1 : 0];
+    let get_dmg = [0, 0, 0, 0, 0, 0];
+    let set_get_dmg_default = () => { get_dmg = [checkArr(item_data.helmet, 'N/A') ? -1 : 0, checkArr(item_data.jacket, 'N/A') ? -1 : 0, checkArr(item_data.lweapon, 'N/A') ? -1 : 0, checkArr(item_data.rweapon, 'N/A') ? -1 : 0, checkArr(item_data.legstrap, 'N/A') ? -1 : 0, checkArr(item_data.boots, 'N/A') ? -1 : 0] };
     let get_rd_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     let e_get_dmg_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     let e_get_def_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
@@ -842,10 +887,6 @@ var apputils = (function () {
           }
           update_ui_e_box(0, 0);
           update_ui_e_box(1, 2);
-
-          console.log(e_get_dmg_status);
-          console.log(e_get_def_status);
-          console.log(e_get_dmg);
           break;
         case 1:
           document.querySelector('.enemy-ui-hp-base').style.background = '#f7d967';
@@ -883,10 +924,6 @@ var apputils = (function () {
           }
           update_ui_e_box(0, 0);
           update_ui_e_box(1, 3);
-
-          console.log(e_get_dmg_status);
-          console.log(e_get_def_status);
-          console.log(e_get_dmg);
           break;
         case 2:
           document.querySelector('.enemy-ui-hp-base').style.background = '#4b7e3f';
@@ -911,10 +948,6 @@ var apputils = (function () {
             opacity('.battle-enemy-box', 0, '0.3')
           }
           update_ui_e_box(0, 1);
-
-          console.log(e_get_dmg_status);
-          console.log(e_get_def_status);
-          console.log(e_get_dmg);
           break;
         case 3:
           document.querySelector('.enemy-ui-hp-base').style.background = '#b74e6a';
@@ -974,10 +1007,6 @@ var apputils = (function () {
           update_ui_e_box(0, 0);
           update_ui_e_box(1, 2);
           update_ui_e_box(2, 3);
-
-          console.log(e_get_dmg_status);
-          console.log(e_get_def_status);
-          console.log(e_get_dmg);
           break;
         default:
       }
@@ -1007,11 +1036,18 @@ var apputils = (function () {
         if (hctrl_p_to_e === -1) {
           hctrl_p_to_e = c;
           setcolor(c);
+          document.querySelector('.battle-me-info div').innerHTML =
+            c === 0 ? currentEquipName.helmet : c === 1 ? currentEquipName.jacket : c === 2 ? currentEquipName.lweapon : c === 3 ? currentEquipName.rweapon : c === 4 ? currentEquipName.legstrap : c === 5 ? currentEquipName.boots : null;
+          document.querySelector('.battle-me-info div').innerHTML += '<br><br>';
+          document.querySelector('.battle-me-info div').innerHTML += language_data.map.enemies.info.chipCode;
+          document.querySelector('.battle-me-info div').innerHTML +=
+            '<div style="font-size: 12px;width:100%;height: fit-content;">' + (c === 0 ? item_data.helmet : c === 1 ? item_data.jacket : c === 2 ? item_data.lweapon : c === 3 ? item_data.rweapon : c === 4 ? item_data.legstrap : c === 5 ? item_data.boots : null) + '</div>';
           get_hctrl = -1;
         } else {
           setTimeout(() => {
             hctrl_p_to_e = -1;
           }, 200);
+          document.querySelector('.battle-me-info div').innerHTML = language_data.battle.loading;
           setcolor(c, '#fff5');
           get_hctrl = c;
         }
@@ -1039,14 +1075,25 @@ var apputils = (function () {
         dmg_ui_update();
       }
     }
-    function equipItem() {
+    evt.click('.battle', 0, (e) => {
+      if (e.target.parentElement.className !== 'battle-me-box') {
+        hctrl_p_to_e = -1;
+        document.querySelector('.battle-me-info div').innerHTML = language_data.battle.loading;
+        document.querySelectorAll('.battle-me-box').forEach(element => {
+          element.style.background = '#fff5';
+        });
+      }
+    });
+    function equipItem(languageData) {
       // helmet
       switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[0]) {
         case -1:
           setItemData(item_data.helmet, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          currentEquipName.helmet = '';
           break;
         case 0:
           setItemData(item_data.helmet, '1%DEF', '1%RD', '1%DEF', '1%RD', '1%DEF', '1%RD');
+          currentEquipName.helmet = languageData.item.equipment.helmet["0"];
           break;
 
         default:
@@ -1056,6 +1103,7 @@ var apputils = (function () {
       switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[1]) {
         case -1:
           setItemData(item_data.jacket, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          currentEquipName.jacket = '';
           break;
 
         default:
@@ -1065,6 +1113,7 @@ var apputils = (function () {
       switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[2]) {
         case -1:
           setItemData(item_data.lweapon, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          currentEquipName.lweapon = '';
           break;
 
         default:
@@ -1074,9 +1123,11 @@ var apputils = (function () {
       switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[3]) {
         case -1:
           setItemData(item_data.rweapon, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          currentEquipName.rweapon = '';
           break;
         case 1:
           setItemData(item_data.rweapon, '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG')
+          currentEquipName.rweapon = languageData.item.equipment.weapon["1"];
           break;
 
         default:
@@ -1086,6 +1137,7 @@ var apputils = (function () {
       switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[4]) {
         case -1:
           setItemData(item_data.legstrap, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          currentEquipName.legstrap = '';
           break;
         default:
         // Tab to edit
@@ -1094,6 +1146,7 @@ var apputils = (function () {
       switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[5]) {
         case -1:
           setItemData(item_data.boots, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          currentEquipName.boots = '';
           break;
 
         default:
@@ -1245,6 +1298,8 @@ var apputils = (function () {
       }
       update_equip_color(b, n, item_id);
       b.addEventListener('click', (e) => {
+        if (isBattle)
+          return;
         contextmenuutils.init(document.body, (b2, c) => {
           ToMouse(c);
           c.style.border = '2px solid #3db3d050';
@@ -1253,7 +1308,7 @@ var apputils = (function () {
           c.style.background = 'linear-gradient(to bottom, #3db3d045, #191325)';
         })
         if (equip_data[n] === item_id) {
-          contextmenuutils.addItem('卸除', (c) => {
+          contextmenuutils.addItem(language_data.item.equip.contextmenu["0"], (c) => {
             defaultset(c);
             c.addEventListener("click", () => {
               save_equipdata(n, -1);
@@ -1261,7 +1316,7 @@ var apputils = (function () {
             })
           })
         } else {
-          contextmenuutils.addItem('裝備', (c) => {
+          contextmenuutils.addItem(language_data.item.equip.contextmenu["1"], (c) => {
             defaultset(c);
             c.addEventListener("click", () => {
               save_equipdata(n, item_id);
@@ -1304,7 +1359,7 @@ var apputils = (function () {
     update();
   }
 
-  function showmenu(n) {
+  function showmenu(n, languageData = language_data) {
     storageutils.set('menunum', JSON.stringify(n));
     switch (n) {
       case 0:
@@ -1328,7 +1383,7 @@ var apputils = (function () {
           textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
-          textContent('.nav-guide', 0, '「地圖 MAP」');
+          textContent('.nav-guide', 0, languageData.nav.guide.map);
         } else {
           display('.battle', 0, 'flex');
           display('.map', 0, '');
@@ -1349,7 +1404,7 @@ var apputils = (function () {
           textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
-          textContent('.nav-guide', 0, '「戰鬥 BATTLE」');
+          textContent('.nav-guide', 0, languageData.nav.guide.battle);
         }
         break;
       case 1:
@@ -1379,7 +1434,7 @@ var apputils = (function () {
         display('.equip', 0, '');
         display('.encyclopedia', 0, '');
 
-        textContent('.nav-guide', 0, '「物品 ITEM」');
+        textContent('.nav-guide', 0, languageData.nav.guide.item);
         break;
       case 2:
         display('.battle', 0, '');
@@ -1401,7 +1456,7 @@ var apputils = (function () {
         textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
-        textContent('.nav-guide', 0, '「狀態 STATE」');
+        textContent('.nav-guide', 0, languageData.nav.guide.state);
         break;
       case 3:
         display('.battle', 0, '');
@@ -1423,7 +1478,7 @@ var apputils = (function () {
         textShadow('.menu-btn', 3, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
         textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
-        textContent('.nav-guide', 0, '「大廳 Lobby」');
+        textContent('.nav-guide', 0, languageData.nav.guide.lobby);
         break;
       case 4:
         display('.battle', 0, '');
@@ -1445,7 +1500,7 @@ var apputils = (function () {
         textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 4, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
 
-        textContent('.nav-guide', 0, '「設定 Settings」');
+        textContent('.nav-guide', 0, languageData.nav.guide.settings);
         break;
       default:
         break;
@@ -1554,14 +1609,14 @@ var apputils = (function () {
       start: () => {
         if (!timerId) {
           timerId = setInterval(callback, interval);
-          console.log('Loop started');
+          //console.log('Loop started');
         }
       },
       stop: () => {
         if (timerId) {
           clearInterval(timerId);
           timerId = null;
-          console.log('Loop stopped');
+          //console.log('Loop stopped');
         }
       }
     };
@@ -1573,6 +1628,9 @@ var apputils = (function () {
         break;
       case 'en':
         storageutils.set('apputils_lan', 'en');
+        break;
+      case 'jp':
+        storageutils.set('apputils_lan', 'jp');
         break;
 
       default:

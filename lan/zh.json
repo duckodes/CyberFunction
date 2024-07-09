@@ -1,6 +1,20 @@
 {
     "nav": {
-        "username": "用戶名稱"
+        "username": "用戶名稱",
+        "guide": {
+            "itemsEncyclopedia": "「物品百科」",
+            "helmet": "「頭盔」",
+            "jacket": "「上衣」",
+            "weapon": "「武器」",
+            "legStrap": "「腿掛」",
+            "boots": "「靴子」",
+            "map": "「地圖」",
+            "battle": "「戰鬥」",
+            "item": "「物品」",
+            "state": "「狀態」",
+            "lobby": "「大廳」",
+            "settings": "「設定」"
+        }
     },
     "footer": {
         "menuBtnText": {
@@ -18,7 +32,8 @@
                 "1": "資訊"
             },
             "info": {
-                "chipCode": "晶片代碼"
+                "chipCode": "晶片代碼",
+                "loading": "系統加載中.."
             }
         }
     },
@@ -31,7 +46,8 @@
         "skip": "跳過輸入",
         "noLoad": "⚠︎ 晶片尚未輸入",
         "reroll": "拆除晶片",
-        "exit": "逃跑"
+        "exit": "逃跑",
+        "loading": "系統加載中.."
     },
     "item": {
         "options": {
@@ -47,7 +63,11 @@
             "leftWeapon": "左手",
             "rightWeapon": "右手",
             "legStrap": "腿掛",
-            "boots": "靴子"
+            "boots": "靴子",
+            "contextmenu": {
+                "0": "卸除",
+                "1": "裝備"
+            }
         },
         "encyclopedia": {
             "helmet": "頭盔",
@@ -104,7 +124,8 @@
             "now": "繁體中文",
             "options": {
                 "zh": "繁體中文",
-                "en": "英文"
+                "en": "英文",
+                "jp": "日文"
             }
         },
         "logout": "登出"

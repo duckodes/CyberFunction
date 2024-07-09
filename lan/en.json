@@ -1,6 +1,20 @@
 {
     "nav": {
-        "username": "USER NAME"
+        "username": "USER NAME",
+        "guide": {
+            "itemsEncyclopedia": "「ITEMS ENCYCLOPEDIA」",
+            "helmet": "「HELMET」",
+            "jacket": "「JACKET」",
+            "weapon": "「WEAPON」",
+            "legStrap": "「LEG STRAP」",
+            "boots": "「BOOTS」",
+            "map": "「MAP」",
+            "battle": "「BATTLE」",
+            "item": "「ITEM」",
+            "state": "「STATE」",
+            "lobby": "「LOBBY」",
+            "settings": "「SETTINGS」"
+        }
     },
     "footer": {
         "menuBtnText": {
@@ -12,13 +26,14 @@
         }
     },
     "map": {
-        "enemies":{
-            "contextmenu":{
+        "enemies": {
+            "contextmenu": {
                 "0": "MONSTER STRATEGY",
                 "1": "INFO"
             },
             "info": {
-                "chipCode": "CHIP CODE"
+                "chipCode": "CHIP CODE",
+                "loading": "SYSTEM LOADING.."
             }
         }
     },
@@ -31,7 +46,8 @@
         "skip": "Skip",
         "noLoad": "⚠︎ Chip not yet inserted",
         "reroll": "REMOVE CHIP",
-        "exit": "EXIT"
+        "exit": "ESCAPE",
+        "loading": "SYSTEM LOADING.."
     },
     "item": {
         "options": {
@@ -47,7 +63,11 @@
             "leftWeapon": "LEFT WEAPON",
             "rightWeapon": "RIGHT WEAPON",
             "legStrap": "LEGSTRAP",
-            "boots": "BOOTS"
+            "boots": "BOOTS",
+            "contextmenu": {
+                "0": "REMOVE",
+                "1": "EQUIPMENT"
+            }
         },
         "encyclopedia": {
             "helmet": "HELMET",
@@ -104,7 +124,8 @@
             "now": "English",
             "options": {
                 "zh": "Traditional Chinese",
-                "en": "English"
+                "en": "English",
+                "jp": "Japanese"
             }
         },
         "logout": "LOGOUT"

@@ -172,11 +172,14 @@ function draw() {
 }
 
 function resize() {
-    if (g) {
-        g.resizeCanvas(window.innerWidth, window.innerHeight);
-    }
-    resizeCanvas(window.innerWidth, window.innerHeight);
-    recreate();
+    clearTimeout(window.resizedFinished);
+    window.resizedFinished = setTimeout(function () {
+        if (g) {
+            g.resizeCanvas(window.innerWidth, window.innerHeight);
+        }
+        resizeCanvas(window.innerWidth, window.innerHeight);
+        recreate();
+    }, 500);
 }
 function _savePNG() {
     save("circuit_board.png");

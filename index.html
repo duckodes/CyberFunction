@@ -223,6 +223,9 @@
             <div class="roll-container">
               <div class="roll">Load chip X 2</div>
             </div>
+            <div class="battle-me-info">
+              <div>SYSTEM LOADING..</div>
+            </div>
           </div>
         </div>
         <div class="item">
@@ -386,7 +389,7 @@
           <div class="language en-set">
             <div class="lan-row">
               <div class="lan-now">
-                繁體中文
+                English
               </div>
               <div class="lan-triangle">
                 ▲
@@ -394,10 +397,13 @@
             </div>
             <div class="lan-options lan-col">
               <div class="lan-zh">
-                繁體中文
+                Traditional Chinese
               </div>
               <div class="lan-en">
-                英文
+                English
+              </div>
+              <div class="lan-jp">
+                Japanese
               </div>
             </div>
           </div>
@@ -651,7 +657,6 @@
 
         settings_username_input.value = user.displayName;
         nav_username.innerHTML = `${user.displayName}<br><div class="f-10 en-set">${language_data.nav.username}</div>`;
-        apputils.lan(storageutils.get('apputils_lan', 'zh'));
 
         console.log(user);
       } else {
