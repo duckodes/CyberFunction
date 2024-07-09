@@ -527,7 +527,7 @@
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getDatabase, ref, query, limitToFirst, limitToLast, push, onChildAdded, onChildRemoved, set, child, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import { getDatabase, ref, query, limitToFirst, limitToLast, push, onChildAdded, onChildRemoved, set, child, remove, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
@@ -658,10 +658,25 @@
         settings_username_input.value = user.displayName;
         nav_username.innerHTML = `${user.displayName}<br><div class="f-10 en-set">${language_data.nav.username}</div>`;
 
+        get(ref(db, `battle/${uid}`)).then((snapshot) => {
+          if (snapshot.exists()) {
+            localStorage.setItem("continueBattleData", snapshot.val().data);
+          } else {
+            console.log("No data available");
+            localStorage.removeItem("continueBattleData");
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+
+
         console.log(user);
       } else {
         // User is signed out
       }
+      set(ref(db, 'battle/' + user.uid), {
+        data: localStorage.getItem("continueBattleData")
+      });
     });
 
     // use login function
