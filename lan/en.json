@@ -11,6 +11,75 @@
             "4": "SETTINGS"
         }
     },
+    "map": {
+        "enemies":{
+            "contextmenu":{
+                "0": "MONSTER STRATEGY",
+                "1": "INFO"
+            },
+            "info": {
+                "chipCode": "CHIP CODE"
+            }
+        }
+    },
+    "battle": {
+        "loadChip": {
+            "0": "Load chip X 2",
+            "1": "Load chip X 1"
+        },
+        "start": "Start ⏎",
+        "skip": "Skip",
+        "noLoad": "⚠︎ Chip not yet inserted",
+        "reroll": "REMOVE CHIP",
+        "exit": "EXIT"
+    },
+    "item": {
+        "options": {
+            "cannotEquip": "UNABLE TO CHANGE DURING BATTLE",
+            "0": "EQUIP",
+            "1": "ITEMS ENCYCLOPEDIA",
+            "2": "MALL",
+            "3": "VENDING MACHINE"
+        },
+        "equip": {
+            "helmet": "HELMET",
+            "jacket": "JACKET",
+            "leftWeapon": "LEFT WEAPON",
+            "rightWeapon": "RIGHT WEAPON",
+            "legStrap": "LEGSTRAP",
+            "boots": "BOOTS"
+        },
+        "encyclopedia": {
+            "helmet": "HELMET",
+            "jacket": "JACKET",
+            "weapon": "WEAPON",
+            "legStrap": "LEGSTRAP",
+            "boots": "BOOTS"
+        },
+        "equipment": {
+            "helmet": {
+                "0": "BASIC STANDARD HELMET",
+                "1": "KROLL TYPE I STEEL HELMET"
+            },
+            "jacket": {
+                "0": "BASIC STANDARD ARMOR"
+            },
+            "weapon": {
+                "0": "SQUARE AND ROUND CROSS SHIELD",
+                "1": "LIGHTWEIGHT PARING KNIFE",
+                "2": "CHINESE STYLE CHEF’S KNIFE",
+                "3": "LOW-VOLTAGE STUN BATON",
+                "4": "LIGHTWEIGHT GRENADE"
+            },
+            "legstrap": {
+                "0": "ORAL RESTORATIVE MEDICATION",
+                "1": "STOP-LOSS BELT"
+            },
+            "boots": {
+                "0": "BASIC STANDARD COMBAT BOOTS"
+            }
+        }
+    },
     "lobby": {
         "time": {
             "<5": "Early morning",
@@ -28,5 +97,30 @@
             "1": "[error] cannot consist solely of spaces",
             "2": "[error] cannot be blank"
         }
+    },
+    "settings": {
+        "username": "CODE",
+        "language": {
+            "now": "English",
+            "options": {
+                "zh": "Traditional Chinese",
+                "en": "English"
+            }
+        },
+        "logout": "LOGOUT"
+    },
+    "enemies": {
+        "name": [
+            "「 BLUE SLIME 」",
+            "「 IRON CLAW LIZARD 」",
+            "「 COMMON LIZARD 」",
+            "「 RED SLIME 」"
+        ],
+        "info": [
+            "HEAD HAS HIGHLY DEFENSIVE CAPABILITIES",
+            "EXTREMELY HIGH ATTACK POWER",
+            "NO PARTICULARLY OUTSTANDING ABILITIES",
+            "POSSESSES DUAL ATTACKING CAPABILITIES"
+        ]
     }
 }

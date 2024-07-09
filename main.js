@@ -16,44 +16,93 @@ var apputils = (function () {
       .then(response => response.json())
       .then(data => {
         language_data = data;
-        document.querySelectorAll('.menu-btn-text')[0].textContent = language_data.footer.menuBtnText["0"];
-        document.querySelectorAll('.menu-btn-text')[1].textContent = language_data.footer.menuBtnText["1"];
-        document.querySelectorAll('.menu-btn-text')[2].textContent = language_data.footer.menuBtnText["2"];
-        document.querySelectorAll('.menu-btn-text')[3].textContent = language_data.footer.menuBtnText["3"];
-        document.querySelectorAll('.menu-btn-text')[4].textContent = language_data.footer.menuBtnText["4"];
+        document.querySelectorAll('.menu-btn-text')[0].textContent = data.footer.menuBtnText["0"];
+        document.querySelectorAll('.menu-btn-text')[1].textContent = data.footer.menuBtnText["1"];
+        document.querySelectorAll('.menu-btn-text')[2].textContent = data.footer.menuBtnText["2"];
+        document.querySelectorAll('.menu-btn-text')[3].textContent = data.footer.menuBtnText["3"];
+        document.querySelectorAll('.menu-btn-text')[4].textContent = data.footer.menuBtnText["4"];
+
+        document.querySelectorAll('.item-options .item-all-btn')[0].textContent = data.item.options["0"];
+        document.querySelectorAll('.item-options .item-all-btn')[1].textContent = data.item.options["1"];
+        document.querySelectorAll('.item-options .item-all-btn')[2].textContent = data.item.options["2"];
+        document.querySelectorAll('.item-options .item-all-btn')[3].textContent = data.item.options["3"];
+
+        document.querySelectorAll('.equip .color-0')[0].textContent = data.item.equip.helmet;
+        document.querySelectorAll('.equip .color-0')[1].textContent = data.item.equip.jacket;
+        document.querySelectorAll('.equip .color-0')[2].textContent = data.item.equip.leftWeapon;
+        document.querySelectorAll('.equip .color-0')[3].textContent = data.item.equip.rightWeapon;
+        document.querySelectorAll('.equip .color-0')[4].textContent = data.item.equip.legStrap;
+        document.querySelectorAll('.equip .color-0')[5].textContent = data.item.equip.boots;
+
+        document.querySelectorAll('.encyclopedia .item-all-btn')[0].textContent = data.item.encyclopedia.helmet;
+        document.querySelectorAll('.encyclopedia .item-all-btn')[1].textContent = data.item.encyclopedia.jacket;
+        document.querySelectorAll('.encyclopedia .item-all-btn')[2].textContent = data.item.encyclopedia.weapon;
+        document.querySelectorAll('.encyclopedia .item-all-btn')[3].textContent = data.item.encyclopedia.legStrap;
+        document.querySelectorAll('.encyclopedia .item-all-btn')[4].textContent = data.item.encyclopedia.boots;
+
+        document.querySelectorAll('.e-helmet .item-all-btn')[0].textContent = data.item.equipment.helmet["0"];
+        document.querySelectorAll('.e-helmet .item-all-btn')[1].textContent = data.item.equipment.helmet["1"];
+
+        document.querySelectorAll('.e-jacket .item-all-btn')[0].textContent = data.item.equipment.jacket["0"];
+
+        document.querySelectorAll('.e-weapon .item-all-btn')[0].textContent = data.item.equipment.weapon["0"];
+        document.querySelectorAll('.e-weapon .item-all-btn')[1].textContent = data.item.equipment.weapon["1"];
+        document.querySelectorAll('.e-weapon .item-all-btn')[2].textContent = data.item.equipment.weapon["2"];
+        document.querySelectorAll('.e-weapon .item-all-btn')[3].textContent = data.item.equipment.weapon["3"];
+        document.querySelectorAll('.e-weapon .item-all-btn')[4].textContent = data.item.equipment.weapon["4"];
+
+        document.querySelectorAll('.e-legstrap .item-all-btn')[0].textContent = data.item.equipment.legstrap["0"];
+        document.querySelectorAll('.e-legstrap .item-all-btn')[1].textContent = data.item.equipment.legstrap["1"];
+
+        document.querySelectorAll('.e-boots .item-all-btn')[0].textContent = data.item.equipment.boots["0"];
+
+        document.getElementById('message').setAttribute('placeholder', language_data.lobby.enterMessage);
+        document.getElementById('submit').textContent = language_data.lobby.submit;
+
+        document.querySelector('.settings-username .f-10').textContent = data.settings.username;
+        document.querySelector('.lan-now').textContent = data.settings.language.now;
+        document.querySelector('.lan-zh').textContent = data.settings.language.options.zh;
+        document.querySelector('.lan-en').textContent = data.settings.language.options.en;
+        document.querySelector('.logout').textContent = data.settings.logout;
+
+        document.querySelectorAll('.battle-weapon-name')[0].textContent = data.item.equip.helmet;
+        document.querySelectorAll('.battle-weapon-name')[1].textContent = data.item.equip.jacket;
+        document.querySelectorAll('.battle-weapon-name')[2].textContent = data.item.equip.leftWeapon;
+        document.querySelectorAll('.battle-weapon-name')[3].textContent = data.item.equip.rightWeapon;
+        document.querySelectorAll('.battle-weapon-name')[4].textContent = data.item.equip.legStrap;
+        document.querySelectorAll('.battle-weapon-name')[5].textContent = data.item.equip.boots;
+
+        document.querySelector('.battle-exit').innerHTML = data.battle.exit + '&#60;';
+        document.querySelector('.reroll div').innerHTML = '&#62; ' + data.battle.reroll;
+        update_rolltimes_btn();
+
+        showEncyclopediaINFO(data);
+
+        showItems(data);
       })
       .catch(error => {
         console.error('Fetch error:', error);
       });
 
-    document.querySelector('.zh-set .lan-now').addEventListener('click', (e) => {
-      if (document.querySelector('.zh-set .lan-triangle').textContent !== '▼') {
-        document.querySelector('.zh-set .lan-triangle').textContent = '▼';
-        document.querySelector('.zh-set .lan-options').style.display = 'flex';
+    document.querySelector('.lan-now').addEventListener('click', (e) => {
+      if (document.querySelector('.lan-triangle').textContent !== '▼') {
+        document.querySelector('.lan-triangle').textContent = '▼';
+        document.querySelector('.lan-options').style.display = 'flex';
       } else {
-        document.querySelector('.zh-set .lan-triangle').textContent = '▲';
-        document.querySelector('.zh-set .lan-options').style.display = '';
-      }
-    });
-    document.querySelector('.en-set .lan-now').addEventListener('click', (e) => {
-      if (document.querySelector('.en-set .lan-triangle').textContent !== '▼') {
-        document.querySelector('.en-set .lan-triangle').textContent = '▼';
-        document.querySelector('.en-set .lan-options').style.display = 'flex';
-      } else {
-        document.querySelector('.en-set .lan-triangle').textContent = '▲';
-        document.querySelector('.en-set .lan-options').style.display = '';
+        document.querySelector('.lan-triangle').textContent = '▲';
+        document.querySelector('.lan-options').style.display = '';
       }
     });
     document.querySelector('.lan-zh').addEventListener('click', () => {
       setLanguage('zh');
-      document.querySelector('.en-set .lan-triangle').textContent = '▲';
-      document.querySelector('.en-set .lan-options').style.display = '';
+      document.querySelector('.lan-triangle').textContent = '▲';
+      document.querySelector('.lan-options').style.display = '';
       location.reload();
     });
     document.querySelector('.lan-en').addEventListener('click', () => {
       setLanguage('en');
-      document.querySelector('.zh-set .lan-triangle').textContent = '▲';
-      document.querySelector('.zh-set .lan-options').style.display = '';
+      document.querySelector('.lan-triangle').textContent = '▲';
+      document.querySelector('.lan-options').style.display = '';
       location.reload();
     });
 
@@ -82,7 +131,7 @@ var apputils = (function () {
     evt.click('.menu-btn', 4, () => {
       showmenu(4);
     })
-    evt.click('.item-all-btn', 0, (e) => {
+    evt.click('.item-options .item-all-btn', 0, (e) => {
       if (!isBattle) {
         display('.item-all-btn', 0, 'none');
         display('.item-all-btn', 1, 'none');
@@ -90,20 +139,15 @@ var apputils = (function () {
         display('.item-all-btn', 3, 'none');
         display('.equip', 0, 'flex');
       } else {
-        e.target.textContent = '戰鬥中無法更換';
+        e.target.textContent = language_data.item.options.cannotEquip;
         e.target.style.color = '#c24347';
         setTimeout(() => {
-          e.target.innerHTML = `<div>
-              裝備<br>
-              <div class="en-set">
-                EQUIP
-              </div>
-            </div>`;
+          e.target.innerHTML = `${language_data.item.options["0"]}`;
           e.target.style.color = '';
         }, 1000);
       }
     })
-    evt.click('.item-all-btn', 1, () => {
+    evt.click('.item-options .item-all-btn', 1, () => {
       display('.item-all-btn', 0, 'none');
       display('.item-all-btn', 1, 'none');
       display('.item-all-btn', 2, 'none');
@@ -183,79 +227,80 @@ var apputils = (function () {
       textContent('.nav-guide', 0, '「物品百科 ITEMS ENCYCLOPEDIA」');
     })
 
-    let encyclopedia_nums = document.querySelectorAll('.encyclopedia .item-all-btn').length;
-    let helmet_nums = document.querySelectorAll('.e-helmet .item-all-btn').length;
-    let jacket_nums = document.querySelectorAll('.e-jacket .item-all-btn').length;
-    let weapon_nums = document.querySelectorAll('.e-weapon .item-all-btn').length;
-    let legstrap_nums = document.querySelectorAll('.e-legstrap .item-all-btn').length;
-    let boots_nums = document.querySelectorAll('.e-boots .item-all-btn').length;
-    let for_helmet_nums = item_nums + encyclopedia_nums;
-    let for_jacket_nums = item_nums + encyclopedia_nums + helmet_nums;
-    let for_weapon_nums = item_nums + encyclopedia_nums + helmet_nums + jacket_nums;
-    let for_legstrap_nums = item_nums + encyclopedia_nums + helmet_nums + jacket_nums + weapon_nums;
-    let for_boots_nums = item_nums + encyclopedia_nums + helmet_nums + jacket_nums + weapon_nums + legstrap_nums;
-    // n = array + for_xxx_nums
-    // helmet info
-    e_info_show(0 + for_helmet_nums, 0, '.e-helmet', '初級普通頭盔<div class="en-set">BASIC STANDARD HELMET</div>', '「初級普通頭盔 BASIC STANDARD HELMET」');
-    e_info_show(1 + for_helmet_nums, 0, '.e-helmet', '克羅爾ㄧ型鋼盔<div class="en-set">KROLL TYPE I STEEL HELMET</div>', '「克羅爾ㄧ型鋼盔 KROLL TYPE I STEEL HELMET」');
-    // jacket info
-    e_info_show(0 + for_jacket_nums, 1, '.e-jacket', '初級普通戰甲<div class="en-set">BASIC STANDARD ARMOR</div>', '「初級普通戰甲 BASIC STANDARD ARMOR」');
-    // weapon info
-    e_info_show(0 + for_weapon_nums, 2, '.e-weapon', '方圓十字盾<div class="en-set">SQUARE AND ROUND CROSS SHIELD</div>', '「方圓十字盾 SQUARE AND ROUND CROSS SHIELD」');
-    e_info_show(1 + for_weapon_nums, 2, '.e-weapon', '輕便水果刀<div class="en-set">LIGHTWEIGHT PARING KNIFE</div>', '「輕便水果刀 LIGHTWEIGHT PARING KNIFE」');
-    e_info_show(2 + for_weapon_nums, 2, '.e-weapon', '中式文武菜刀<div class="en-set">CHINESE STYLE CHEF’S KNIFE</div>', '「中式文武菜刀 CHINESE STYLE CHEF’S KNIFE」');
-    e_info_show(3 + for_weapon_nums, 2, '.e-weapon', '低伏電擊棒<div class="en-set">LOW-VOLTAGE STUN BATON</div>', '「低伏電擊棒 LOW-VOLTAGE STUN BATON」');
-    e_info_show(4 + for_weapon_nums, 2, '.e-weapon', '輕便手榴彈<div class="en-set">LIGHTWEIGHT GRENADE</div>', '「輕便手榴彈 LIGHTWEIGHT GRENADE」');
-    // legstrap info
-    e_info_show(0 + for_legstrap_nums, 3, '.e-legstrap', '補損口服藥<div class="en-set">ORAL RESTORATIVE MEDICATION</div>', '「補損口服藥 ORAL RESTORATIVE MEDICATION」');
-    e_info_show(1 + for_legstrap_nums, 3, '.e-legstrap', '止損帶<div class="en-set">STOP-LOSS BELT</div>', '「止損帶 STOP-LOSS BELT」');
-    // boots info
-    e_info_show(0 + for_boots_nums, 4, '.e-boots', '初級普通戰靴<div class="en-set">BASIC STANDARD COMBAT BOOTS</div>', '「初級普通戰靴 BASIC STANDARD COMBAT BOOTS」');
+    function showEncyclopediaINFO(languageData) {
+      let encyclopedia_nums = document.querySelectorAll('.encyclopedia .item-all-btn').length;
+      let helmet_nums = document.querySelectorAll('.e-helmet .item-all-btn').length;
+      let jacket_nums = document.querySelectorAll('.e-jacket .item-all-btn').length;
+      let weapon_nums = document.querySelectorAll('.e-weapon .item-all-btn').length;
+      let legstrap_nums = document.querySelectorAll('.e-legstrap .item-all-btn').length;
+      let for_helmet_nums = item_nums + encyclopedia_nums;
+      let for_jacket_nums = item_nums + encyclopedia_nums + helmet_nums;
+      let for_weapon_nums = item_nums + encyclopedia_nums + helmet_nums + jacket_nums;
+      let for_legstrap_nums = item_nums + encyclopedia_nums + helmet_nums + jacket_nums + weapon_nums;
+      let for_boots_nums = item_nums + encyclopedia_nums + helmet_nums + jacket_nums + weapon_nums + legstrap_nums;
 
-    function e_info_show(n, n2, closegroup, infotype, guide) {
-      evt.click('.item-all-btn', n, () => {
-        display(closegroup, 0, '');
-        display('.e-info', 0, 'flex');
+      // helmet info
+      e_info_show(0 + for_helmet_nums, 0, '.e-helmet', languageData.item.equipment.helmet["0"], `「${languageData.item.equipment.helmet["0"]}」`);
+      e_info_show(1 + for_helmet_nums, 0, '.e-helmet', languageData.item.equipment.helmet["1"], `「${languageData.item.equipment.helmet["1"]}」`);
+      // jacket info
+      e_info_show(0 + for_jacket_nums, 1, '.e-jacket', languageData.item.equipment.jacket["0"], `「${languageData.item.equipment.jacket["0"]}」`);
+      // weapon info
+      e_info_show(0 + for_weapon_nums, 2, '.e-weapon', languageData.item.equipment.weapon["0"], `「${languageData.item.equipment.weapon["0"]}」`);
+      e_info_show(1 + for_weapon_nums, 2, '.e-weapon', languageData.item.equipment.weapon["1"], `「${languageData.item.equipment.weapon["1"]}」`);
+      e_info_show(2 + for_weapon_nums, 2, '.e-weapon', languageData.item.equipment.weapon["2"], `「${languageData.item.equipment.weapon["2"]}」`);
+      e_info_show(3 + for_weapon_nums, 2, '.e-weapon', languageData.item.equipment.weapon["3"], `「${languageData.item.equipment.weapon["3"]}」`);
+      e_info_show(4 + for_weapon_nums, 2, '.e-weapon', languageData.item.equipment.weapon["4"], `「${languageData.item.equipment.weapon["4"]}」`);
+      // legstrap info
+      e_info_show(0 + for_legstrap_nums, 3, '.e-legstrap', languageData.item.equipment.legstrap["0"], `「${languageData.item.equipment.legstrap["0"]}」`);
+      e_info_show(1 + for_legstrap_nums, 3, '.e-legstrap', languageData.item.equipment.legstrap["1"], `「${languageData.item.equipment.legstrap["1"]}」`);
+      // boots info
+      e_info_show(0 + for_boots_nums, 4, '.e-boots', languageData.item.equipment.boots["0"], `「${languageData.item.equipment.boots["0"]}」`);
 
-        document.querySelector('.e-info-back').id = n2
+      function e_info_show(n, n2, closegroup, infotype, guide) {
+        evt.click('.item-all-btn', n, () => {
+          display(closegroup, 0, '');
+          display('.e-info', 0, 'flex');
 
-        innerHTML('.e-info-type', 0, infotype);
+          document.querySelector('.e-info-back').id = n2
 
-        textContent('.nav-guide', 0, guide);
-      })
-      evt.click('.e-info-back', 0, () => {
-        display('.e-info', 0, '');
-        switch (document.querySelector('.e-info-back').id) {
-          case '0':
-            display('.e-helmet', 0, 'flex');
+          innerHTML('.e-info-type', 0, infotype);
 
-            textContent('.nav-guide', 0, '「頭盔 HELMET」');
-            break;
-          case '1':
-            display('.e-jacket', 0, 'flex');
+          textContent('.nav-guide', 0, guide);
+        })
+        evt.click('.e-info-back', 0, () => {
+          display('.e-info', 0, '');
+          switch (document.querySelector('.e-info-back').id) {
+            case '0':
+              display('.e-helmet', 0, 'flex');
 
-            textContent('.nav-guide', 0, '「上衣 JACKET」');
-            break;
-          case '2':
-            display('.e-weapon', 0, 'flex');
+              textContent('.nav-guide', 0, '「頭盔 HELMET」');
+              break;
+            case '1':
+              display('.e-jacket', 0, 'flex');
 
-            textContent('.nav-guide', 0, '「武器 WEAPON」');
-            break;
-          case '3':
-            display('.e-legstrap', 0, 'flex');
+              textContent('.nav-guide', 0, '「上衣 JACKET」');
+              break;
+            case '2':
+              display('.e-weapon', 0, 'flex');
 
-            textContent('.nav-guide', 0, '「腿掛 LEG STRAP」');
-            break;
-          case '4':
-            display('.e-boots', 0, 'flex');
+              textContent('.nav-guide', 0, '「武器 WEAPON」');
+              break;
+            case '3':
+              display('.e-legstrap', 0, 'flex');
 
-            textContent('.nav-guide', 0, '「靴子 BOOTS」');
-            break;
+              textContent('.nav-guide', 0, '「腿掛 LEG STRAP」');
+              break;
+            case '4':
+              display('.e-boots', 0, 'flex');
 
-          default:
-          // Tab to edit
-        }
-      })
+              textContent('.nav-guide', 0, '「靴子 BOOTS」');
+              break;
+
+            default:
+            // Tab to edit
+          }
+        })
+      }
     }
 
     stat_btn('.s-helmet');
@@ -290,8 +335,6 @@ var apputils = (function () {
     }
 
     let enemies_id = -1;
-    let enemies_name = ['「 藍色史萊姆 BLUE SLIME 」', '「 金剛抓蜥蜴 IRON CLAW LIZARD 」', '「 普通蜥蜴 COMMON LIZARD 」', '「 紅色史萊姆 RED SLIME 」'];
-    let enemies_info = ['頭部具有高度的防禦功能', '攻擊力極高', '沒有特別厲害的能力', '具有雙攻擊性'];
     let enemies_items = [{
       helmet: ['2%DEF', '1%DEF', '2%DEF', '3%DEF', '1%DEF', '1%DEF'],
       lweapon: ['1%DMG', '2%DMG', '3%DMG', '2%DMG', '2%DMG', '1%DMG']
@@ -323,22 +366,22 @@ var apputils = (function () {
           c.style.background = 'linear-gradient(to bottom, #3db3d045, #191325)';
           c.style.zIndex = '2';
         })
-        let randomEnemiesNum = Math.floor(getRandomNumber(0, enemies_name.length));
+        let randomEnemiesNum = Math.floor(getRandomNumber(0, language_data.enemies.name.length));
         enemies_id = randomEnemiesNum;
-        contextmenuutils.addItem(enemies_name[randomEnemiesNum], (c) => {
+        contextmenuutils.addItem(language_data.enemies.name[randomEnemiesNum], (c) => {
           c.style.background = "#3db3d050";
           c.style.color = '#3db3d0';
           c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
         })
-        contextmenuutils.addItem('攻略魔物', (c) => {
+        contextmenuutils.addItem(language_data.map.enemies.contextmenu["0"], (c) => {
           defaultset(c);
           battleSetup(c);
         })
-        contextmenuutils.addItem('資訊', (c) => {
+        contextmenuutils.addItem(language_data.map.enemies.contextmenu["1"], (c) => {
           defaultset(c);
           c.addEventListener('click', () => {
             display('.map-info', 0, 'flex');
-            document.querySelector('.map-info-title').innerHTML = enemies_name[randomEnemiesNum] + '<br>' + enemies_info[randomEnemiesNum] + '<br><br>' + '晶片代碼：<br>' + JSON.stringify(enemies_items[enemies_id], null, 2).toUpperCase().replace(/],/g, '],<br><br>').replace(/:/g, ' >>>').replace('{', '').replace('}', '<br><br>>> SYSTEM LOAD..');
+            document.querySelector('.map-info-title').innerHTML = language_data.enemies.name[randomEnemiesNum] + '<br>' + language_data.enemies.info[randomEnemiesNum] + '<br><br>' + '\'' + language_data.map.enemies.info.chipCode + '：<br>\'' + JSON.stringify(enemies_items[enemies_id], null, 2).toUpperCase().replace(/],/g, '],<br><br>').replace(/:/g, ' >>>').replace('{', '').replace('}', '<br><br>>> SYSTEM LOAD..');
           })
         })
         function defaultset(c) {
@@ -432,7 +475,7 @@ var apputils = (function () {
       }
     }
     function update_ui_e_box(n, n1) {
-      innerHTML('.battle-enemy-box', n, `<div style="font-size: 10px;background: #1e588d;display:flex;justify-content:center;width:100%;">${e_get_def_status[n1].replace('N/A', '').replace('%DEF', ' ⛨')}${e_get_rd_status[n1].replace('N/A', '').replace('%RD', ' ✙')}</div><div style="color: #c24347;text-shadow: 1px 1px 5px #000, 1px 1px 5px #000;background: linear-gradient(to right, #551913, #c24347aa, #551913);"><sup>${n1 === 0 ? '頭盔' : n1 === 1 ? '上衣' : n1 === 2 ? '左手' : n1 === 3 ? '右手' : n1 === 4 ? '腿掛' : n1 === 5 ? '靴子' : ''}</sup> ${e_get_dmg[n1]}<sub>%</sub><sub style="font-size: 10px;color: #f7d967;">〚${e_get_dmg_status[n1] === 'N/A' ? '⛶' : e_get_dmg_status[n1] + ' 🩸'}〛</sub></div>`);
+      innerHTML('.battle-enemy-box', n, `<div style="font-size: 10px;background: #1e588d;display:flex;justify-content:center;width:100%;">${e_get_def_status[n1].replace('N/A', '').replace('%DEF', ' ⛨')}${e_get_rd_status[n1].replace('N/A', '').replace('%RD', ' ✙')}</div><div style="color: #c24347;text-shadow: 1px 1px 5px #000, 1px 1px 5px #000;background: linear-gradient(to right, #551913, #c24347aa, #551913);"><sup>${n1 === 0 ? language_data.item.equip.helmet : n1 === 1 ? language_data.item.equip.jacket : n1 === 2 ? language_data.item.equip.leftWeapon : n1 === 3 ? language_data.item.equip.rightWeapon : n1 === 4 ? language_data.item.equip.legStrap : n1 === 5 ? language_data.item.equip.boots : ''}</sup> ${e_get_dmg[n1]}<sub>%</sub><sub style="font-size: 10px;color: #f7d967;">〚${e_get_dmg_status[n1] === 'N/A' ? '⛶' : e_get_dmg_status[n1] + ' 🩸'}〛</sub></div>`);
     }
     function update_ui_e_hp() {
       if (e_get_dmg[0] > e_get_dmg[1]) {
@@ -470,7 +513,7 @@ var apputils = (function () {
       legstrap: ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'],
       boots: ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'],
     };
-    let equip_data = JSON.parse(storageutils.get('equip_data', JSON.stringify([0, -1, -1, 0, -1, -1])));
+    let equip_data = JSON.parse(storageutils.get('equip_data', JSON.stringify([0, -1, -1, 1, -1, -1])));
     equipItem();
     let battle_arr_data = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     let rolltimes = 2;
@@ -524,7 +567,7 @@ var apputils = (function () {
               update_ui_e_box_all();
               setTimeout(() => {
                 document.querySelector('.reroll').style.opacity = '';
-                document.querySelector('.reroll div').innerHTML = '&#45;&#62; 拆除晶片';
+                document.querySelector('.reroll div').innerHTML = '&#62; ' + language_data.battle.reroll;
                 document.querySelector('.reroll input').style.display = '';
               }, 1000)
             }, 1000);
@@ -536,13 +579,13 @@ var apputils = (function () {
     function update_rolltimes_btn() {
       switch (rolltimes) {
         case 2:
-          textContent('.roll', 0, '載入晶片 X 2');
+          textContent('.roll', 0, language_data.battle.loadChip["0"]);
           break;
         case 1:
-          textContent('.roll', 0, '載入晶片 X 1');
+          textContent('.roll', 0, language_data.battle.loadChip["1"]);
           break;
         case 0:
-          textContent('.roll', 0, '啟動 ⏎');
+          textContent('.roll', 0, language_data.battle.start);
           break;
         default:
       }
@@ -565,13 +608,13 @@ var apputils = (function () {
         StartRoll();
       } else {
         document.querySelector('.roll').style.color = '#c24347';
-        textContent('.roll', 0, '⚠︎ 晶片尚未輸入');
+        textContent('.roll', 0, language_data.battle.noLoad);
         setTimeout(() => {
           document.querySelector('.roll').style.color = '';
           update_rolltimes_btn();
         }, 1000);
         if (!document.querySelector('.force-start-btn')) {
-          createDIV('force-start-btn', '跳過輸入', document.querySelector('.roll-container'), (b) => {
+          createDIV('force-start-btn', language_data.battle.skip, document.querySelector('.roll-container'), (b) => {
             document.querySelector('.roll-container').insertBefore(b, document.querySelector('.roll'));
             b.addEventListener('click', () => {
               StartRoll();
@@ -761,7 +804,7 @@ var apputils = (function () {
       switch (enemies_id) {
         case 0:
           document.querySelector('.enemy-ui-hp-base').style.background = '#3db3d0';
-          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #3db3d0;">${enemies_name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 6px;color: #3db3d0;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-top: 20px;margin-left: 70px;"></div>`);
+          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #3db3d0;">${language_data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 6px;color: #3db3d0;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-top: 20px;margin-left: 70px;"></div>`);
           evt.click('.battle-enemy-box', 0, () => {
             if (hctrl_p_to_e !== -1 && battle_arr_data[hctrl_p_to_e].includes('DMG') && e_get_dmg[0] !== -1) {
               e_get_dmg_status[0] = parseIntOrDefault(battle_arr_data[hctrl_p_to_e], 0) + parseIntOrDefault(e_get_dmg_status[0], 0);
@@ -806,7 +849,7 @@ var apputils = (function () {
           break;
         case 1:
           document.querySelector('.enemy-ui-hp-base').style.background = '#f7d967';
-          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #f7d967;">${enemies_name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 5px;color: #f7d967;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-left: 70px;"></div>`);
+          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #f7d967;">${language_data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 5px;color: #f7d967;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-left: 70px;"></div>`);
           evt.click('.battle-enemy-box', 0, () => {
             if (hctrl_p_to_e !== -1 && battle_arr_data[hctrl_p_to_e].includes('DMG') && e_get_dmg[0] !== -1) {
               e_get_dmg_status[0] = parseIntOrDefault(battle_arr_data[hctrl_p_to_e], 0) + parseIntOrDefault(e_get_dmg_status[0], 0);
@@ -847,7 +890,7 @@ var apputils = (function () {
           break;
         case 2:
           document.querySelector('.enemy-ui-hp-base').style.background = '#4b7e3f';
-          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #4b7e3f;">${enemies_name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 4px;color: #f7d967;opacity: 0.5;transition: all 500ms ease-in;"></pre>`);
+          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #4b7e3f;">${language_data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 4px;color: #f7d967;opacity: 0.5;transition: all 500ms ease-in;"></pre>`);
           evt.click('.battle-enemy-box', 0, () => {
             if (hctrl_p_to_e !== -1 && battle_arr_data[hctrl_p_to_e].includes('DMG') && e_get_dmg[1] !== -1) {
               e_get_dmg_status[1] = parseIntOrDefault(battle_arr_data[hctrl_p_to_e], 0) + parseIntOrDefault(e_get_dmg_status[1], 0);
@@ -875,7 +918,7 @@ var apputils = (function () {
           break;
         case 3:
           document.querySelector('.enemy-ui-hp-base').style.background = '#b74e6a';
-          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #b74e6a;">${enemies_name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 12px;color: #b74e6a;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-bottom: 70px;margin-left: 70px;"></div><div class="battle-enemy-box" style="margin-top: -120px;margin-left: -150px;"></div>`);
+          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #b74e6a;">${language_data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 12px;color: #b74e6a;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-bottom: 70px;margin-left: 70px;"></div><div class="battle-enemy-box" style="margin-top: -120px;margin-right: 250px;"></div>`);
           evt.click('.battle-enemy-box', 0, () => {
             if (hctrl_p_to_e !== -1 && battle_arr_data[hctrl_p_to_e].includes('DMG') && e_get_dmg[0] !== -1) {
               e_get_dmg_status[0] = parseIntOrDefault(battle_arr_data[hctrl_p_to_e], 0) + parseIntOrDefault(e_get_dmg_status[0], 0);
@@ -1032,7 +1075,7 @@ var apputils = (function () {
         case -1:
           setItemData(item_data.rweapon, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
           break;
-        case 0:
+        case 1:
           setItemData(item_data.rweapon, '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG')
           break;
 
@@ -1063,7 +1106,7 @@ var apputils = (function () {
         helmet: [0],
         jacket: [],
         lweapon: [],
-        rweapon: [0],
+        rweapon: [1],
         legstrap: [],
         boots: [],
       })));
@@ -1072,162 +1115,124 @@ var apputils = (function () {
       t.push(item_id);
       storageutils.set('own_equipment', JSON.stringify(own_equipment));
     }
-    showItems();
 
-    function showItems() {
-      switch (storageutils.get('apputils_lan', 'zh')) {
-        case 'zh':
-          for (var i = 0; i < own_equipment.helmet.length; i++) {
-            switch (own_equipment.helmet[i]) {
-              case 0:
-                createDIV('item-all-btn', '初級普通頭盔', document.querySelectorAll('.equip .color-0')[0], (b) => {
-                  itemOption(b, 0, own_equipment.helmet[i]);
-                });
-                break;
+    function showItems(languageData) {
+      for (var i = 0; i < own_equipment.helmet.length; i++) {
+        switch (own_equipment.helmet[i]) {
+          case 0:
+            createDIV('item-all-btn', languageData.item.equipment.helmet["0"], document.querySelectorAll('.equip .color-0')[0], (b) => {
+              itemOption(b, 0, own_equipment.helmet[i]);
+            });
+            break;
 
-              default:
-              // Tab to edit
-            }
-          }
-          for (var i = 0; i < own_equipment.jacket.length; i++) {
-            switch (own_equipment.jacket[i]) {
-              case 0:
-                createDIV('item-all-btn', '初級普通戰甲', document.querySelectorAll('.equip .color-0')[1], (b) => {
-                  itemOption(b, 1, own_equipment.jacket[i]);
-                });
-                break;
+          default:
+          // Tab to edit
+        }
+      }
+      for (var i = 0; i < own_equipment.jacket.length; i++) {
+        switch (own_equipment.jacket[i]) {
+          case 0:
+            createDIV('item-all-btn', languageData.item.equipment.jacket["0"], document.querySelectorAll('.equip .color-0')[1], (b) => {
+              itemOption(b, 1, own_equipment.jacket[i]);
+            });
+            break;
 
-              default:
-              // Tab to edit
-            }
-          }
-          for (var i = 0; i < own_equipment.lweapon.length; i++) {
-            switch (own_equipment.lweapon[i]) {
-              case 0:
-                createDIV('item-all-btn', '輕便水果刀', document.querySelectorAll('.equip .color-0')[2], (b) => {
-                  itemOption(b, 2, own_equipment.lweapon[i]);
-                });
-                break;
+          default:
+          // Tab to edit
+        }
+      }
+      for (var i = 0; i < own_equipment.lweapon.length; i++) {
+        switch (own_equipment.lweapon[i]) {
+          case 0:
+            createDIV('item-all-btn', languageData.item.equipment.weapon["0"], document.querySelectorAll('.equip .color-0')[2], (b) => {
+              itemOption(b, 2, own_equipment.lweapon[i]);
+            });
+            break;
+          case 1:
+            createDIV('item-all-btn', languageData.item.equipment.weapon["1"], document.querySelectorAll('.equip .color-0')[2], (b) => {
+              itemOption(b, 2, own_equipment.lweapon[i]);
+            });
+            break;
+          case 2:
+            createDIV('item-all-btn', languageData.item.equipment.weapon["2"], document.querySelectorAll('.equip .color-0')[2], (b) => {
+              itemOption(b, 2, own_equipment.lweapon[i]);
+            });
+            break;
+          case 3:
+            createDIV('item-all-btn', languageData.item.equipment.weapon["3"], document.querySelectorAll('.equip .color-0')[2], (b) => {
+              itemOption(b, 2, own_equipment.lweapon[i]);
+            });
+            break;
+          case 4:
+            createDIV('item-all-btn', languageData.item.equipment.weapon["4"], document.querySelectorAll('.equip .color-0')[2], (b) => {
+              itemOption(b, 2, own_equipment.lweapon[i]);
+            });
+            break;
 
-              default:
-              // Tab to edit
-            }
-          }
-          for (var i = 0; i < own_equipment.rweapon.length; i++) {
-            switch (own_equipment.rweapon[i]) {
-              case 0:
-                createDIV('item-all-btn', '輕便水果刀', document.querySelectorAll('.equip .color-0')[3], (b) => {
-                  itemOption(b, 3, own_equipment.rweapon[i]);
-                });
-                break;
+          default:
+          // Tab to edit
+        }
+      }
+      for (var i = 0; i < own_equipment.rweapon.length; i++) {
+        switch (own_equipment.rweapon[i]) {
+          case 0:
+            createDIV('item-all-btn', languageData.item.equipment.weapon["0"], document.querySelectorAll('.equip .color-0')[3], (b) => {
+              itemOption(b, 3, own_equipment.rweapon[i]);
+            });
+            break;
+          case 1:
+            createDIV('item-all-btn', languageData.item.equipment.weapon["1"], document.querySelectorAll('.equip .color-0')[3], (b) => {
+              itemOption(b, 3, own_equipment.rweapon[i]);
+            });
+            break;
+          case 2:
+            createDIV('item-all-btn', languageData.item.equipment.weapon["2"], document.querySelectorAll('.equip .color-0')[3], (b) => {
+              itemOption(b, 3, own_equipment.rweapon[i]);
+            });
+            break;
+          case 3:
+            createDIV('item-all-btn', languageData.item.equipment.weapon["3"], document.querySelectorAll('.equip .color-0')[3], (b) => {
+              itemOption(b, 3, own_equipment.rweapon[i]);
+            });
+            break;
+          case 4:
+            createDIV('item-all-btn', languageData.item.equipment.weapon["4"], document.querySelectorAll('.equip .color-0')[3], (b) => {
+              itemOption(b, 3, own_equipment.rweapon[i]);
+            });
+            break;
 
-              default:
-              // Tab to edit
-            }
-          }
-          for (var i = 0; i < own_equipment.legstrap.length; i++) {
-            switch (own_equipment.legstrap[i]) {
-              case 0:
-                createDIV('item-all-btn', '補損口服藥', document.querySelectorAll('.equip .color-0')[4], (b) => {
-                  itemOption(b, 4, own_equipment.legstrap[i]);
-                });
-                break;
+          default:
+          // Tab to edit
+        }
+      }
+      for (var i = 0; i < own_equipment.legstrap.length; i++) {
+        switch (own_equipment.legstrap[i]) {
+          case 0:
+            createDIV('item-all-btn', languageData.item.equipment.legstrap["0"], document.querySelectorAll('.equip .color-0')[4], (b) => {
+              itemOption(b, 4, own_equipment.legstrap[i]);
+            });
+            break;
+          case 1:
+            createDIV('item-all-btn', languageData.item.equipment.legstrap["1"], document.querySelectorAll('.equip .color-0')[4], (b) => {
+              itemOption(b, 4, own_equipment.legstrap[i]);
+            });
+            break;
 
-              default:
-              // Tab to edit
-            }
-          }
-          for (var i = 0; i < own_equipment.boots.length; i++) {
-            switch (own_equipment.boots[i]) {
-              case 0:
-                createDIV('item-all-btn', '初級普通戰靴', document.querySelectorAll('.equip .color-0')[5], (b) => {
-                  itemOption(b, 5, own_equipment.boots[i]);
-                });
-                break;
+          default:
+          // Tab to edit
+        }
+      }
+      for (var i = 0; i < own_equipment.boots.length; i++) {
+        switch (own_equipment.boots[i]) {
+          case 0:
+            createDIV('item-all-btn', languageData.item.equipment.boots["0"], document.querySelectorAll('.equip .color-0')[5], (b) => {
+              itemOption(b, 5, own_equipment.boots[i]);
+            });
+            break;
 
-              default:
-              // Tab to edit
-            }
-          }
-          break;
-
-        case 'en':
-          for (var i = 0; i < own_equipment.helmet.length; i++) {
-            switch (own_equipment.helmet[i]) {
-              case 0:
-                createDIV('item-all-btn', 'BASIC STANDARD HELMET', document.querySelectorAll('.equip .color-0')[0], (b) => {
-                  itemOption(b, 0, own_equipment.helmet[i]);
-                });
-                break;
-
-              default:
-              // Tab to edit
-            }
-          }
-          for (var i = 0; i < own_equipment.jacket.length; i++) {
-            switch (own_equipment.jacket[i]) {
-              case 0:
-                createDIV('item-all-btn', 'BASIC STANDARD ARMOR', document.querySelectorAll('.equip .color-0')[1], (b) => {
-                  itemOption(b, 1, own_equipment.jacket[i]);
-                });
-                break;
-
-              default:
-              // Tab to edit
-            }
-          }
-          for (var i = 0; i < own_equipment.lweapon.length; i++) {
-            switch (own_equipment.lweapon[i]) {
-              case 0:
-                createDIV('item-all-btn', 'LIGHTWEIGHT PARING KNIFE', document.querySelectorAll('.equip .color-0')[2], (b) => {
-                  itemOption(b, 2, own_equipment.lweapon[i]);
-                });
-                break;
-
-              default:
-              // Tab to edit
-            }
-          }
-          for (var i = 0; i < own_equipment.rweapon.length; i++) {
-            switch (own_equipment.rweapon[i]) {
-              case 0:
-                createDIV('item-all-btn', 'LIGHTWEIGHT PARING KNIFE', document.querySelectorAll('.equip .color-0')[3], (b) => {
-                  itemOption(b, 3, own_equipment.rweapon[i]);
-                });
-                break;
-
-              default:
-              // Tab to edit
-            }
-          }
-          for (var i = 0; i < own_equipment.legstrap.length; i++) {
-            switch (own_equipment.legstrap[i]) {
-              case 0:
-                createDIV('item-all-btn', 'ORAL RESTORATIVE MEDICATION', document.querySelectorAll('.equip .color-0')[4], (b) => {
-                  itemOption(b, 4, own_equipment.legstrap[i]);
-                });
-                break;
-
-              default:
-              // Tab to edit
-            }
-          }
-          for (var i = 0; i < own_equipment.boots.length; i++) {
-            switch (own_equipment.boots[i]) {
-              case 0:
-                createDIV('item-all-btn', 'BASIC STANDARD COMBAT BOOTS', document.querySelectorAll('.equip .color-0')[5], (b) => {
-                  itemOption(b, 5, own_equipment.boots[i]);
-                });
-                break;
-
-              default:
-              // Tab to edit
-            }
-          }
-          break;
-
-        default:
-          break;
+          default:
+          // Tab to edit
+        }
       }
     }
     function itemOption(b, n, item_id) {
@@ -1564,23 +1569,9 @@ var apputils = (function () {
   function setLanguage(lan) {
     switch (lan) {
       case 'zh':
-        document.querySelectorAll('.en-set').forEach(element => {
-          element.style.display = 'none';
-        });
-        document.querySelectorAll('.zh-set').forEach(element => {
-          element.style.display = '';
-        });
-
         storageutils.set('apputils_lan', 'zh');
         break;
       case 'en':
-        document.querySelectorAll('.en-set').forEach(element => {
-          element.style.display = '';
-        });
-        document.querySelectorAll('.zh-set').forEach(element => {
-          element.style.display = 'none';
-        });
-
         storageutils.set('apputils_lan', 'en');
         break;
 

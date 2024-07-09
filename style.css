@@ -8,16 +8,6 @@
   src: url('/font-family/CyberwarRegular-7BX0E.ttf') format('truetype');
 }
 
-.en-set {
-  font-size: 10px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.zh-set {
-  font-size: 10px;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
-
 .color-0 {
   color: #3db3d0;
 }
@@ -436,6 +426,13 @@ body {
   height: 100%;
 }
 
+.battle-weapon-name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+}
+
 .enemy-hp {
   border: 1px solid #fff5;
   width: 25%;
@@ -482,6 +479,7 @@ body {
   text-align: center;
   font-size: 17px;
   font-family: SdglitchdemoRegular-YzROj, CyberwarRegular-7BX0E;
+  padding-bottom: 3px;
 }
 
 .roll-container {
@@ -647,6 +645,10 @@ body {
 .equip {
   display: none;
   flex-direction: column;
+}
+
+.equip .color-0 {
+  padding: 5px;
 }
 
 .encyclopedia {
@@ -934,6 +936,11 @@ body {
   flex-direction: row;
 }
 
+.lan-col {
+  display: flex;
+  flex-direction: column;
+}
+
 .lan-options {
   display: none;
   width: 100%;
@@ -1057,8 +1064,8 @@ body {
   width: 10px;
   height: 10px;
   position: fixed;
-  bottom: 15px;
-  right: 30%;
+  bottom: 25px;
+  right: 29.5dvw;
 }
 
 .lobby-hint div {
