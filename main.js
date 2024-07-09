@@ -1,13 +1,61 @@
 console.log('CFO ver.0.0.0');
+var language_data;
 var apputils = (function () {
   return {
     def: def,
+    lan: setLanguage
   }
 
   var isBattle = false;
   function def() {
     // set the first login num of menu
     showmenu(JSON.parse(storageutils.get('menunum', JSON.stringify(4))));
+
+    // settings language
+    fetch('lan/' + storageutils.get('apputils_lan', 'zh') + '.json')
+      .then(response => response.json())
+      .then(data => {
+        language_data = data;
+        document.querySelectorAll('.menu-btn-text')[0].textContent = language_data.footer.menuBtnText["0"];
+        document.querySelectorAll('.menu-btn-text')[1].textContent = language_data.footer.menuBtnText["1"];
+        document.querySelectorAll('.menu-btn-text')[2].textContent = language_data.footer.menuBtnText["2"];
+        document.querySelectorAll('.menu-btn-text')[3].textContent = language_data.footer.menuBtnText["3"];
+        document.querySelectorAll('.menu-btn-text')[4].textContent = language_data.footer.menuBtnText["4"];
+      })
+      .catch(error => {
+        console.error('Fetch error:', error);
+      });
+
+    document.querySelector('.zh-set .lan-now').addEventListener('click', (e) => {
+      if (document.querySelector('.zh-set .lan-triangle').textContent !== '▼') {
+        document.querySelector('.zh-set .lan-triangle').textContent = '▼';
+        document.querySelector('.zh-set .lan-options').style.display = 'flex';
+      } else {
+        document.querySelector('.zh-set .lan-triangle').textContent = '▲';
+        document.querySelector('.zh-set .lan-options').style.display = '';
+      }
+    });
+    document.querySelector('.en-set .lan-now').addEventListener('click', (e) => {
+      if (document.querySelector('.en-set .lan-triangle').textContent !== '▼') {
+        document.querySelector('.en-set .lan-triangle').textContent = '▼';
+        document.querySelector('.en-set .lan-options').style.display = 'flex';
+      } else {
+        document.querySelector('.en-set .lan-triangle').textContent = '▲';
+        document.querySelector('.en-set .lan-options').style.display = '';
+      }
+    });
+    document.querySelector('.lan-zh').addEventListener('click', () => {
+      setLanguage('zh');
+      document.querySelector('.en-set .lan-triangle').textContent = '▲';
+      document.querySelector('.en-set .lan-options').style.display = '';
+      location.reload();
+    });
+    document.querySelector('.lan-en').addEventListener('click', () => {
+      setLanguage('en');
+      document.querySelector('.zh-set .lan-triangle').textContent = '▲';
+      document.querySelector('.zh-set .lan-options').style.display = '';
+      location.reload();
+    });
 
     // events
     evt.click('.menu-btn', 0, () => {
@@ -1027,77 +1075,159 @@ var apputils = (function () {
     showItems();
 
     function showItems() {
-      for (var i = 0; i < own_equipment.helmet.length; i++) {
-        switch (own_equipment.helmet[i]) {
-          case 0:
-            createDIV('item-all-btn', '初級普通頭盔', document.querySelectorAll('.equip .en-set.color-0')[0], (b) => {
-              itemOption(b, 0, own_equipment.helmet[i]);
-            });
-            break;
+      switch (storageutils.get('apputils_lan', 'zh')) {
+        case 'zh':
+          for (var i = 0; i < own_equipment.helmet.length; i++) {
+            switch (own_equipment.helmet[i]) {
+              case 0:
+                createDIV('item-all-btn', '初級普通頭盔', document.querySelectorAll('.equip .color-0')[0], (b) => {
+                  itemOption(b, 0, own_equipment.helmet[i]);
+                });
+                break;
 
-          default:
-          // Tab to edit
-        }
-      }
-      for (var i = 0; i < own_equipment.jacket.length; i++) {
-        switch (own_equipment.jacket[i]) {
-          case 0:
-            createDIV('item-all-btn', '初級普通戰甲', document.querySelectorAll('.equip .en-set.color-0')[1], (b) => {
-              itemOption(b, 1, own_equipment.jacket[i]);
-            });
-            break;
+              default:
+              // Tab to edit
+            }
+          }
+          for (var i = 0; i < own_equipment.jacket.length; i++) {
+            switch (own_equipment.jacket[i]) {
+              case 0:
+                createDIV('item-all-btn', '初級普通戰甲', document.querySelectorAll('.equip .color-0')[1], (b) => {
+                  itemOption(b, 1, own_equipment.jacket[i]);
+                });
+                break;
 
-          default:
-          // Tab to edit
-        }
-      }
-      for (var i = 0; i < own_equipment.lweapon.length; i++) {
-        switch (own_equipment.lweapon[i]) {
-          case 0:
-            createDIV('item-all-btn', '輕便水果刀', document.querySelectorAll('.equip .en-set.color-0')[2], (b) => {
-              itemOption(b, 2, own_equipment.lweapon[i]);
-            });
-            break;
+              default:
+              // Tab to edit
+            }
+          }
+          for (var i = 0; i < own_equipment.lweapon.length; i++) {
+            switch (own_equipment.lweapon[i]) {
+              case 0:
+                createDIV('item-all-btn', '輕便水果刀', document.querySelectorAll('.equip .color-0')[2], (b) => {
+                  itemOption(b, 2, own_equipment.lweapon[i]);
+                });
+                break;
 
-          default:
-          // Tab to edit
-        }
-      }
-      for (var i = 0; i < own_equipment.rweapon.length; i++) {
-        switch (own_equipment.rweapon[i]) {
-          case 0:
-            createDIV('item-all-btn', '輕便水果刀', document.querySelectorAll('.equip .en-set.color-0')[3], (b) => {
-              itemOption(b, 3, own_equipment.rweapon[i]);
-            });
-            break;
+              default:
+              // Tab to edit
+            }
+          }
+          for (var i = 0; i < own_equipment.rweapon.length; i++) {
+            switch (own_equipment.rweapon[i]) {
+              case 0:
+                createDIV('item-all-btn', '輕便水果刀', document.querySelectorAll('.equip .color-0')[3], (b) => {
+                  itemOption(b, 3, own_equipment.rweapon[i]);
+                });
+                break;
 
-          default:
-          // Tab to edit
-        }
-      }
-      for (var i = 0; i < own_equipment.legstrap.length; i++) {
-        switch (own_equipment.legstrap[i]) {
-          case 0:
-            createDIV('item-all-btn', '補損口服藥', document.querySelectorAll('.equip .en-set.color-0')[4], (b) => {
-              itemOption(b, 4, own_equipment.legstrap[i]);
-            });
-            break;
+              default:
+              // Tab to edit
+            }
+          }
+          for (var i = 0; i < own_equipment.legstrap.length; i++) {
+            switch (own_equipment.legstrap[i]) {
+              case 0:
+                createDIV('item-all-btn', '補損口服藥', document.querySelectorAll('.equip .color-0')[4], (b) => {
+                  itemOption(b, 4, own_equipment.legstrap[i]);
+                });
+                break;
 
-          default:
-          // Tab to edit
-        }
-      }
-      for (var i = 0; i < own_equipment.boots.length; i++) {
-        switch (own_equipment.boots[i]) {
-          case 0:
-            createDIV('item-all-btn', '初級普通戰靴', document.querySelectorAll('.equip .en-set.color-0')[5], (b) => {
-              itemOption(b, 5, own_equipment.boots[i]);
-            });
-            break;
+              default:
+              // Tab to edit
+            }
+          }
+          for (var i = 0; i < own_equipment.boots.length; i++) {
+            switch (own_equipment.boots[i]) {
+              case 0:
+                createDIV('item-all-btn', '初級普通戰靴', document.querySelectorAll('.equip .color-0')[5], (b) => {
+                  itemOption(b, 5, own_equipment.boots[i]);
+                });
+                break;
 
-          default:
-          // Tab to edit
-        }
+              default:
+              // Tab to edit
+            }
+          }
+          break;
+
+        case 'en':
+          for (var i = 0; i < own_equipment.helmet.length; i++) {
+            switch (own_equipment.helmet[i]) {
+              case 0:
+                createDIV('item-all-btn', 'BASIC STANDARD HELMET', document.querySelectorAll('.equip .color-0')[0], (b) => {
+                  itemOption(b, 0, own_equipment.helmet[i]);
+                });
+                break;
+
+              default:
+              // Tab to edit
+            }
+          }
+          for (var i = 0; i < own_equipment.jacket.length; i++) {
+            switch (own_equipment.jacket[i]) {
+              case 0:
+                createDIV('item-all-btn', 'BASIC STANDARD ARMOR', document.querySelectorAll('.equip .color-0')[1], (b) => {
+                  itemOption(b, 1, own_equipment.jacket[i]);
+                });
+                break;
+
+              default:
+              // Tab to edit
+            }
+          }
+          for (var i = 0; i < own_equipment.lweapon.length; i++) {
+            switch (own_equipment.lweapon[i]) {
+              case 0:
+                createDIV('item-all-btn', 'LIGHTWEIGHT PARING KNIFE', document.querySelectorAll('.equip .color-0')[2], (b) => {
+                  itemOption(b, 2, own_equipment.lweapon[i]);
+                });
+                break;
+
+              default:
+              // Tab to edit
+            }
+          }
+          for (var i = 0; i < own_equipment.rweapon.length; i++) {
+            switch (own_equipment.rweapon[i]) {
+              case 0:
+                createDIV('item-all-btn', 'LIGHTWEIGHT PARING KNIFE', document.querySelectorAll('.equip .color-0')[3], (b) => {
+                  itemOption(b, 3, own_equipment.rweapon[i]);
+                });
+                break;
+
+              default:
+              // Tab to edit
+            }
+          }
+          for (var i = 0; i < own_equipment.legstrap.length; i++) {
+            switch (own_equipment.legstrap[i]) {
+              case 0:
+                createDIV('item-all-btn', 'ORAL RESTORATIVE MEDICATION', document.querySelectorAll('.equip .color-0')[4], (b) => {
+                  itemOption(b, 4, own_equipment.legstrap[i]);
+                });
+                break;
+
+              default:
+              // Tab to edit
+            }
+          }
+          for (var i = 0; i < own_equipment.boots.length; i++) {
+            switch (own_equipment.boots[i]) {
+              case 0:
+                createDIV('item-all-btn', 'BASIC STANDARD COMBAT BOOTS', document.querySelectorAll('.equip .color-0')[5], (b) => {
+                  itemOption(b, 5, own_equipment.boots[i]);
+                });
+                break;
+
+              default:
+              // Tab to edit
+            }
+          }
+          break;
+
+        default:
+          break;
       }
     }
     function itemOption(b, n, item_id) {
@@ -1156,8 +1286,8 @@ var apputils = (function () {
     }
     function update_equip_color(b, n, item_id) {
       if (equip_data[n] === item_id) {
-        for (var i = 0; i < document.querySelectorAll('.equip .en-set.color-0')[n].querySelectorAll('.item-all-btn').length; i++) {
-          document.querySelectorAll('.equip .en-set.color-0')[n].querySelectorAll('.item-all-btn')[i].style.color = '';
+        for (var i = 0; i < document.querySelectorAll('.equip .color-0')[n].querySelectorAll('.item-all-btn').length; i++) {
+          document.querySelectorAll('.equip .color-0')[n].querySelectorAll('.item-all-btn')[i].style.color = '';
         }
         b.style.color = '#f7d967';
       } else {
@@ -1181,6 +1311,12 @@ var apputils = (function () {
           display('.lobby', 0, '');
           display('.settings', 0, '');
 
+          document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#7ea4c1');
+          document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+
           textShadow('.menu-btn', 0, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
           textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -1195,6 +1331,12 @@ var apputils = (function () {
           display('.stat', 0, '');
           display('.lobby', 0, '');
           display('.settings', 0, '');
+
+          document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#7ea4c1');
+          document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
 
           textShadow('.menu-btn', 0, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
           textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -1212,6 +1354,12 @@ var apputils = (function () {
         display('.stat', 0, '');
         display('.lobby', 0, '');
         display('.settings', 0, '');
+
+        document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#7ea4c1');
+        document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
 
         textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 1, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
@@ -1236,6 +1384,12 @@ var apputils = (function () {
         display('.lobby', 0, '');
         display('.settings', 0, '');
 
+        document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#7ea4c1');
+        document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+
         textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 2, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
@@ -1252,6 +1406,12 @@ var apputils = (function () {
         display('.lobby', 0, 'flex');
         display('.settings', 0, '');
 
+        document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#7ea4c1');
+        document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+
         textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -1267,6 +1427,12 @@ var apputils = (function () {
         display('.stat', 0, '');
         display('.lobby', 0, '');
         display('.settings', 0, 'flex');
+
+        document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+        document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#8fb5d2');
 
         textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
         textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -1394,6 +1560,33 @@ var apputils = (function () {
         }
       }
     };
+  }
+  function setLanguage(lan) {
+    switch (lan) {
+      case 'zh':
+        document.querySelectorAll('.en-set').forEach(element => {
+          element.style.display = 'none';
+        });
+        document.querySelectorAll('.zh-set').forEach(element => {
+          element.style.display = '';
+        });
+
+        storageutils.set('apputils_lan', 'zh');
+        break;
+      case 'en':
+        document.querySelectorAll('.en-set').forEach(element => {
+          element.style.display = '';
+        });
+        document.querySelectorAll('.zh-set').forEach(element => {
+          element.style.display = 'none';
+        });
+
+        storageutils.set('apputils_lan', 'en');
+        break;
+
+      default:
+        break;
+    }
   }
 }())
 

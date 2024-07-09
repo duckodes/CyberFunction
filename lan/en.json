@@ -1,0 +1,32 @@
+{
+    "nav": {
+        "username": "USER NAME"
+    },
+    "footer": {
+        "menuBtnText": {
+            "0": "MAP",
+            "1": "ITEM",
+            "2": "STATE",
+            "3": "LOBBY",
+            "4": "SETTINGS"
+        }
+    },
+    "lobby": {
+        "time": {
+            "<5": "Early morning",
+            "<8": "Dawn",
+            "<12": "Morning",
+            "<13": "Noon",
+            "<16": "Afternoon",
+            "<18": "Dusk",
+            ">=18": "Evening"
+        },
+        "enterMessage": "Enter Message..",
+        "submit": "Send",
+        "checkMessage": {
+            "0": "[⚠︎] please login account",
+            "1": "[error] cannot consist solely of spaces",
+            "2": "[error] cannot be blank"
+        }
+    }
+}
