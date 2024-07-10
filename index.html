@@ -658,7 +658,26 @@
         settings_username_input.value = user.displayName;
         nav_username.innerHTML = `${user.displayName}<br><div class="f-10 en-set">${language_data.nav.username}</div>`;
 
-        get(ref(db, `battle/${uid}`)).then((snapshot) => {
+        // user data
+        const authRef = ref(db, `auth/${uid}`);
+        get(authRef).then((snapshot) => {
+          if (snapshot.exists()) {
+            userObj.userData = snapshot.val().data;
+          } else {
+            console.log("No data available");
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+        userObj.on('change', value => {
+          set(authRef, {
+            data: value
+          });
+        });
+
+        // is battle ?
+        const battleRef = ref(db, `battle/${uid}`);
+        get(battleRef).then((snapshot) => {
           if (snapshot.exists()) {
             continueBattleObj.continueBattleData = snapshot.val().data;
           } else {
@@ -667,8 +686,8 @@
         }).catch((error) => {
           console.error(error);
         });
-        continueBattleObj.on('change', function (value) {
-          set(ref(db, 'battle/' + auth.currentUser.uid), {
+        continueBattleObj.on('change', value => {
+          set(battleRef, {
             data: value
           });
         });

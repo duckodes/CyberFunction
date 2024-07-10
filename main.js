@@ -33,6 +33,39 @@ var continueBattleObj = {
     }
   }
 };
+var userObj = {
+  _userData: null,
+  listeners: {
+    change: []
+  },
+  set userData(value) {
+    this._userData = value;
+    this.triggerChangeEvent(value);
+  },
+  get userData() {
+    return this._userData;
+  },
+  on: function (eventName, callback) {
+    if (this.listeners[eventName]) {
+      this.listeners[eventName].push(callback);
+    }
+  },
+  off: function (eventName, callback) {
+    if (this.listeners[eventName]) {
+      const index = this.listeners[eventName].indexOf(callback);
+      if (index !== -1) {
+        this.listeners[eventName].splice(index, 1);
+      }
+    }
+  },
+  triggerChangeEvent: function (value) {
+    if (this.listeners.change) {
+      this.listeners.change.forEach(function (callback) {
+        callback(value);
+      });
+    }
+  }
+};
 var apputils = (function () {
   return {
     def: def,
@@ -40,6 +73,29 @@ var apputils = (function () {
   }
   var isBattle = false;
   function def() {
+    var btc = 0;
+    var etc = 0;
+    // user data
+    userObj.on('change', userchangeListener);
+    function userchangeListener(value) {
+      if (value) {
+        updateUserDataUI(userObj.userData.btc, userObj.userData.etc);
+      }
+    }
+    function updateUserDataUI(authbtc, authetc) {
+      btc = authbtc;
+      etc = authetc;
+      const btc_data = document.querySelector('.nav-wallet-btc-data');
+      const etc_data = document.querySelector('.nav-wallet-etc-data');
+      btc_data.textContent = btc;
+      etc_data.textContent = etc;
+    }
+    function saveUserData() {
+      userObj.userData = {
+        btc: btc,
+        etc: etc
+      }
+    }
     // settings language
     fetch('lan/' + storageutils.get('apputils_lan', 'en') + '.json')
       .then(response => response.json())
@@ -116,6 +172,7 @@ var apputils = (function () {
 
         showItems(data);
 
+        // is battle ?
         continueBattleObj.on('change', changeListener);
         function changeListener(value) {
           if (continueBattleObj.continueBattleData && continueBattleObj.continueBattleData.enemyId !== -1) {
@@ -854,12 +911,19 @@ var apputils = (function () {
             || get_dmg[0] === -1 && get_dmg[1] === -1 && get_dmg[2] === -1 && get_dmg[3] === -1 && get_dmg[4] === -1 && get_dmg[5] === -1) {
             innerHTML('.gameover-border', 0, '<div style="color: #c24347;">DEFEAT</div>');
             innerHTML('.gameover-info', 0, `<div style="color: #c24347;font-family: SdglitchdemoRegular-YzROj, CyberwarRegular-7BX0E;">REPAIR COSTS: ${get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * -3} BTC.</div>`);
+            btc -= get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * 3;
+            saveUserData();
+
             gameover();
             display('.gameover', 0, 'flex');
           }
           if (e_get_dmg[0] >= 10 || e_get_dmg[1] >= 10) {
+            var reward = Math.floor(getRandomNumber(e_get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0), e_get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * 5));
             innerHTML('.gameover-border', 0, '<div style="color: #f7d967;">VICTORY</div>');
-            innerHTML('.gameover-info', 0, `<div style="color: #f7d967;">AUTOMATIC REPAIRS FREE OF CHARGE.<br>REWARD:</div>`);
+            innerHTML('.gameover-info', 0, `<div style="color: #f7d967;">AUTOMATIC REPAIRS FREE OF CHARGE.<br>REWARD: ${reward}</div>`);
+            btc += reward;
+            saveUserData();
+
             gameover();
             display('.gameover', 0, 'flex');
           }
@@ -890,6 +954,8 @@ var apputils = (function () {
       display('.gameover', 0, 'flex');
       innerHTML('.gameover-border', 0, '<div style="color: #c24347;">ESCAPE</div>');
       innerHTML('.gameover-info', 0, `<div style="color: #c24347;font-family: SdglitchdemoRegular-YzROj, CyberwarRegular-7BX0E;">YOU HAVE FLED THE BATTLEFIELD. <br>PUNISHMENT: ${get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * -5} BTC.</div>`);
+      btc -= get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * 5;
+      saveUserData();
       gameover();
       rolltimes = 2;
       update_rolltimes_btn();
@@ -1163,7 +1229,7 @@ var apputils = (function () {
     }
     evt.click('.battle', 0, (e) => {
       saveContinueBattle();
-      if (e.target.parentElement.className !== 'battle-me-box') {
+      if (e.target.parentElement && e.target.parentElement.className !== 'battle-me-box') {
         hctrl_p_to_e = -1;
         document.querySelector('.battle-me-info div').innerHTML = language_data.battle.loading;
         document.querySelectorAll('.battle-me-box').forEach(element => {
