@@ -674,9 +674,11 @@
       }
     });
     window.addEventListener("beforeunload", (e) => {
-      set(ref(db, 'battle/' + auth.currentUser.uid), {
-        data: continueBattleData
-      });
+      if (continueBattleData.enemyId === -1) {
+        set(ref(db, 'battle/' + auth.currentUser.uid), {
+          data: continueBattleData
+        });
+      }
     });
 
     // use login function
