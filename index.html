@@ -660,22 +660,22 @@
 
         get(ref(db, `battle/${uid}`)).then((snapshot) => {
           if (snapshot.exists()) {
-            localStorage.setItem("continueBattleData", snapshot.val().data);
+            continueBattleObj.continueBattleData = snapshot.val().data;
           } else {
             console.log("No data available");
-            localStorage.removeItem("continueBattleData");
           }
         }).catch((error) => {
           console.error(error);
         });
 
-
         console.log(user);
       } else {
         // User is signed out
       }
-      set(ref(db, 'battle/' + user.uid), {
-        data: localStorage.getItem("continueBattleData")
+    });
+    window.addEventListener("beforeunload", (e) => {
+      set(ref(db, 'battle/' + auth.currentUser.uid), {
+        data: continueBattleData
       });
     });
 

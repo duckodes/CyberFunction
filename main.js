@@ -1,15 +1,14 @@
 console.log('CFO ver.0.0.0');
 var language_data;
 var continueBattleData;
+let continueBattleObj = {};
 var apputils = (function () {
   return {
     def: def,
-    lan: setLanguage,
+    lan: setLanguage
   }
-
   var isBattle = false;
   function def() {
-
     // settings language
     fetch('lan/' + storageutils.get('apputils_lan', 'en') + '.json')
       .then(response => response.json())
@@ -85,10 +84,6 @@ var apputils = (function () {
         equipItem(language_data);
 
         showItems(data);
-
-        if (JSON.parse(localStorage.getItem("continueBattleData")) && JSON.parse(localStorage.getItem("continueBattleData")).enemyId !== -1) {
-          continueBattle(JSON.parse(localStorage.getItem("continueBattleData")));
-        }
       })
       .catch(error => {
         console.error('Fetch error:', error);
@@ -388,7 +383,7 @@ var apputils = (function () {
       rweapon: ['3%DMG', '1%DMG', '3%DMG', '1%DMG', '3%DMG', '1%DMG']
     }];
     centerMapScroll();
-    document.body.addEventListener('click', (e) => { saveContinueBattle(); });
+    document.body.addEventListener('click', (e) => { saveContinueBattle() });
     evt.click('.map-info', 0, (e) => {
       if (e.target === document.querySelector('.map-info')) {
         display('.map-info', 0, '');
@@ -483,9 +478,18 @@ var apputils = (function () {
         rollTimes: rolltimes,
         battleArrData: battle_arr_data
       }
-      localStorage.setItem('continueBattleData', JSON.stringify(continueBattleData));
     }
-
+    Object.defineProperty(continueBattleObj, 'continueBattleData', {
+      get: function() {
+          return continueBattleData;
+      },
+      set: function(value) {
+          continueBattleData = value;
+          if (continueBattleData && continueBattleData.enemyId !== -1) {
+            continueBattle(continueBattleData);
+          }
+      }
+    });
     function continueBattle(data) {
       enemies_id = data.enemyId;
       isBattle = true;
@@ -694,7 +698,6 @@ var apputils = (function () {
       update_rolltimes_btn();
     }
     evt.click('.roll', 0, () => {
-      saveContinueBattle();
       if (checkArr(battle_arr_data, 'N/A')) {
         StartRoll();
       } else {
