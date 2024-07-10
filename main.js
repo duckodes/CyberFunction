@@ -1,7 +1,30 @@
 console.log('CFO ver.0.0.0');
 var language_data;
-var continueBattleData;
-let continueBattleObj = {};
+var continueBattleObj = {
+  _continueBattleData: null,
+  listeners: {
+    change: []
+  },
+  set continueBattleData(value) {
+    this._continueBattleData = value;
+    this.triggerChangeEvent(value);
+  },
+  get continueBattleData() {
+    return this._continueBattleData;
+  },
+  on: function (eventName, callback) {
+    if (this.listeners[eventName]) {
+      this.listeners[eventName].push(callback);
+    }
+  },
+  triggerChangeEvent: function (value) {
+    if (this.listeners.change) {
+      this.listeners.change.forEach(function (callback) {
+        callback(value);
+      });
+    }
+  }
+};
 var apputils = (function () {
   return {
     def: def,
@@ -383,7 +406,7 @@ var apputils = (function () {
       rweapon: ['3%DMG', '1%DMG', '3%DMG', '1%DMG', '3%DMG', '1%DMG']
     }];
     centerMapScroll();
-    document.body.addEventListener('click', (e) => { saveContinueBattle() });
+    document.body.addEventListener('click', (e) => { });
     evt.click('.map-info', 0, (e) => {
       if (e.target === document.querySelector('.map-info')) {
         display('.map-info', 0, '');
@@ -448,6 +471,7 @@ var apputils = (function () {
         ability_ui_update();
         update_ui_e_hp();
         background_setup_loop.start();
+        saveContinueBattle();
       })
     }
     const background_setup_loop = loop(() => {
@@ -465,7 +489,7 @@ var apputils = (function () {
     }, 5000);
 
     function saveContinueBattle() {
-      continueBattleData = {
+      continueBattleObj.continueBattleData = {
         enemyId: enemies_id,
         getDmg: get_dmg,
         getDmgStatus: get_dmg_status,
@@ -479,17 +503,11 @@ var apputils = (function () {
         battleArrData: battle_arr_data
       }
     }
-    Object.defineProperty(continueBattleObj, 'continueBattleData', {
-      get: function() {
-          return continueBattleData;
-      },
-      set: function(value) {
-          continueBattleData = value;
-          if (continueBattleData && continueBattleData.enemyId !== -1) {
-            continueBattle(continueBattleData);
-          }
+    setTimeout(() => {
+      if (continueBattleObj.continueBattleData && continueBattleObj.continueBattleData.enemyId !== -1) {
+        continueBattle(continueBattleObj.continueBattleData);
       }
-    });
+    }, 1000);
     function continueBattle(data) {
       enemies_id = data.enemyId;
       isBattle = true;
@@ -698,6 +716,7 @@ var apputils = (function () {
       update_rolltimes_btn();
     }
     evt.click('.roll', 0, () => {
+      saveContinueBattle();
       if (checkArr(battle_arr_data, 'N/A')) {
         StartRoll();
       } else {
@@ -810,6 +829,7 @@ var apputils = (function () {
           update_ui_e_box_all();
           setTimeout(() => {
             enemyRoll();
+            saveContinueBattle();
             update_ui_e_hp();
             display('.roll', 0, '');
             display('.reroll', 0, '');
@@ -863,6 +883,7 @@ var apputils = (function () {
       update_rolltimes_btn();
       battle_arr_data = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
       ability_ui_update();
+      saveContinueBattle();
     });
 
     function parseIntOrDefault(value, defaultValue) {
@@ -1129,6 +1150,7 @@ var apputils = (function () {
       }
     }
     evt.click('.battle', 0, (e) => {
+      saveContinueBattle();
       if (e.target.parentElement.className !== 'battle-me-box') {
         hctrl_p_to_e = -1;
         document.querySelector('.battle-me-info div').innerHTML = language_data.battle.loading;
