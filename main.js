@@ -17,6 +17,14 @@ var continueBattleObj = {
       this.listeners[eventName].push(callback);
     }
   },
+  off: function (eventName, callback) {
+    if (this.listeners[eventName]) {
+      const index = this.listeners[eventName].indexOf(callback);
+      if (index !== -1) {
+        this.listeners[eventName].splice(index, 1);
+      }
+    }
+  },
   triggerChangeEvent: function (value) {
     if (this.listeners.change) {
       this.listeners.change.forEach(function (callback) {
@@ -107,6 +115,14 @@ var apputils = (function () {
         equipItem(language_data);
 
         showItems(data);
+
+        continueBattleObj.on('change', changeListener);
+        function changeListener(value) {
+          if (continueBattleObj.continueBattleData && continueBattleObj.continueBattleData.enemyId !== -1) {
+            continueBattle(continueBattleObj.continueBattleData);
+            continueBattleObj.off('change', changeListener);
+          }
+        }
       })
       .catch(error => {
         console.error('Fetch error:', error);
@@ -503,11 +519,7 @@ var apputils = (function () {
         battleArrData: battle_arr_data
       }
     }
-    setTimeout(() => {
-      if (continueBattleObj.continueBattleData && continueBattleObj.continueBattleData.enemyId !== -1) {
-        continueBattle(continueBattleObj.continueBattleData);
-      }
-    }, 1000);
+
     function continueBattle(data) {
       enemies_id = data.enemyId;
       isBattle = true;
