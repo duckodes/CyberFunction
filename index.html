@@ -661,17 +661,18 @@
         get(ref(db, `battle/${uid}`)).then((snapshot) => {
           if (snapshot.exists()) {
             continueBattleObj.continueBattleData = snapshot.val().data;
-            continueBattleObj.on('change', function (value) {
-              set(ref(db, 'battle/' + auth.currentUser.uid), {
-                data: value
-              });
-            });
           } else {
             console.log("No data available");
           }
         }).catch((error) => {
           console.error(error);
         });
+        continueBattleObj.on('change', function (value) {
+          set(ref(db, 'battle/' + auth.currentUser.uid), {
+            data: value
+          });
+        });
+        
         console.log(user);
       } else {
         // User is signed out
