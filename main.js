@@ -994,6 +994,8 @@ var apputils = (function () {
             innerHTML('.gameover-border', 0, '<div style="color: #c24347;">DEFEAT</div>');
             innerHTML('.gameover-info', 0, `<div style="color: #c24347;font-family: SdglitchdemoRegular-YzROj, CyberwarRegular-7BX0E;">REPAIR COSTS: ${get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * -3} BTC.</div>`);
             btc -= get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * 3;
+            const btc_data = document.querySelector('.nav-wallet-btc-data');
+            btc_data.textContent = btc;
             saveUserData();
 
             gameover();
@@ -1004,6 +1006,8 @@ var apputils = (function () {
             innerHTML('.gameover-border', 0, '<div style="color: #f7d967;">VICTORY</div>');
             innerHTML('.gameover-info', 0, `<div style="color: #f7d967;">AUTOMATIC REPAIRS FREE OF CHARGE.<br>REWARD: ${reward}</div>`);
             btc += reward;
+            const btc_data = document.querySelector('.nav-wallet-btc-data');
+            btc_data.textContent = btc;
             saveUserData();
 
             gameover();
@@ -1014,6 +1018,9 @@ var apputils = (function () {
       }
     });
     function gameover() {
+      display('.roll', 0, '');
+      display('.reroll', 0, '');
+      display('.battle-exit', 0, '');
       isBattle = false;
       showmenu(0);
       activeMenu = 0;
