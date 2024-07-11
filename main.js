@@ -1367,7 +1367,7 @@ var apputils = (function () {
           break;
         case 4:
           setItemData(item_data.lweapon, '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG');
-          currentEquipName.lweapon = languageData.item.equipment.weapon["3"];
+          currentEquipName.lweapon = languageData.item.equipment.weapon["4"];
           break;
 
         default:
@@ -1394,7 +1394,7 @@ var apputils = (function () {
           break;
         case 4:
           setItemData(item_data.lweapon, '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG');
-          currentEquipName.rweapon = languageData.item.equipment.weapon["3"];
+          currentEquipName.rweapon = languageData.item.equipment.weapon["4"];
           break;
 
         default:
