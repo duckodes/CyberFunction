@@ -1,5 +1,39 @@
 console.log('CFO ver.0.0.0');
 var language_data;
+var language_dataObj = {};
+var isUndoObj = {
+  _isUndo: null,
+  listeners: {
+    change: []
+  },
+  set isUndo(value) {
+    this._isUndo = value;
+    this.triggerChangeEvent(value);
+  },
+  get isUndo() {
+    return this._isUndo;
+  },
+  on: function (eventName, callback) {
+    if (this.listeners[eventName]) {
+      this.listeners[eventName].push(callback);
+    }
+  },
+  off: function (eventName, callback) {
+    if (this.listeners[eventName]) {
+      const index = this.listeners[eventName].indexOf(callback);
+      if (index !== -1) {
+        this.listeners[eventName].splice(index, 1);
+      }
+    }
+  },
+  triggerChangeEvent: function (value) {
+    if (this.listeners.change) {
+      this.listeners.change.forEach(function (callback) {
+        callback(value);
+      });
+    }
+  }
+};
 var continueBattleObj = {
   _continueBattleData: null,
   listeners: {
@@ -68,122 +102,143 @@ var userObj = {
 };
 var apputils = (function () {
   return {
-    def: def,
-    lan: setLanguage
+    def: def
   }
   var isBattle = false;
   function def() {
+    // user data
     var btc = 0;
     var etc = 0;
-    // user data
-    userObj.on('change', userchangeListener);
-    function userchangeListener(value) {
+    var language;
+    var activeMenu;
+    userObj.on('change', updateUserData);
+    function updateUserData(value) {
       if (value) {
-        updateUserDataUI(userObj.userData.btc, userObj.userData.etc);
+        getUserData();
+        userObj.off('change', updateUserData);
       }
     }
-    function updateUserDataUI(authbtc, authetc) {
-      btc = authbtc;
-      etc = authetc;
+    function getUserData() {
+      btc = userObj.userData.btc;
+      etc = userObj.userData.etc;
+      own_equipment = userObj.userData.ownitems;
+      equip_data = userObj.userData.equipment;
+      language = userObj.userData.language
+      activeMenu = userObj.userData.menu;
+
+      // is battle ?
+      Object.defineProperty(language_dataObj, 'language', {
+        get: function () {
+          return language_data;
+        },
+        set: function (value) {
+          language_data = value;
+          if (continueBattleObj.continueBattleData) {
+            continueBattle(continueBattleObj.continueBattleData);
+          }
+        },
+        configurable: true
+      });
+
+      // update wallet
       const btc_data = document.querySelector('.nav-wallet-btc-data');
       const etc_data = document.querySelector('.nav-wallet-etc-data');
       btc_data.textContent = btc;
       etc_data.textContent = etc;
+
+      // settings language
+      fetch('lan/' + language + '.json')
+        .then(response => response.json())
+        .then(data => {
+          language_data = data;
+          language_dataObj.language = data;
+          // set the first login num of menu
+          showmenu(activeMenu, data);
+
+          document.querySelectorAll('.menu-btn-text')[0].textContent = data.footer.menuBtnText["0"];
+          document.querySelectorAll('.menu-btn-text')[1].textContent = data.footer.menuBtnText["1"];
+          document.querySelectorAll('.menu-btn-text')[2].textContent = data.footer.menuBtnText["2"];
+          document.querySelectorAll('.menu-btn-text')[3].textContent = data.footer.menuBtnText["3"];
+          document.querySelectorAll('.menu-btn-text')[4].textContent = data.footer.menuBtnText["4"];
+
+          document.querySelectorAll('.item-options .item-all-btn')[0].textContent = data.item.options["0"];
+          document.querySelectorAll('.item-options .item-all-btn')[1].textContent = data.item.options["1"];
+          document.querySelectorAll('.item-options .item-all-btn')[2].textContent = data.item.options["2"];
+          document.querySelectorAll('.item-options .item-all-btn')[3].textContent = data.item.options["3"];
+
+          document.querySelectorAll('.equip .color-0')[0].textContent = data.item.equip.helmet;
+          document.querySelectorAll('.equip .color-0')[1].textContent = data.item.equip.jacket;
+          document.querySelectorAll('.equip .color-0')[2].textContent = data.item.equip.leftWeapon;
+          document.querySelectorAll('.equip .color-0')[3].textContent = data.item.equip.rightWeapon;
+          document.querySelectorAll('.equip .color-0')[4].textContent = data.item.equip.legStrap;
+          document.querySelectorAll('.equip .color-0')[5].textContent = data.item.equip.boots;
+
+          document.querySelectorAll('.encyclopedia .item-all-btn')[0].textContent = data.item.encyclopedia.helmet;
+          document.querySelectorAll('.encyclopedia .item-all-btn')[1].textContent = data.item.encyclopedia.jacket;
+          document.querySelectorAll('.encyclopedia .item-all-btn')[2].textContent = data.item.encyclopedia.weapon;
+          document.querySelectorAll('.encyclopedia .item-all-btn')[3].textContent = data.item.encyclopedia.legStrap;
+          document.querySelectorAll('.encyclopedia .item-all-btn')[4].textContent = data.item.encyclopedia.boots;
+
+          document.querySelectorAll('.e-helmet .item-all-btn')[0].textContent = data.item.equipment.helmet["0"];
+          document.querySelectorAll('.e-helmet .item-all-btn')[1].textContent = data.item.equipment.helmet["1"];
+
+          document.querySelectorAll('.e-jacket .item-all-btn')[0].textContent = data.item.equipment.jacket["0"];
+
+          document.querySelectorAll('.e-weapon .item-all-btn')[0].textContent = data.item.equipment.weapon["0"];
+          document.querySelectorAll('.e-weapon .item-all-btn')[1].textContent = data.item.equipment.weapon["1"];
+          document.querySelectorAll('.e-weapon .item-all-btn')[2].textContent = data.item.equipment.weapon["2"];
+          document.querySelectorAll('.e-weapon .item-all-btn')[3].textContent = data.item.equipment.weapon["3"];
+          document.querySelectorAll('.e-weapon .item-all-btn')[4].textContent = data.item.equipment.weapon["4"];
+
+          document.querySelectorAll('.e-legstrap .item-all-btn')[0].textContent = data.item.equipment.legstrap["0"];
+          document.querySelectorAll('.e-legstrap .item-all-btn')[1].textContent = data.item.equipment.legstrap["1"];
+
+          document.querySelectorAll('.e-boots .item-all-btn')[0].textContent = data.item.equipment.boots["0"];
+
+          document.getElementById('message').setAttribute('placeholder', language_data.lobby.enterMessage);
+          document.getElementById('submit').textContent = language_data.lobby.submit;
+
+          document.querySelector('.settings-username .f-10').textContent = data.settings.username;
+          document.querySelector('.lan-now').textContent = data.settings.language.now;
+          document.querySelector('.lan-zh').textContent = data.settings.language.options.zh;
+          document.querySelector('.lan-en').textContent = data.settings.language.options.en;
+          document.querySelector('.lan-jp').textContent = data.settings.language.options.jp;
+          document.querySelector('.logout').textContent = data.settings.logout;
+
+          document.querySelectorAll('.battle-weapon-name')[0].textContent = data.item.equip.helmet;
+          document.querySelectorAll('.battle-weapon-name')[1].textContent = data.item.equip.jacket;
+          document.querySelectorAll('.battle-weapon-name')[2].textContent = data.item.equip.leftWeapon;
+          document.querySelectorAll('.battle-weapon-name')[3].textContent = data.item.equip.rightWeapon;
+          document.querySelectorAll('.battle-weapon-name')[4].textContent = data.item.equip.legStrap;
+          document.querySelectorAll('.battle-weapon-name')[5].textContent = data.item.equip.boots;
+
+          document.querySelector('.battle-exit').innerHTML = data.battle.exit + '&#60;';
+          document.querySelector('.reroll div').innerHTML = '&#62; ' + data.battle.reroll;
+          update_rolltimes_btn();
+          document.querySelector('.battle-me-info div').innerHTML = language_data.battle.loading;
+
+          showEncyclopediaINFO(data);
+
+          equipItemAbility(language_data);
+
+          updateOwnItemsUI(language_data);
+
+          document.querySelector('.nav-username .f-10.en-set').textContent = language_data.nav.username;
+        })
+        .catch(error => {
+          console.error('Fetch error:', error);
+        });
     }
     function saveUserData() {
       userObj.userData = {
         btc: btc,
-        etc: etc
+        etc: etc,
+        ownitems: own_equipment,
+        equipment: equip_data,
+        language: language,
+        menu: activeMenu
       }
     }
-    // settings language
-    fetch('lan/' + storageutils.get('apputils_lan', 'en') + '.json')
-      .then(response => response.json())
-      .then(data => {
-        language_data = data;
-        // set the first login num of menu
-        showmenu(JSON.parse(storageutils.get('menunum', JSON.stringify(4))), data);
-
-        document.querySelectorAll('.menu-btn-text')[0].textContent = data.footer.menuBtnText["0"];
-        document.querySelectorAll('.menu-btn-text')[1].textContent = data.footer.menuBtnText["1"];
-        document.querySelectorAll('.menu-btn-text')[2].textContent = data.footer.menuBtnText["2"];
-        document.querySelectorAll('.menu-btn-text')[3].textContent = data.footer.menuBtnText["3"];
-        document.querySelectorAll('.menu-btn-text')[4].textContent = data.footer.menuBtnText["4"];
-
-        document.querySelectorAll('.item-options .item-all-btn')[0].textContent = data.item.options["0"];
-        document.querySelectorAll('.item-options .item-all-btn')[1].textContent = data.item.options["1"];
-        document.querySelectorAll('.item-options .item-all-btn')[2].textContent = data.item.options["2"];
-        document.querySelectorAll('.item-options .item-all-btn')[3].textContent = data.item.options["3"];
-
-        document.querySelectorAll('.equip .color-0')[0].textContent = data.item.equip.helmet;
-        document.querySelectorAll('.equip .color-0')[1].textContent = data.item.equip.jacket;
-        document.querySelectorAll('.equip .color-0')[2].textContent = data.item.equip.leftWeapon;
-        document.querySelectorAll('.equip .color-0')[3].textContent = data.item.equip.rightWeapon;
-        document.querySelectorAll('.equip .color-0')[4].textContent = data.item.equip.legStrap;
-        document.querySelectorAll('.equip .color-0')[5].textContent = data.item.equip.boots;
-
-        document.querySelectorAll('.encyclopedia .item-all-btn')[0].textContent = data.item.encyclopedia.helmet;
-        document.querySelectorAll('.encyclopedia .item-all-btn')[1].textContent = data.item.encyclopedia.jacket;
-        document.querySelectorAll('.encyclopedia .item-all-btn')[2].textContent = data.item.encyclopedia.weapon;
-        document.querySelectorAll('.encyclopedia .item-all-btn')[3].textContent = data.item.encyclopedia.legStrap;
-        document.querySelectorAll('.encyclopedia .item-all-btn')[4].textContent = data.item.encyclopedia.boots;
-
-        document.querySelectorAll('.e-helmet .item-all-btn')[0].textContent = data.item.equipment.helmet["0"];
-        document.querySelectorAll('.e-helmet .item-all-btn')[1].textContent = data.item.equipment.helmet["1"];
-
-        document.querySelectorAll('.e-jacket .item-all-btn')[0].textContent = data.item.equipment.jacket["0"];
-
-        document.querySelectorAll('.e-weapon .item-all-btn')[0].textContent = data.item.equipment.weapon["0"];
-        document.querySelectorAll('.e-weapon .item-all-btn')[1].textContent = data.item.equipment.weapon["1"];
-        document.querySelectorAll('.e-weapon .item-all-btn')[2].textContent = data.item.equipment.weapon["2"];
-        document.querySelectorAll('.e-weapon .item-all-btn')[3].textContent = data.item.equipment.weapon["3"];
-        document.querySelectorAll('.e-weapon .item-all-btn')[4].textContent = data.item.equipment.weapon["4"];
-
-        document.querySelectorAll('.e-legstrap .item-all-btn')[0].textContent = data.item.equipment.legstrap["0"];
-        document.querySelectorAll('.e-legstrap .item-all-btn')[1].textContent = data.item.equipment.legstrap["1"];
-
-        document.querySelectorAll('.e-boots .item-all-btn')[0].textContent = data.item.equipment.boots["0"];
-
-        document.getElementById('message').setAttribute('placeholder', language_data.lobby.enterMessage);
-        document.getElementById('submit').textContent = language_data.lobby.submit;
-
-        document.querySelector('.settings-username .f-10').textContent = data.settings.username;
-        document.querySelector('.lan-now').textContent = data.settings.language.now;
-        document.querySelector('.lan-zh').textContent = data.settings.language.options.zh;
-        document.querySelector('.lan-en').textContent = data.settings.language.options.en;
-        document.querySelector('.lan-jp').textContent = data.settings.language.options.jp;
-        document.querySelector('.logout').textContent = data.settings.logout;
-
-        document.querySelectorAll('.battle-weapon-name')[0].textContent = data.item.equip.helmet;
-        document.querySelectorAll('.battle-weapon-name')[1].textContent = data.item.equip.jacket;
-        document.querySelectorAll('.battle-weapon-name')[2].textContent = data.item.equip.leftWeapon;
-        document.querySelectorAll('.battle-weapon-name')[3].textContent = data.item.equip.rightWeapon;
-        document.querySelectorAll('.battle-weapon-name')[4].textContent = data.item.equip.legStrap;
-        document.querySelectorAll('.battle-weapon-name')[5].textContent = data.item.equip.boots;
-
-        document.querySelector('.battle-exit').innerHTML = data.battle.exit + '&#60;';
-        document.querySelector('.reroll div').innerHTML = '&#62; ' + data.battle.reroll;
-        update_rolltimes_btn();
-        document.querySelector('.battle-me-info div').innerHTML = language_data.battle.loading;
-
-        showEncyclopediaINFO(data);
-
-        equipItem(language_data);
-
-        showItems(data);
-
-        // is battle ?
-        continueBattleObj.on('change', changeListener);
-        function changeListener(value) {
-          if (continueBattleObj.continueBattleData && continueBattleObj.continueBattleData.enemyId !== -1) {
-            continueBattle(continueBattleObj.continueBattleData);
-            continueBattleObj.off('change', changeListener);
-          }
-        }
-      })
-      .catch(error => {
-        console.error('Fetch error:', error);
-      });
 
     document.querySelector('.lan-now').addEventListener('click', (e) => {
       if (document.querySelector('.lan-triangle').textContent !== '▼') {
@@ -195,19 +250,22 @@ var apputils = (function () {
       }
     });
     document.querySelector('.lan-zh').addEventListener('click', () => {
-      setLanguage('zh');
+      language = 'zh';
+      saveUserData();
       document.querySelector('.lan-triangle').textContent = '▲';
       document.querySelector('.lan-options').style.display = '';
       location.reload();
     });
     document.querySelector('.lan-en').addEventListener('click', () => {
-      setLanguage('en');
+      language = 'en';
+      saveUserData();
       document.querySelector('.lan-triangle').textContent = '▲';
       document.querySelector('.lan-options').style.display = '';
       location.reload();
     });
     document.querySelector('.lan-jp').addEventListener('click', () => {
-      setLanguage('jp');
+      language = 'jp';
+      saveUserData();
       document.querySelector('.lan-triangle').textContent = '▲';
       document.querySelector('.lan-options').style.display = '';
       location.reload();
@@ -216,10 +274,14 @@ var apputils = (function () {
     // events
     evt.click('.menu-btn', 0, () => {
       showmenu(0);
+      activeMenu = 0;
+      saveUserData();
       centerMapScroll();
       isBattle ? background_setup_loop.start() : background_setup_loop.stop();
     })
     evt.click('.menu-btn', 1, () => {
+      activeMenu = 1;
+      saveUserData();
       if (document.querySelector('.item').style.display === 'flex') {
         showmenu(1);
         display('.e-helmet', 0, '');
@@ -253,13 +315,19 @@ var apputils = (function () {
     })
     evt.click('.menu-btn', 2, () => {
       showmenu(2);
+      activeMenu = 2;
+      saveUserData();
     })
     evt.click('.menu-btn', 3, () => {
       showmenu(3);
+      activeMenu = 3;
+      saveUserData();
       document.querySelector('.lobby-hint').style.display = '';
     })
     evt.click('.menu-btn', 4, () => {
       showmenu(4);
+      activeMenu = 4;
+      saveUserData();
     })
     evt.click('.item-options .item-all-btn', 0, (e) => {
       if (!isBattle) {
@@ -288,6 +356,8 @@ var apputils = (function () {
     })
     evt.click('.back-btn', 0, () => {
       showmenu(1);
+      activeMenu = 1;
+      saveUserData();
     })
     let equip_nums = document.querySelectorAll('.equip .item-all-btn').length;
     let item_nums = 4 + equip_nums;
@@ -538,6 +608,8 @@ var apputils = (function () {
       c.addEventListener('click', () => {
         isBattle = true;
         showmenu(0);
+        activeMenu = 0;
+        saveUserData();
 
         set_get_dmg_default();
         enemyRoll();
@@ -695,7 +767,7 @@ var apputils = (function () {
       legstrap: '',
       boots: ''
     };
-    let equip_data = JSON.parse(storageutils.get('equip_data', JSON.stringify([0, -1, -1, 1, -1, -1])));
+    let equip_data = [0, -1, -1, 1, -1, -1];
     let battle_arr_data = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     let rolltimes = 2;
     let checkreroll_input = false;
@@ -775,17 +847,24 @@ var apputils = (function () {
       // reroll();
     });
     function reroll() {
-      if (rolltimes < 2) {
-        reset_val_reroll();
-        if (document.querySelector('.force-start-btn')) {
-          document.querySelector('.force-start-btn').remove();
-        }
-        rolltimes = 2;
+      // if (rolltimes < 2) {
+      //   reset_val_reroll();
+      //   if (document.querySelector('.force-start-btn')) {
+      //     document.querySelector('.force-start-btn').remove();
+      //   }
+      //   rolltimes = 2;
+      // }
+      // update_rolltimes_btn();
+      isUndoObj.isUndo = true;
+      continueBattleObj.on('change', update);
+      function update(value) {
+        setTimeout(() => {
+          continueBattle(continueBattleObj.continueBattleData);
+        }, 1500);
+        continueBattleObj.off('change', update);
       }
-      update_rolltimes_btn();
     }
     evt.click('.roll', 0, () => {
-      saveContinueBattle();
       if (checkArr(battle_arr_data, 'N/A')) {
         StartRoll();
       } else {
@@ -819,6 +898,7 @@ var apputils = (function () {
             document.querySelector('.force-start-btn').remove();
           }
           rolltimes--;
+          saveContinueBattle();
         } else {
           rolltimes = 2;
           display('.roll', 0, 'none');
@@ -897,12 +977,14 @@ var apputils = (function () {
           dmg_ui_update();
           update_ui_e_box_all();
           setTimeout(() => {
-            enemyRoll();
-            saveContinueBattle();
-            update_ui_e_hp();
-            display('.roll', 0, '');
-            display('.reroll', 0, '');
-            display('.battle-exit', 0, '');
+            if (enemies_id !== -1) {
+              enemyRoll();
+              saveContinueBattle();
+              update_ui_e_hp();
+              display('.roll', 0, '');
+              display('.reroll', 0, '');
+              display('.battle-exit', 0, '');
+            }
           }, 1500);
 
           // GAME OVER
@@ -934,6 +1016,8 @@ var apputils = (function () {
     function gameover() {
       isBattle = false;
       showmenu(0);
+      activeMenu = 0;
+      saveUserData();
       if (document.getElementById(`asciiArt${enemies_id}`)) {
         document.getElementById(`asciiArt${enemies_id}`).remove();
       }
@@ -949,19 +1033,19 @@ var apputils = (function () {
       if (document.querySelector('.force-start-btn')) {
         document.querySelector('.force-start-btn').remove();
       }
+      continueBattleObj.continueBattleData = null;
     }
     evt.click('.battle-exit', 0, () => {
       display('.gameover', 0, 'flex');
       innerHTML('.gameover-border', 0, '<div style="color: #c24347;">ESCAPE</div>');
       innerHTML('.gameover-info', 0, `<div style="color: #c24347;font-family: SdglitchdemoRegular-YzROj, CyberwarRegular-7BX0E;">YOU HAVE FLED THE BATTLEFIELD. <br>PUNISHMENT: ${get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * -5} BTC.</div>`);
       btc -= get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * 5;
-      saveUserData();
       gameover();
       rolltimes = 2;
       update_rolltimes_btn();
       battle_arr_data = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
       ability_ui_update();
-      saveContinueBattle();
+      continueBattleObj.continueBattleData = null;
     });
 
     function parseIntOrDefault(value, defaultValue) {
@@ -970,10 +1054,10 @@ var apputils = (function () {
     }
     function save_equipdata(n, n1) {
       equip_data[n] = n1;
-      storageutils.set('equip_data', JSON.stringify(equip_data));
-      equipItem(language_data);
+      equipItemAbility(language_data);
       set_get_dmg_default();
       dmg_ui_update();
+      saveUserData();
     }
     function setItemData(t, n, n1, n2, n3, n4, n5) {
       t[0] = n;
@@ -1228,7 +1312,6 @@ var apputils = (function () {
       }
     }
     evt.click('.battle', 0, (e) => {
-      saveContinueBattle();
       if (e.target.parentElement && e.target.parentElement.className !== 'battle-me-box') {
         hctrl_p_to_e = -1;
         document.querySelector('.battle-me-info div').innerHTML = language_data.battle.loading;
@@ -1237,96 +1320,143 @@ var apputils = (function () {
         });
       }
     });
-    function equipItem(languageData) {
+    function equipItemAbility(languageData) {
       // helmet
-      switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[0]) {
-        case -1:
-          setItemData(item_data.helmet, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
-          currentEquipName.helmet = '';
-          break;
+      switch (equip_data[0]) {
         case 0:
-          setItemData(item_data.helmet, '1%DEF', '1%RD', '1%DEF', '1%RD', '1%DEF', '1%RD');
+          setItemData(item_data.helmet, '1%DEF', '1%DEF', '1%DEF', '1%DEF', '1%DEF', '1%DEF');
           currentEquipName.helmet = languageData.item.equipment.helmet["0"];
           break;
+        case 1:
+          setItemData(item_data.helmet, '2%DEF', '1%DEF', '1%DEF', '1%DEF', '2%DEF', '1%DEF');
+          currentEquipName.helmet = languageData.item.equipment.helmet["1"];
+          break;
 
         default:
-        // Tab to edit
+          setItemData(item_data.helmet, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          currentEquipName.helmet = '';
       }
       // jacket
-      switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[1]) {
-        case -1:
+      switch (equip_data[1]) {
+        case 0:
+          setItemData(item_data.jacket, '1%DEF', '1%RD', '1%DEF', '1%RD', '1%DEF', '1%RD');
+          currentEquipName.jacket = languageData.item.equipment.jacket["0"];
+          break;
+
+        default:
           setItemData(item_data.jacket, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
           currentEquipName.jacket = '';
-          break;
-
-        default:
-        // Tab to edit
       }
       // lweapon
-      switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[2]) {
-        case -1:
-          setItemData(item_data.lweapon, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
-          currentEquipName.lweapon = '';
+      switch (equip_data[2]) {
+        case 0:
+          setItemData(item_data.lweapon, '1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF');
+          currentEquipName.lweapon = languageData.item.equipment.weapon["0"];
+          break;
+        case 1:
+          setItemData(item_data.lweapon, '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG');
+          currentEquipName.lweapon = languageData.item.equipment.weapon["1"];
+          break;
+        case 2:
+          setItemData(item_data.lweapon, '3%DMG', '2%DMG', '1%DMG', '1%DMG', '2%DMG', '3%DMG');
+          currentEquipName.lweapon = languageData.item.equipment.weapon["2"];
+          break;
+        case 3:
+          setItemData(item_data.lweapon, '1%DMG', '0%DMG', '1%DMG', '5%DMG', '0%DMG', '1%DMG');
+          currentEquipName.lweapon = languageData.item.equipment.weapon["3"];
+          break;
+        case 4:
+          setItemData(item_data.lweapon, '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG');
+          currentEquipName.lweapon = languageData.item.equipment.weapon["3"];
           break;
 
         default:
-        // Tab to edit
+          setItemData(item_data.lweapon, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          currentEquipName.lweapon = '';
       }
       // rweapon
-      switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[3]) {
-        case -1:
-          setItemData(item_data.rweapon, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
-          currentEquipName.rweapon = '';
+      switch (equip_data[3]) {
+        case 0:
+          setItemData(item_data.rweapon, '1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF')
+          currentEquipName.rweapon = languageData.item.equipment.weapon["0"];
           break;
         case 1:
           setItemData(item_data.rweapon, '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG')
           currentEquipName.rweapon = languageData.item.equipment.weapon["1"];
           break;
+        case 2:
+          setItemData(item_data.lweapon, '3%DMG', '2%DMG', '1%DMG', '1%DMG', '2%DMG', '3%DMG');
+          currentEquipName.rweapon = languageData.item.equipment.weapon["2"];
+          break;
+        case 3:
+          setItemData(item_data.lweapon, '1%DMG', '0%DMG', '1%DMG', '5%DMG', '0%DMG', '1%DMG');
+          currentEquipName.rweapon = languageData.item.equipment.weapon["3"];
+          break;
+        case 4:
+          setItemData(item_data.lweapon, '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG');
+          currentEquipName.rweapon = languageData.item.equipment.weapon["3"];
+          break;
 
         default:
-        // Tab to edit
+          // Tab to edit
+          setItemData(item_data.rweapon, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          currentEquipName.rweapon = '';
       }
       // legstrap
-      switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[4]) {
-        case -1:
+      switch (equip_data[4]) {
+        case 0:
+          setItemData(item_data.legstrap, '1%RD', '1%RD', '1%RD', '1%RD', '1%RD', '1%RD');
+          currentEquipName.legstrap = languageData.item.equipment.legstrap["0"];
+          break;
+
+        default:
           setItemData(item_data.legstrap, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
           currentEquipName.legstrap = '';
-          break;
-        default:
-        // Tab to edit
       }
       // boots
-      switch (JSON.parse(storageutils.get('equip_data', JSON.stringify(equip_data)))[5]) {
-        case -1:
-          setItemData(item_data.boots, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
-          currentEquipName.boots = '';
+      switch (equip_data[5]) {
+        case 0:
+          setItemData(item_data.boots, '0%DEF', '1%DEF', '0%DEF', '1%DEF', '1%DEF', '0%DEF');
+          currentEquipName.boots = languageData.item.equipment.boots["0"];
           break;
 
         default:
-        // Tab to edit
+          setItemData(item_data.boots, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          currentEquipName.boots = '';
       }
     }
 
-    let own_equipment =
-      JSON.parse(storageutils.get('own_equipment', JSON.stringify({
-        helmet: [0],
-        jacket: [],
-        lweapon: [],
-        rweapon: [1],
-        legstrap: [],
-        boots: [],
-      })));
-    // get new award use this
-    function save_ownEquipment(t, item_id) {
+    let own_equipment = {
+      helmet: [],
+      jacket: [],
+      lweapon: [],
+      rweapon: [],
+      legstrap: [],
+      boots: [],
+    };
+
+    // get new items use this
+    function saveOwnEquipment(t, item_id) {
       t.push(item_id);
-      storageutils.set('own_equipment', JSON.stringify(own_equipment));
+      updateOwnItemsUI(language_data);
+      saveUserData();
     }
 
-    function showItems(languageData) {
+    function updateOwnItemsUI(languageData) {
+      document.querySelectorAll('.equip .color-0').forEach(element => {
+        element.querySelectorAll('.item-all-btn').forEach(element => {
+          element.remove();
+        });
+      });
       for (var i = 0; i < own_equipment.helmet.length; i++) {
         switch (own_equipment.helmet[i]) {
           case 0:
             createDIV('item-all-btn', languageData.item.equipment.helmet["0"], document.querySelectorAll('.equip .color-0')[0], (b) => {
+              itemOption(b, 0, own_equipment.helmet[i]);
+            });
+            break;
+          case 1:
+            createDIV('item-all-btn', languageData.item.equipment.helmet["1"], document.querySelectorAll('.equip .color-0')[0], (b) => {
               itemOption(b, 0, own_equipment.helmet[i]);
             });
             break;
@@ -1465,7 +1595,7 @@ var apputils = (function () {
             defaultset(c);
             c.addEventListener("click", () => {
               save_equipdata(n, -1);
-              update_equip_color(b, n, item_id);
+              b.style.color = '';
             })
           })
         } else {
@@ -1473,7 +1603,7 @@ var apputils = (function () {
             defaultset(c);
             c.addEventListener("click", () => {
               save_equipdata(n, item_id);
-              update_equip_color(b, n, item_id);
+              b.style.color = '#f7d967';
             })
           })
         }
@@ -1510,155 +1640,155 @@ var apputils = (function () {
 
     initEnemy();
     update();
-  }
 
-  function showmenu(n, languageData = language_data) {
-    storageutils.set('menunum', JSON.stringify(n));
-    switch (n) {
-      case 0:
-        if (!isBattle) {
+    function showmenu(n, languageData = language_data) {
+      switch (n) {
+        case 0:
+          if (!isBattle) {
+            display('.battle', 0, '');
+            display('.map', 0, 'flex');
+            display('.item', 0, '');
+            display('.stat', 0, '');
+            display('.lobby', 0, '');
+            display('.settings', 0, '');
+
+            document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#7ea4c1');
+            document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+            document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+            document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+            document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+
+            textShadow('.menu-btn', 0, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
+            textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+            textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+            textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+            textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+
+            textContent('.nav-guide', 0, languageData.nav.guide.map);
+          } else {
+            display('.battle', 0, 'flex');
+            display('.map', 0, '');
+            display('.item', 0, '');
+            display('.stat', 0, '');
+            display('.lobby', 0, '');
+            display('.settings', 0, '');
+
+            document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#7ea4c1');
+            document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+            document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+            document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+            document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+
+            textShadow('.menu-btn', 0, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
+            textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+            textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+            textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+            textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+
+            textContent('.nav-guide', 0, languageData.nav.guide.battle);
+          }
+          break;
+        case 1:
           display('.battle', 0, '');
-          display('.map', 0, 'flex');
-          display('.item', 0, '');
+          display('.map', 0, '');
+          display('.item', 0, 'flex');
           display('.stat', 0, '');
           display('.lobby', 0, '');
           display('.settings', 0, '');
 
-          document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#7ea4c1');
-          document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#7ea4c1');
           document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
 
-          textShadow('.menu-btn', 0, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
-          textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 1, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
           textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
-          textContent('.nav-guide', 0, languageData.nav.guide.map);
-        } else {
-          display('.battle', 0, 'flex');
+          display('.item-all-btn', 0, '');
+          display('.item-all-btn', 1, '');
+          display('.item-all-btn', 2, '');
+          display('.item-all-btn', 3, '');
+          display('.equip', 0, '');
+          display('.encyclopedia', 0, '');
+
+          textContent('.nav-guide', 0, languageData.nav.guide.item);
+          break;
+        case 2:
+          display('.battle', 0, '');
+          display('.map', 0, '');
+          display('.item', 0, '');
+          display('.stat', 0, 'flex');
+          display('.lobby', 0, '');
+          display('.settings', 0, '');
+
+          document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#7ea4c1');
+          document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+
+          textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 2, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
+          textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+
+          textContent('.nav-guide', 0, languageData.nav.guide.state);
+          break;
+        case 3:
+          display('.battle', 0, '');
+          display('.map', 0, '');
+          display('.item', 0, '');
+          display('.stat', 0, '');
+          display('.lobby', 0, 'flex');
+          display('.settings', 0, '');
+
+          document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#7ea4c1');
+          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+
+          textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 3, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
+          textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+
+          textContent('.nav-guide', 0, languageData.nav.guide.lobby);
+          break;
+        case 4:
+          display('.battle', 0, '');
           display('.map', 0, '');
           display('.item', 0, '');
           display('.stat', 0, '');
           display('.lobby', 0, '');
-          display('.settings', 0, '');
+          display('.settings', 0, 'flex');
 
-          document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#7ea4c1');
+          document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#8fb5d2');
 
-          textShadow('.menu-btn', 0, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
+          textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-          textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 4, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
 
-          textContent('.nav-guide', 0, languageData.nav.guide.battle);
-        }
-        break;
-      case 1:
-        display('.battle', 0, '');
-        display('.map', 0, '');
-        display('.item', 0, 'flex');
-        display('.stat', 0, '');
-        display('.lobby', 0, '');
-        display('.settings', 0, '');
-
-        document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#7ea4c1');
-        document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
-
-        textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 1, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
-        textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-
-        display('.item-all-btn', 0, '');
-        display('.item-all-btn', 1, '');
-        display('.item-all-btn', 2, '');
-        display('.item-all-btn', 3, '');
-        display('.equip', 0, '');
-        display('.encyclopedia', 0, '');
-
-        textContent('.nav-guide', 0, languageData.nav.guide.item);
-        break;
-      case 2:
-        display('.battle', 0, '');
-        display('.map', 0, '');
-        display('.item', 0, '');
-        display('.stat', 0, 'flex');
-        display('.lobby', 0, '');
-        display('.settings', 0, '');
-
-        document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#7ea4c1');
-        document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
-
-        textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 2, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
-        textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-
-        textContent('.nav-guide', 0, languageData.nav.guide.state);
-        break;
-      case 3:
-        display('.battle', 0, '');
-        display('.map', 0, '');
-        display('.item', 0, '');
-        display('.stat', 0, '');
-        display('.lobby', 0, 'flex');
-        display('.settings', 0, '');
-
-        document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#7ea4c1');
-        document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
-
-        textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 3, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
-        textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-
-        textContent('.nav-guide', 0, languageData.nav.guide.lobby);
-        break;
-      case 4:
-        display('.battle', 0, '');
-        display('.map', 0, '');
-        display('.item', 0, '');
-        display('.stat', 0, '');
-        display('.lobby', 0, '');
-        display('.settings', 0, 'flex');
-
-        document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#8fb5d2');
-
-        textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 4, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
-
-        textContent('.nav-guide', 0, languageData.nav.guide.settings);
-        break;
-      default:
-        break;
+          textContent('.nav-guide', 0, languageData.nav.guide.settings);
+          break;
+        default:
+          break;
+      }
     }
   }
+
   function createDIV(classname, textContent, parent, func) {
     const div = document.createElement('DIV');
     div.className = classname;
@@ -1773,22 +1903,6 @@ var apputils = (function () {
         }
       }
     };
-  }
-  function setLanguage(lan) {
-    switch (lan) {
-      case 'zh':
-        storageutils.set('apputils_lan', 'zh');
-        break;
-      case 'en':
-        storageutils.set('apputils_lan', 'en');
-        break;
-      case 'jp':
-        storageutils.set('apputils_lan', 'jp');
-        break;
-
-      default:
-        break;
-    }
   }
 }())
 

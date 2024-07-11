@@ -652,18 +652,42 @@
         const uid = user.uid;
 
         sign_container.remove();
-        updateMessage();
         canvas.style.display = 'block';
 
         settings_username_input.value = user.displayName;
-        nav_username.innerHTML = `${user.displayName}<br><div class="f-10 en-set">${language_data.nav.username}</div>`;
+        nav_username.innerHTML = `${user.displayName}<br><div class="f-10 en-set"></div>`;
 
         // user data
         const authRef = ref(db, `auth/${uid}`);
         get(authRef).then((snapshot) => {
           if (snapshot.exists()) {
             userObj.userData = snapshot.val().data;
+            updateMessage();
           } else {
+            //set default user data
+            set(authRef, {
+              data: {
+                btc: 0,
+                etc: 0,
+                ownitems: {
+                  helmet: [0],
+                  jacket: [-1],
+                  lweapon: [-1],
+                  rweapon: [1],
+                  legstrap: [-1],
+                  boots: [-1]
+                },
+                equipment: [0, -1, -1, 1, -1, -1],
+                language: 'zh',
+                menu: 4
+              }
+            });
+            get(authRef).then(snapshot => {
+              snapshot ? userObj.userData = snapshot.val().data : null;
+              updateMessage();
+            }).catch((error) => {
+              console.error(error);
+            });
             console.log("No data available");
           }
         }).catch((error) => {
@@ -689,6 +713,17 @@
         continueBattleObj.on('change', value => {
           set(battleRef, {
             data: value
+          });
+        });
+        isUndoObj.on('change', value => {
+          get(battleRef).then((snapshot) => {
+            if (snapshot.exists()) {
+              continueBattleObj.continueBattleData = snapshot.val().data;
+            } else {
+              console.log("No data available");
+            }
+          }).catch((error) => {
+            console.error(error);
           });
         });
 
