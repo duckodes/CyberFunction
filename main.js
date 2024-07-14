@@ -6,7 +6,7 @@ var islanguage_data = {
     change: []
   },
   set done(value) {
-    this._lang = value;
+    this._done = value;
     this.triggerChangeEvent(value);
   },
   get done() {
