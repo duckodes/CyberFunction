@@ -1,6 +1,38 @@
 console.log('CFO ver.0.0.0');
 var language_data;
-var language_dataObj = {};
+var islanguage_data = {
+  _done: null,
+  listeners: {
+    change: []
+  },
+  set done(value) {
+    this._lang = value;
+    this.triggerChangeEvent(value);
+  },
+  get done() {
+    return this._done;
+  },
+  on: function (eventName, callback) {
+    if (this.listeners[eventName]) {
+      this.listeners[eventName].push(callback);
+    }
+  },
+  off: function (eventName, callback) {
+    if (this.listeners[eventName]) {
+      const index = this.listeners[eventName].indexOf(callback);
+      if (index !== -1) {
+        this.listeners[eventName].splice(index, 1);
+      }
+    }
+  },
+  triggerChangeEvent: function (value) {
+    if (this.listeners.change) {
+      this.listeners.change.forEach(function (callback) {
+        callback(value);
+      });
+    }
+  }
+};
 var isUndoObj = {
   _isUndo: null,
   listeners: {
@@ -127,17 +159,10 @@ var apputils = (function () {
       activeMenu = userObj.userData.menu;
 
       // is battle ?
-      Object.defineProperty(language_dataObj, 'language', {
-        get: function () {
-          return language_data;
-        },
-        set: function (value) {
-          language_data = value;
-          if (continueBattleObj.continueBattleData) {
-            continueBattle(continueBattleObj.continueBattleData);
-          }
-        },
-        configurable: true
+      islanguage_data.on('change', (value) => {
+        if (continueBattleObj.continueBattleData) {
+          continueBattle(continueBattleObj.continueBattleData);
+        }
       });
 
       // update wallet
@@ -151,7 +176,7 @@ var apputils = (function () {
         .then(response => response.json())
         .then(data => {
           language_data = data;
-          language_dataObj.language = data;
+          islanguage_data.done = data;
           // set the first login num of menu
           showmenu(activeMenu, data);
 

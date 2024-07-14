@@ -662,7 +662,6 @@
         get(authRef).then((snapshot) => {
           if (snapshot.exists()) {
             userObj.userData = snapshot.val().data;
-            updateMessage();
           } else {
             //set default user data
             set(authRef, {
@@ -684,7 +683,6 @@
             });
             get(authRef).then(snapshot => {
               snapshot ? userObj.userData = snapshot.val().data : null;
-              updateMessage();
             }).catch((error) => {
               console.error(error);
             });
@@ -697,6 +695,9 @@
           set(authRef, {
             data: value
           });
+        });
+        islanguage_data.on('change', (value) => {
+          updateMessage();
         });
 
         // is battle ?
