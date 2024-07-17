@@ -1729,24 +1729,24 @@ var apputils = (function () {
         save_equipdata(4, 0);
       }
       if (document.getElementById('draggable-0') && own_equipment.legstrap && !own_equipment.legstrap.includes(0)) {
-        dragDrop_arr = dragDrop_arr.filter(item => item !== 0);
+        dragDrop_arr = dragDrop_arr.filter(item => item !== 0); console.log(dragDrop_arr);
         dragDrop_arr_str = [''];
         for (let i = 0; i < dragDrop_arr.length; i++) {
-          if (document.getElementById(`draggable-${dragDrop_arr[i]}`) === null)
-            return;
-          dragDrop_arr_str.push(document.getElementById(`draggable-${dragDrop_arr[i]}`).getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(`draggable-${dragDrop_arr[i]}`.replace('-', ''))));
+          if (document.getElementById(`draggable-${dragDrop_arr[i]}`) !== null) {
+            dragDrop_arr_str.push(document.getElementById(`draggable-${dragDrop_arr[i]}`).getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(`draggable-${dragDrop_arr[i]}`.replace('-', ''))));
+          }
         }
         DragIn_Element.innerHTML = dragDrop_arr_str;
         saveUserData();
         document.getElementById('draggable-0').remove();
       }
       if (document.getElementById('draggable-1') && own_equipment.legstrap && !own_equipment.legstrap.includes(1)) {
-        dragDrop_arr = dragDrop_arr.filter(item => item !== 1); saveUserData();
+        dragDrop_arr = dragDrop_arr.filter(item => item !== 1); console.log(dragDrop_arr);
         dragDrop_arr_str = [''];
         for (let i = 0; i < dragDrop_arr.length; i++) {
-          if (document.getElementById(`draggable-${dragDrop_arr[i]}`) === null)
-            return;
-          dragDrop_arr_str.push(document.getElementById(`draggable-${dragDrop_arr[i]}`).getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(`draggable-${dragDrop_arr[i]}`.replace('-', ''))));
+          if (document.getElementById(`draggable-${dragDrop_arr[i]}`) !== null) {
+            dragDrop_arr_str.push(document.getElementById(`draggable-${dragDrop_arr[i]}`).getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(`draggable-${dragDrop_arr[i]}`.replace('-', ''))));
+          }
         }
         DragIn_Element.innerHTML = dragDrop_arr_str;
         saveUserData();
