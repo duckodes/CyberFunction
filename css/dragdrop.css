@@ -1,0 +1,179 @@
+.dropbase {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    width: calc(280px + ((var(--col-num) - 4) * 72px));
+    height: calc(280px + ((var(--row-num) - 4) * 72px));
+    border: 1px solid #000;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--col-num), 1fr);
+    grid-template-rows: repeat(var(--row-num), 1fr);
+    gap: 10px;
+    background: #f0f0f050;
+    visibility: hidden;
+}
+
+.draggable1-1 {
+    width: 63px;
+    height: 63px;
+    background-color: red;
+    position: absolute;
+    cursor: move;
+    z-index: 2;
+    opacity: 0.5;
+}
+
+.draggable1-2 {
+    width: 63px;
+    height: 135px;
+    background-color: red;
+    position: absolute;
+    cursor: move;
+    z-index: 2;
+    opacity: 0.5;
+}
+
+.draggable1-3 {
+    width: 63px;
+    height: 207px;
+    background-color: red;
+    position: absolute;
+    cursor: move;
+    z-index: 2;
+    opacity: 0.5;
+}
+
+.draggable2-1 {
+    width: 135px;
+    height: 63px;
+    background-color: red;
+    position: absolute;
+    cursor: move;
+    z-index: 2;
+    opacity: 0.5;
+}
+
+.draggable2-2 {
+    width: 135px;
+    height: 135px;
+    background-color: red;
+    position: absolute;
+    cursor: move;
+    z-index: 2;
+    opacity: 0.5;
+}
+
+.draggable3-1 {
+    width: 207px;
+    height: 63px;
+    background-color: red;
+    position: absolute;
+    cursor: move;
+    z-index: 2;
+    opacity: 0.5;
+}
+
+#draggable-0 {
+    background-image: url(../img/monster/slime/red_slime.png);
+    background-size: 150% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#draggable-0--battle {
+    background-image: url(../img/monster/slime/red_slime.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+#draggable-1 {
+    background-image: url(../img/monster/slime/blue_slime.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#draggable-1--battle {
+    background-image: url(../img/monster/slime/blue_slime.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+#draggable3 {
+    background-image: url(../img/monster/slime/red_slime.png);
+    background-size: 150% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#draggable4 {
+    background-image: url(../img/monster/slime/red_slime.png);
+    background-size: 80% 150%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#draggable5 {
+    background-image: url(../img/monster/slime/red_slime.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#draggable6 {
+    background-image: url(../img/monster/slime/red_slime.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.dropzone {
+    grid-column: 1 / span var(--col-num);
+    grid-row: 1 / span var(--row-num);
+    display: grid;
+    grid-template-columns: repeat(var(--col-num), 1fr);
+    grid-template-rows: repeat(var(--row-num), 1fr);
+    gap: 10px;
+}
+
+.dropzone>div {
+    border: 1px dashed #000;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.dragIn-arr-title {
+    position: relative;
+    background: #f0f0f050;
+    width: fit-content;
+    visibility: hidden;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dragIn-arr {
+    position: relative;
+    background: #f0f0f050;
+}
+
+.dragIn-arr-close {
+    text-align: center;
+}
+
+.dragIn-arr-close div {
+    width: fit-content;
+}
+
+.dragIn-arr-close:hover {
+    cursor: pointer;
+    color: aliceblue;
+}

@@ -642,6 +642,43 @@ body {
   cursor: pointer;
 }
 
+.legstrap-container {
+  width: 100dvw;
+  height: 25dvh;
+  position: fixed;
+  top: 37.5dvh;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 3;
+  background: #000a;
+}
+
+.legstrap-box {
+  width: 250px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.legstrap-box>div{
+  width: 50px;
+  height: 50px;
+  background: #000;
+  border: 1px solid #00eeff;
+}
+
+.legstrap-box-close{
+  color: white;
+  cursor: pointer;
+}
+
+.legstrap-box-close:hover{
+  opacity: 0.5;
+}
+
 .item {
   display: none;
   align-items: center;
@@ -678,6 +715,21 @@ body {
 
 .equip .color-0 {
   padding: 5px;
+}
+
+.equip>.open-base {
+  display: flex;
+  justify-content: center;
+}
+
+.equip .open {
+  cursor: pointer;
+  color: #fff;
+  width: fit-content;
+}
+
+.equip .open:hover {
+  color: #fff5;
 }
 
 .encyclopedia {

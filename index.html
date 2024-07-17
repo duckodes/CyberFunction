@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="css/default.css">
   <link rel="stylesheet" href="css/circuitboardgenerator.css">
   <link rel="stylesheet" href="https://lib.duckode.com/css/contextmenuutils.css">
+  <link rel="stylesheet" href="css/dragdrop.css">
   <link rel="stylesheet" href="css/override.css">
 </head>
 
@@ -226,6 +227,13 @@
             <div class="battle-me-info">
               <div>SYSTEM LOADING..</div>
             </div>
+            <div class="legstrap-container">
+              <div class="legstrap-box">
+              </div>
+              <div class="legstrap-box-close">
+                ⏏
+              </div>
+            </div>
           </div>
         </div>
         <div class="item">
@@ -259,6 +267,9 @@
             </div>
             <div class="color-0">
               LEGSTRAP
+            </div>
+            <div class="open-base">
+              <div class="open">⏏</div>
             </div>
             <div class="color-0">
               BOOTS
@@ -517,6 +528,19 @@
 
     </div>
   </app>
+
+  <div class="dropbase">
+    <div class="dropzone">
+    </div>
+  </div>
+  <div class="dragIn-arr-title">
+    已裝備
+    <div class="dragIn-arr-close">
+      <div>⏏</div>
+    </div>
+    <div class="dragIn-arr" style="word-break: break-all"></div>
+  </div>
+
   <script src="https://lib.duckode.com/js/storageutils.min.js"></script>
   <script src="https://lib.duckode.com/js/contextmenuutils.min.js"></script>
   <!-- Project -->
@@ -677,6 +701,13 @@
                   boots: [-1]
                 },
                 equipment: [0, -1, -1, 1, -1, -1],
+                dragdrop: {
+                  arr: [-1],
+                  str: [''],
+                  pos: [[0, 0], [0, 0]],
+                  bgc: ['#a005', '#a005'],
+                  opy: [1, 1]
+                },
                 language: 'zh',
                 menu: 4
               }

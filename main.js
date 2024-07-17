@@ -155,7 +155,12 @@ var apputils = (function () {
       etc = userObj.userData.etc;
       own_equipment = userObj.userData.ownitems;
       equip_data = userObj.userData.equipment;
-      language = userObj.userData.language
+      dragDrop_arr = userObj.userData.dragdrop.arr;
+      dragDrop_arr_str = userObj.userData.dragdrop.str;
+      dragDrop_pos = userObj.userData.dragdrop.pos;
+      dragDrop_bgc = userObj.userData.dragdrop.bgc;
+      dragDrop_opy = userObj.userData.dragdrop.opy;
+      language = userObj.userData.language;
       activeMenu = userObj.userData.menu;
 
       // is battle ?
@@ -260,6 +265,13 @@ var apputils = (function () {
         etc: etc,
         ownitems: own_equipment,
         equipment: equip_data,
+        dragdrop: {
+          arr: dragDrop_arr,
+          str: dragDrop_arr_str,
+          pos: dragDrop_pos,
+          bgc: dragDrop_bgc,
+          opy: dragDrop_opy
+        },
         language: language,
         menu: activeMenu
       }
@@ -450,6 +462,28 @@ var apputils = (function () {
       display('.encyclopedia', 0, 'flex');
 
       textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
+    })
+    evt.click('.equip .open', 0, () => {
+      if (document.querySelector('.dropbase').style.visibility === '') {
+        document.querySelector('.dropbase').style.visibility = 'visible';
+        document.querySelector('.dragIn-arr-title').style.visibility = 'visible';
+        document.querySelector('.dragIn-arr').style.visibility = 'visible';
+      } else {
+        document.querySelector('.dropbase').style.visibility = '';
+        document.querySelector('.dragIn-arr-title').style.visibility = '';
+        document.querySelector('.dragIn-arr').style.visibility = '';
+      }
+    })
+    evt.click('.dragIn-arr-close div', 0, () => {
+      if (document.querySelector('.dropbase').style.visibility === '') {
+        document.querySelector('.dropbase').style.visibility = 'visible';
+        document.querySelector('.dragIn-arr-title').style.visibility = 'visible';
+        document.querySelector('.dragIn-arr').style.visibility = 'visible';
+      } else {
+        document.querySelector('.dropbase').style.visibility = '';
+        document.querySelector('.dragIn-arr-title').style.visibility = '';
+        document.querySelector('.dragIn-arr').style.visibility = '';
+      }
     })
 
     function showEncyclopediaINFO(languageData) {
@@ -699,6 +733,7 @@ var apputils = (function () {
       ability_ui_update();
       update_ui_e_hp();
       background_setup_loop.start();
+      update_battleLegstrap();
     }
 
     function dmg_ui_update() {
@@ -1087,7 +1122,6 @@ var apputils = (function () {
     function save_equipdata(n, n1) {
       equip_data[n] = n1;
       equipItemAbility(language_data);
-      set_get_dmg_default();
       dmg_ui_update();
       saveUserData();
     }
@@ -1437,7 +1471,7 @@ var apputils = (function () {
       // legstrap
       switch (equip_data[4]) {
         case 0:
-          setItemData(item_data.legstrap, '1%RD', '1%RD', '1%RD', '1%RD', '1%RD', '1%RD');
+          setItemData(item_data.legstrap, '0', '0', '0', '0', '0', '0');
           currentEquipName.legstrap = languageData.item.equipment.legstrap["0"];
           break;
 
@@ -1480,6 +1514,12 @@ var apputils = (function () {
           element.remove();
         });
       });
+      if (document.getElementById('draggable-0')) {
+        document.getElementById('draggable-0').remove();
+      }
+      if (document.getElementById('draggable-1')) {
+        document.getElementById('draggable-1').remove();
+      }
       for (var i = 0; i < own_equipment.helmet.length; i++) {
         switch (own_equipment.helmet[i]) {
           case 0:
@@ -1573,17 +1613,19 @@ var apputils = (function () {
           // Tab to edit
         }
       }
-      for (var i = 0; i < own_equipment.legstrap.length; i++) {
-        switch (own_equipment.legstrap[i]) {
+      for (var i = 0; i < uniq(own_equipment.legstrap).length; i++) {
+        switch (uniq(own_equipment.legstrap)[i]) {
           case 0:
-            createDIV('item-all-btn', languageData.item.equipment.legstrap["0"], document.querySelectorAll('.equip .color-0')[4], (b) => {
-              itemOption(b, 4, own_equipment.legstrap[i]);
-            });
+            // createDIV('item-all-btn', languageData.item.equipment.legstrap["0"], document.querySelectorAll('.equip .color-0')[4], (b) => {
+            //   itemOption(b, 4, own_equipment.legstrap[i]);
+            // });
+            createDraggable('draggable-0', 1, 2, languageData.item.equipment.legstrap["0"]);
             break;
           case 1:
-            createDIV('item-all-btn', languageData.item.equipment.legstrap["1"], document.querySelectorAll('.equip .color-0')[4], (b) => {
-              itemOption(b, 4, own_equipment.legstrap[i]);
-            });
+            // createDIV('item-all-btn', languageData.item.equipment.legstrap["1"], document.querySelectorAll('.equip .color-0')[4], (b) => {
+            //   itemOption(b, 4, own_equipment.legstrap[i]);
+            // });
+            createDraggable('draggable-1', 1, 1, languageData.item.equipment.legstrap["1"]);
             break;
 
           default:
@@ -1602,6 +1644,14 @@ var apputils = (function () {
           // Tab to edit
         }
       }
+      setTimeout(() => {
+        document.querySelectorAll('.draggable1-1').forEach(element => {
+          draggableObj(element, 1, 1);
+        });
+        document.querySelectorAll('.draggable1-2').forEach(element => {
+          draggableObj(element, 1, 2);
+        });
+      }, 500);
     }
     function itemOption(b, n, item_id) {
       function getElementIndex(element) {
@@ -1627,6 +1677,7 @@ var apputils = (function () {
             defaultset(c);
             c.addEventListener("click", () => {
               save_equipdata(n, -1);
+              set_get_dmg_default();
               b.style.color = '';
             })
           })
@@ -1635,6 +1686,7 @@ var apputils = (function () {
             defaultset(c);
             c.addEventListener("click", () => {
               save_equipdata(n, item_id);
+              set_get_dmg_default();
               b.style.color = '#f7d967';
             })
           })
@@ -1669,11 +1721,321 @@ var apputils = (function () {
         b.style.color = '';
       }
     }
+    function update_battleLegstrap() {
+      document.querySelector('.legstrap-box').innerHTML = '';
+      if (dragDrop_arr.filter(item => item !== -1).length === 0) {
+        save_equipdata(4, -1);
+      } else {
+        save_equipdata(4, 0);
+      }
+      if (document.getElementById('draggable-0') && own_equipment.legstrap && !own_equipment.legstrap.includes(0)) {
+        dragDrop_arr = dragDrop_arr.filter(item => item !== 0);
+        dragDrop_arr_str = [''];
+        for (let i = 0; i < dragDrop_arr.length; i++) {
+          if (document.getElementById(`draggable-${dragDrop_arr[i]}`) === null)
+            return;
+          dragDrop_arr_str.push(document.getElementById(`draggable-${dragDrop_arr[i]}`).getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(`draggable-${dragDrop_arr[i]}`.replace('-', ''))));
+        }
+        DragIn_Element.innerHTML = dragDrop_arr_str;
+        saveUserData();
+        document.getElementById('draggable-0').remove();
+      }
+      if (document.getElementById('draggable-1') && own_equipment.legstrap && !own_equipment.legstrap.includes(1)) {
+        dragDrop_arr = dragDrop_arr.filter(item => item !== 1); saveUserData();
+        dragDrop_arr_str = [''];
+        for (let i = 0; i < dragDrop_arr.length; i++) {
+          if (document.getElementById(`draggable-${dragDrop_arr[i]}`) === null)
+            return;
+          dragDrop_arr_str.push(document.getElementById(`draggable-${dragDrop_arr[i]}`).getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(`draggable-${dragDrop_arr[i]}`.replace('-', ''))));
+        }
+        DragIn_Element.innerHTML = dragDrop_arr_str;
+        saveUserData();
+        document.getElementById('draggable-1').remove();
+      }
+      for (let i = 0; i < dragDrop_arr.length; i++) {
+        switch (dragDrop_arr[i]) {
+          case 0:
+            document.querySelector('.legstrap-box').innerHTML += '<div id="draggable-0--battle"></div>';
+            setTimeout(() => {
+              document.getElementById('draggable-0--battle').addEventListener('mousedown', (e) => {
+                contextmenuutils.init(document.body, (b, c) => {
+                  ToMouse(c);
+                  c.style.border = '2px solid #3db3d050';
+                  c.style.borderRadius = '2px';
+                  c.style.fontSize = '12px';
+                  c.style.background = 'linear-gradient(to bottom, #3db3d045, #191325)';
+                  c.style.zIndex = '2';
+                })
+                for (let i = 0; i < get_dmg.length; i++) {
+                  if (get_dmg[i] !== -1) {
+                    switch (i) {
+                      case 0:
+                        contextmenuutils.addItem('+頭部', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(0);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              get_dmg[i] -= 1;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+                      case 1:
+                        contextmenuutils.addItem('+上衣', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(0);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              get_dmg[i] -= 1;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+                      case 2:
+                        contextmenuutils.addItem('+左手', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(0);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              get_dmg[i] -= 1;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+                      case 3:
+                        contextmenuutils.addItem('+右手', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(0);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              get_dmg[i] -= 1;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+                      case 4:
+                        contextmenuutils.addItem('+腿掛', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(0);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              get_dmg[i] -= 1;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+                      case 5:
+                        contextmenuutils.addItem('+靴子', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(0);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              get_dmg[i] -= 1;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+
+                      default:
+                        break;
+                    }
+                  }
+                }
+                function defaultset(c, callback) {
+                  c.style.color = '#3db3d0';
+                  c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
+                  c.addEventListener("click", () => {
+                    if (get_dmg[4] !== -1) {
+                      callback();
+                    }
+                    contextmenuutils.remove();
+                  });
+                  c.addEventListener("touchstart", () => {
+                    c.style.background = "#3db3d050";
+                  });
+                  c.addEventListener("touchend", () => {
+                    c.style.background = "";
+                  });
+                }
+                function ToMouse(c) {
+                  c.style.left = (e.pageX) + "px";
+                  c.style.top = (e.pageY) + "px";
+                }
+              });
+            }, 1);
+            break;
+          case 1:
+            document.querySelector('.legstrap-box').innerHTML += '<div id="draggable-1--battle"></div>';
+            setTimeout(() => {
+              document.getElementById('draggable-1--battle').addEventListener('mousedown', (e) => {
+                contextmenuutils.init(document.body, (b, c) => {
+                  ToMouse(c);
+                  c.style.border = '2px solid #3db3d050';
+                  c.style.borderRadius = '2px';
+                  c.style.fontSize = '12px';
+                  c.style.background = 'linear-gradient(to bottom, #3db3d045, #191325)';
+                  c.style.zIndex = '2';
+                })
+                for (let i = 0; i < get_dmg.length; i++) {
+                  if (get_dmg[i] !== -1) {
+                    switch (i) {
+                      case 0:
+                        contextmenuutils.addItem('+頭部', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(1);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              (get_dmg[i] - 2) >= 0 ? get_dmg[i] -= 2 : get_dmg[i] = 0;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+                      case 1:
+                        contextmenuutils.addItem('+上衣', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(1);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              (get_dmg[i] - 2) >= 0 ? get_dmg[i] -= 2 : get_dmg[i] = 0;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+                      case 2:
+                        contextmenuutils.addItem('+左手', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(1);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              (get_dmg[i] - 2) >= 0 ? get_dmg[i] -= 2 : get_dmg[i] = 0;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+                      case 3:
+                        contextmenuutils.addItem('+右手', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(1);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              (get_dmg[i] - 2) >= 0 ? get_dmg[i] -= 2 : get_dmg[i] = 0;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+                      case 4:
+                        contextmenuutils.addItem('+腿掛', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(1);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              (get_dmg[i] - 2) >= 0 ? get_dmg[i] -= 2 : get_dmg[i] = 0;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+                      case 5:
+                        contextmenuutils.addItem('+靴子', (c) => {
+                          defaultset(c, () => {
+                            let index = own_equipment.legstrap.indexOf(1);
+                            if (index !== -1 && get_dmg[i] > 0) {
+                              (get_dmg[i] - 2) >= 0 ? get_dmg[i] -= 2 : get_dmg[i] = 0;
+                              dmg_ui_update();
+                              saveContinueBattle();
+                              own_equipment.legstrap.splice(index, 1);
+                              saveUserData();
+                              update_battleLegstrap();
+                            }
+                          });
+                        })
+                        break;
+
+                      default:
+                        break;
+                    }
+                  }
+                }
+                function defaultset(c, callback) {
+                  c.style.color = '#3db3d0';
+                  c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
+                  c.addEventListener("click", () => {
+                    if (get_dmg[4] !== -1) {
+                      callback();
+                    }
+                    contextmenuutils.remove();
+                  });
+                  c.addEventListener("touchstart", () => {
+                    c.style.background = "#3db3d050";
+                  });
+                  c.addEventListener("touchend", () => {
+                    c.style.background = "";
+                  });
+                }
+                function ToMouse(c) {
+                  c.style.left = (e.pageX) + "px";
+                  c.style.top = (e.pageY) + "px";
+                }
+              });
+            }, 1);
+            break;
+
+          default:
+            break;
+        }
+      }
+    }
 
     initEnemy();
     update();
 
     function showmenu(n, languageData = language_data) {
+      document.querySelector('.dropbase').style.visibility = '';
+      document.querySelector('.dragIn-arr-title').style.visibility = '';
+      document.querySelector('.dragIn-arr').style.visibility = '';
       switch (n) {
         case 0:
           if (!isBattle) {
@@ -1819,6 +2181,667 @@ var apputils = (function () {
           break;
       }
     }
+    // DragDropInit
+    const dropzone = document.querySelector('.dropzone');
+    const colnum = 5;
+    const rownum = 5;
+    let dragDrop_arr = [];
+    let dragDrop_arr_str = [];
+    let dragDrop_pos = [[0, 0], [0, 0]];
+    let dragDrop_bgc = ['#a005', '#a005'];
+    let dragDrop_opy = [1, 1];
+    const DragIn_Element = document.querySelector('.dragIn-arr');
+    document.documentElement.style.setProperty('--col-num', `${colnum}`);
+    document.documentElement.style.setProperty('--row-num', `${rownum}`);
+    for (let i = 0; i < rownum * colnum; i++) {
+      dropzone.innerHTML += '<div></div>';
+    }
+    // createDraggable('draggable1', 1, 1);
+    // createDraggable('draggable2', 1, 2);
+    // createDraggable('draggable3', 1, 3);
+    // createDraggable('draggable4', 2, 1);
+    // createDraggable('draggable5', 2, 2);
+    // createDraggable('draggable6', 3, 1);
+    // draggableObj(document.getElementById('draggable1'), 1, 1);
+    // draggableObj(document.getElementById('draggable2'), 1, 2);
+    // draggableObj(document.getElementById('draggable3'), 1, 3);
+    // draggableObj(document.getElementById('draggable4'), 2, 1);
+    // draggableObj(document.getElementById('draggable5'), 2, 2);
+    // draggableObj(document.getElementById('draggable6'), 3, 1);
+
+    function createDraggable(draggableID, rW, rH, dataContent) {
+      const draggable = document.createElement('div');
+      draggable.className = `draggable${rW}-${rH}`;
+      draggable.id = draggableID;
+      draggable.setAttribute('data-content', dataContent);
+      document.querySelector('.dropbase').appendChild(draggable);
+      draggable.style.left = dragDrop_pos[parseNumberFromString(draggableID.replace('-', ''))][0] + 'px';
+      draggable.style.top = dragDrop_pos[parseNumberFromString(draggableID.replace('-', ''))][1] + 'px';
+      draggable.style.backgroundColor = dragDrop_bgc[parseNumberFromString(draggableID.replace('-', ''))];
+      draggable.style.opacity = dragDrop_opy[parseNumberFromString(draggableID.replace('-', ''))];
+      DragIn_Element.innerHTML = dragDrop_arr_str;
+      console.log(draggableID);
+    }
+
+    function draggableObj(draggable, rW, rH) {
+      const draggables = document.querySelectorAll('.draggable1-1, .draggable1-2, .draggable1-3, .draggable2-1, .draggable2-2, .draggable3-1');
+      const dropbase = document.querySelector('.dropbase');
+      const dropzone = document.querySelector('.dropzone');
+      let offsetX, offsetY, initialX, initialY;
+      let ismousedown = false;
+
+      draggable.addEventListener('touchstart', (e) => {
+        if (isBattle)
+          return;
+        draggables.forEach(element => {
+          element.style.zIndex = 1;
+        });
+        e.target.style.zIndex = 3;
+        e.target.style.opacity = '';
+        e.target.style.backgroundColor = 'transparent';
+        const touch = e.touches[0];
+        initialX = draggable.offsetLeft;
+        initialY = draggable.offsetTop;
+        offsetX = touch.clientX - initialX;
+        offsetY = touch.clientY - initialY;
+        dragDrop_arr = dragDrop_arr.filter(item => item !== parseNumberFromString(e.target.id.replace('-', '')));
+        dragDrop_arr_str = dragDrop_arr_str.filter(item => item !== e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+        console.log(dragDrop_arr);
+        DragIn_Element.innerHTML = dragDrop_arr_str;
+      });
+      draggable.addEventListener('mousedown', (e) => {
+        if (isBattle)
+          return;
+        ismousedown = true;
+        draggables.forEach(element => {
+          element.style.zIndex = 1;
+        });
+        e.target.style.zIndex = 3;
+        e.target.style.opacity = '';
+        e.target.style.backgroundColor = 'transparent';
+        initialX = draggable.offsetLeft;
+        initialY = draggable.offsetTop;
+        offsetX = e.clientX - initialX;
+        offsetY = e.clientY - initialY;
+        dragDrop_arr = dragDrop_arr.filter(item => item !== parseNumberFromString(e.target.id.replace('-', '')));
+        dragDrop_arr_str = dragDrop_arr_str.filter(item => item !== e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+        console.log(dragDrop_arr);
+        DragIn_Element.innerHTML = dragDrop_arr_str;
+      });
+
+      draggable.addEventListener('touchmove', (e) => {
+        if (isBattle)
+          return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        let newX = touch.clientX - offsetX;
+        let newY = touch.clientY - offsetY;
+        const objectWidth = parseInt(getComputedStyle(e.target).getPropertyValue('width'));
+        const objectHeight = parseInt(getComputedStyle(e.target).getPropertyValue('height'));
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        // 保證物件在視窗範圍內
+        if (newX < 0) newX = 0;
+        if (newY < 0) newY = 0;
+        if (newX + objectWidth > windowWidth - 20) {
+          newX = windowWidth - 20 - objectWidth;
+        }
+        if (newY + objectHeight > windowHeight - 20) {
+          newY = windowHeight - 20 - objectHeight;
+        }
+        draggable.style.left = `${newX}px`;
+        draggable.style.top = `${newY}px`;
+        // 检查是否有包含 dropzone 里面 div 小格子的中心点的八个偏移点
+        const dropzone = document.querySelector('.dropzone');
+        const dropzoneCells = dropzone.children;
+
+        for (const cell of dropzoneCells) {
+          const cellRect = cell.getBoundingClientRect();
+          const cellCenterX = cellRect.left + cellRect.width / 2;
+          const cellCenterY = cellRect.top + cellRect.height / 2;
+
+          // 偏移量
+          const offset = 5;
+
+          // 八个偏移点
+          const points = [
+            { x: cellCenterX, y: cellCenterY - offset }, // 上
+            { x: cellCenterX, y: cellCenterY + offset }, // 下
+            { x: cellCenterX - offset, y: cellCenterY }, // 左
+            { x: cellCenterX + offset, y: cellCenterY }, // 右
+            { x: cellCenterX - offset, y: cellCenterY - offset }, // 左上
+            { x: cellCenterX + offset, y: cellCenterY - offset }, // 右上
+            { x: cellCenterX - offset, y: cellCenterY + offset }, // 左下
+            { x: cellCenterX + offset, y: cellCenterY + offset } // 右下
+          ];
+
+          let isCovered = false;
+
+          for (const point of points) {
+            if (
+              point.x >= newX &&
+              point.x <= newX + objectWidth &&
+              point.y >= newY &&
+              point.y <= newY + objectHeight
+            ) {
+              isCovered = true;
+              break;
+            }
+          }
+
+          if (isCovered) {
+            cell.style.backgroundColor = '#0a05';
+            const draggableRect = draggable.getBoundingClientRect();
+            const dropbaseRect = dropbase.getBoundingClientRect();
+            const dropzoneRect = dropzone.getBoundingClientRect();
+
+            const cellWidth = (dropzoneRect.width - (30 + ((colnum - 4) * 10))) / colnum;
+            const cellHeight = (dropzoneRect.height - (30 + ((rownum - 4) * 10))) / rownum;
+            const requiredWidth = rW;
+            const requiredHeight = rH;
+
+            const dropzoneCol = Math.floor((draggableRect.left - dropbaseRect.left) / (cellWidth - 3));
+            const dropzoneRow = Math.floor((draggableRect.top - dropbaseRect.top) / (cellHeight + 3));
+            const targetLeft = dropzoneCol * (cellWidth + 10);
+            const targetTop = dropzoneRow * (cellHeight + 10);
+            draggables.forEach((other) => {
+              if (other !== draggable) {
+                const otherRect = other.getBoundingClientRect();
+                if (
+                  targetLeft < otherRect.left + otherRect.width &&
+                  targetLeft + draggableRect.width > otherRect.left &&
+                  targetTop < otherRect.top + otherRect.height &&
+                  targetTop + draggableRect.height > otherRect.top
+                ) {
+                  cell.style.backgroundColor = '#a005';
+                }
+              }
+            });
+          } else {
+            cell.style.backgroundColor = ''; // 还原背景颜色
+          }
+        }
+      });
+      draggable.addEventListener('mousemove', (e) => {
+        if (!ismousedown || isBattle)
+          return;
+        let newX = e.clientX - offsetX;
+        let newY = e.clientY - offsetY;
+        const objectWidth = parseInt(getComputedStyle(e.target).getPropertyValue('width'));
+        const objectHeight = parseInt(getComputedStyle(e.target).getPropertyValue('height'));
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        // 保證物件在視窗範圍內
+        if (newX < 0) newX = 0;
+        if (newY < 0) newY = 0;
+        if (newX + objectWidth > windowWidth - 20) {
+          newX = windowWidth - 20 - objectWidth;
+        }
+        if (newY + objectHeight > windowHeight - 20) {
+          newY = windowHeight - 20 - objectHeight;
+        }
+        draggable.style.left = `${newX}px`;
+        draggable.style.top = `${newY}px`;
+        // 检查是否有包含 dropzone 里面 div 小格子的中心点的八个偏移点
+        const dropzone = document.querySelector('.dropzone');
+        const dropzoneCells = dropzone.children;
+
+        for (const cell of dropzoneCells) {
+          const cellRect = cell.getBoundingClientRect();
+          const cellCenterX = cellRect.left + cellRect.width / 2;
+          const cellCenterY = cellRect.top + cellRect.height / 2;
+
+          // 偏移量
+          const offset = 5;
+
+          // 八个偏移点
+          const points = [
+            { x: cellCenterX, y: cellCenterY - offset }, // 上
+            { x: cellCenterX, y: cellCenterY + offset }, // 下
+            { x: cellCenterX - offset, y: cellCenterY }, // 左
+            { x: cellCenterX + offset, y: cellCenterY }, // 右
+            { x: cellCenterX - offset, y: cellCenterY - offset }, // 左上
+            { x: cellCenterX + offset, y: cellCenterY - offset }, // 右上
+            { x: cellCenterX - offset, y: cellCenterY + offset }, // 左下
+            { x: cellCenterX + offset, y: cellCenterY + offset } // 右下
+          ];
+
+          let isCovered = false;
+
+          for (const point of points) {
+            if (
+              point.x >= newX &&
+              point.x <= newX + objectWidth &&
+              point.y >= newY &&
+              point.y <= newY + objectHeight
+            ) {
+              isCovered = true;
+              break;
+            }
+          }
+
+          if (isCovered) {
+            cell.style.backgroundColor = '#0a05';
+            const draggableRect = draggable.getBoundingClientRect();
+            const dropbaseRect = dropbase.getBoundingClientRect();
+            const dropzoneRect = dropzone.getBoundingClientRect();
+
+            const cellWidth = (dropzoneRect.width - (30 + ((colnum - 4) * 10))) / colnum;
+            const cellHeight = (dropzoneRect.height - (30 + ((rownum - 4) * 10))) / rownum;
+            const requiredWidth = rW;
+            const requiredHeight = rH;
+
+            const dropzoneCol = Math.floor((draggableRect.left - dropbaseRect.left) / (cellWidth - 3));
+            const dropzoneRow = Math.floor((draggableRect.top - dropbaseRect.top) / (cellHeight + 3));
+            const targetLeft = dropzoneCol * (cellWidth + 10);
+            const targetTop = dropzoneRow * (cellHeight + 10);
+            draggables.forEach((other) => {
+              if (other !== draggable) {
+                const otherRect = other.getBoundingClientRect();
+                if (
+                  targetLeft < otherRect.left + otherRect.width &&
+                  targetLeft + draggableRect.width > otherRect.left &&
+                  targetTop < otherRect.top + otherRect.height &&
+                  targetTop + draggableRect.height > otherRect.top
+                ) {
+                  cell.style.backgroundColor = '#a005';
+                }
+              }
+            });
+          } else {
+            cell.style.backgroundColor = ''; // 还原背景颜色
+          }
+        }
+      });
+
+      draggable.addEventListener('touchend', (e) => {
+        if (isBattle)
+          return;
+        // 检查是否有包含 dropzone 里面 div 小格子的中心点
+        const dropzone = document.querySelector('.dropzone');
+        const dropzoneCells = dropzone.children;
+
+        for (const cell of dropzoneCells) {
+          cell.style.backgroundColor = ''; // 还原背景颜色
+        }
+        const draggableRect = draggable.getBoundingClientRect();
+        const dropbaseRect = dropbase.getBoundingClientRect();
+        const dropzoneRect = dropzone.getBoundingClientRect();
+
+        const cellWidth = (dropzoneRect.width - (30 + ((colnum - 4) * 10))) / colnum;
+        const cellHeight = (dropzoneRect.height - (30 + ((rownum - 4) * 10))) / rownum;
+        const requiredWidth = rW;
+        const requiredHeight = rH;
+
+        const dropzoneCol = Math.floor((draggableRect.left - dropbaseRect.left) / (cellWidth - 3));
+        const dropzoneRow = Math.floor((draggableRect.top - dropbaseRect.top) / (cellHeight + 3));
+
+        const targetLeft = dropzoneCol * (cellWidth + 10);
+        const targetTop = dropzoneRow * (cellHeight + 10);
+        dragDrop_pos[parseNumberFromString(e.target.id.replace('-', ''))][0] = targetLeft;
+        dragDrop_pos[parseNumberFromString(e.target.id.replace('-', ''))][1] = targetTop;
+
+        // 檢查是否與其他物件重疊
+        let isOverlap = false;
+        draggables.forEach((other) => {
+          if (other !== draggable) {
+            const otherRect = other.getBoundingClientRect();
+            if (
+              targetLeft < otherRect.left + otherRect.width &&
+              targetLeft + draggableRect.width > otherRect.left &&
+              targetTop < otherRect.top + otherRect.height &&
+              targetTop + draggableRect.height > otherRect.top
+            ) {
+              isOverlap = true;
+            }
+          }
+        });
+
+        if (
+          dropzoneCol + requiredWidth <= colnum &&
+          dropzoneRow + requiredHeight <= rownum &&
+          !isOverlap
+        ) {
+          draggable.style.left = `${targetLeft}px`;
+          draggable.style.top = `${targetTop}px`;
+          if (!dragDrop_arr.includes(e.target.id) && own_equipment.legstrap.includes(parseNumberFromString(e.target.id.replace('-', '')))) {
+            dragDrop_arr.push(parseNumberFromString(e.target.id.replace('-', '')));
+            dragDrop_arr_str.push(e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+            update_battleLegstrap();
+          }
+          e.target.style.zIndex = 1;
+          e.target.style.opacity = 1;
+          e.target.style.backgroundColor = 'transparent';
+          dragDrop_bgc[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.backgroundColor;
+          dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
+          saveUserData();
+          console.log(dragDrop_arr);
+          DragIn_Element.innerHTML = dragDrop_arr_str;
+        } else if (dropzoneCol + requiredWidth <= colnum && dropzoneRow + requiredHeight <= rownum) {
+          // 優先尋找放下位置附近的格子
+          const nearbyPositions = [];
+          for (let rowOffset = 0; rowOffset < rownum; rowOffset++) {
+            for (let colOffset = 0; colOffset < colnum; colOffset++) {
+              const row = dropzoneRow + rowOffset;
+              const col = dropzoneCol + colOffset;
+              if (row >= 0 && row <= rownum - requiredHeight && col >= 0 && col <= colnum - requiredWidth) {
+                nearbyPositions.push({
+                  row,
+                  col,
+                  distance: Math.sqrt(
+                    Math.pow(row - dropzoneRow, 2) + Math.pow(col - dropzoneCol, 2)
+                  ),
+                });
+              }
+            }
+          }
+
+          // 根據距離排序位置
+          nearbyPositions.sort((a, b) => a.distance - b.distance);
+
+          let foundSpot = false;
+          for (let pos of nearbyPositions) {
+            let spotAvailable = true;
+            draggables.forEach((other) => {
+              if (other !== draggable) {
+                const otherRect = other.getBoundingClientRect();
+                const checkLeft = pos.col * (cellWidth + 10);
+                const checkTop = pos.row * (cellHeight + 10);
+                if (
+                  checkLeft < otherRect.left + otherRect.width &&
+                  checkLeft + draggableRect.width > otherRect.left &&
+                  checkTop < otherRect.top + otherRect.height &&
+                  checkTop + draggableRect.height > otherRect.top
+                ) {
+                  spotAvailable = false;
+                }
+              }
+            });
+            if (spotAvailable) {
+              draggable.style.left = `${pos.col * (cellWidth + 10)}px`;
+              draggable.style.top = `${pos.row * (cellHeight + 10)}px`;
+              foundSpot = true;
+              if (!dragDrop_arr.includes(e.target.id) && own_equipment.legstrap.includes(parseNumberFromString(e.target.id.replace('-', '')))) {
+                dragDrop_arr.push(parseNumberFromString(e.target.id.replace('-', '')));
+                dragDrop_arr_str.push(e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+                update_battleLegstrap();
+              }
+              e.target.style.zIndex = 1;
+              e.target.style.opacity = 1;
+              e.target.style.backgroundColor = 'transparent';
+              dragDrop_bgc[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.backgroundColor;
+              dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
+              saveUserData();
+              console.log(dragDrop_arr);
+              DragIn_Element.innerHTML = dragDrop_arr_str;
+              break;
+            }
+          }
+
+          if (!foundSpot) {
+            // 如果附近找不到合適的位置，則從整個網格中尋找
+            for (let row = 0; row <= rownum - requiredHeight; row++) {
+              for (let col = 0; col <= colnum - requiredWidth; col++) {
+                let spotAvailable = true;
+                draggables.forEach((other) => {
+                  if (other !== draggable) {
+                    const otherRect = other.getBoundingClientRect();
+                    const checkLeft = col * (cellWidth + 10);
+                    const checkTop = row * (cellHeight + 10);
+                    if (
+                      checkLeft < otherRect.left + otherRect.width &&
+                      checkLeft + draggableRect.width > otherRect.left &&
+                      checkTop < otherRect.top + otherRect.height &&
+                      checkTop + draggableRect.height > otherRect.top
+                    ) {
+                      spotAvailable = false;
+                    }
+                  }
+                });
+                if (spotAvailable) {
+                  draggable.style.left = `${col * (cellWidth + 10)}px`;
+                  draggable.style.top = `${row * (cellHeight + 10)}px`;
+                  if (!dragDrop_arr.includes(e.target.id) && own_equipment.legstrap.includes(parseNumberFromString(e.target.id.replace('-', '')))) {
+                    dragDrop_arr.push(parseNumberFromString(e.target.id.replace('-', '')));
+                    dragDrop_arr_str.push(e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+                    update_battleLegstrap();
+                  }
+                  e.target.style.zIndex = 1;
+                  e.target.style.opacity = 1;
+                  e.target.style.backgroundColor = 'transparent';
+                  dragDrop_bgc[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.backgroundColor;
+                  dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
+                  saveUserData();
+                  console.log(dragDrop_arr);
+                  DragIn_Element.innerHTML = dragDrop_arr_str;
+                  return;
+                } else {
+                  dragDrop_arr = dragDrop_arr.filter(item => item !== parseNumberFromString(e.target.id.replace('-', '')));
+                  dragDrop_arr_str = dragDrop_arr_str.filter(item => item !== e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+                  e.target.style.zIndex = '';
+                  e.target.style.opacity = '';
+                  e.target.style.backgroundColor = '';
+                  dragDrop_bgc[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.backgroundColor;
+                  dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
+                  saveUserData();
+                  console.log(dragDrop_arr);
+                  DragIn_Element.innerHTML = dragDrop_arr_str;
+                  update_battleLegstrap();
+                  return;
+                }
+              }
+            }
+          }
+        } else {
+          dragDrop_arr = dragDrop_arr.filter(item => item !== parseNumberFromString(e.target.id.replace('-', '')));
+          dragDrop_arr_str = dragDrop_arr_str.filter(item => item !== e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+          e.target.style.zIndex = '';
+          e.target.style.opacity = 0.8;
+          e.target.style.backgroundColor = '#f003';
+          dragDrop_bgc[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.backgroundColor;
+          dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
+          saveUserData();
+          console.log(dragDrop_arr);
+          DragIn_Element.innerHTML = dragDrop_arr_str;
+          update_battleLegstrap();
+        }
+      });
+      document.body.addEventListener('mouseup', () => {
+        ismousedown = false;
+      });
+      draggable.addEventListener('mouseup', (e) => {
+        if (isBattle)
+          return;
+        // 检查是否有包含 dropzone 里面 div 小格子的中心点
+        const dropzone = document.querySelector('.dropzone');
+        const dropzoneCells = dropzone.children;
+
+        for (const cell of dropzoneCells) {
+          cell.style.backgroundColor = ''; // 还原背景颜色
+        }
+        const draggableRect = draggable.getBoundingClientRect();
+        const dropbaseRect = dropbase.getBoundingClientRect();
+        const dropzoneRect = dropzone.getBoundingClientRect();
+
+        const cellWidth = (dropzoneRect.width - (30 + ((colnum - 4) * 10))) / colnum;
+        const cellHeight = (dropzoneRect.height - (30 + ((rownum - 4) * 10))) / rownum;
+        const requiredWidth = rW;
+        const requiredHeight = rH;
+
+        const dropzoneCol = Math.floor((draggableRect.left - dropbaseRect.left) / (cellWidth - 3));
+        const dropzoneRow = Math.floor((draggableRect.top - dropbaseRect.top) / (cellHeight + 3));
+
+        const targetLeft = dropzoneCol * (cellWidth + 10);
+        const targetTop = dropzoneRow * (cellHeight + 10);
+        dragDrop_pos[parseNumberFromString(e.target.id.replace('-', ''))][0] = targetLeft;
+        dragDrop_pos[parseNumberFromString(e.target.id.replace('-', ''))][1] = targetTop;
+
+        // 檢查是否與其他物件重疊
+        let isOverlap = false;
+        draggables.forEach((other) => {
+          if (other !== draggable) {
+            const otherRect = other.getBoundingClientRect();
+            if (
+              targetLeft < otherRect.left + otherRect.width &&
+              targetLeft + draggableRect.width > otherRect.left &&
+              targetTop < otherRect.top + otherRect.height &&
+              targetTop + draggableRect.height > otherRect.top
+            ) {
+              isOverlap = true;
+            }
+          }
+        });
+
+        if (
+          dropzoneCol + requiredWidth <= colnum &&
+          dropzoneRow + requiredHeight <= rownum &&
+          !isOverlap
+        ) {
+          draggable.style.left = `${targetLeft}px`;
+          draggable.style.top = `${targetTop}px`;
+          if (!dragDrop_arr.includes(e.target.id) && own_equipment.legstrap.includes(parseNumberFromString(e.target.id.replace('-', '')))) {
+            dragDrop_arr.push(parseNumberFromString(e.target.id.replace('-', '')));
+            dragDrop_arr_str.push(e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+            update_battleLegstrap();
+          }
+          e.target.style.zIndex = 1;
+          e.target.style.opacity = 1;
+          e.target.style.backgroundColor = 'transparent';
+          dragDrop_bgc[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.backgroundColor;
+          dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
+          saveUserData();
+          console.log(dragDrop_arr);
+          DragIn_Element.innerHTML = dragDrop_arr_str;
+        } else if (dropzoneCol + requiredWidth <= colnum && dropzoneRow + requiredHeight <= rownum) {
+          // 優先尋找放下位置附近的格子
+          const nearbyPositions = [];
+          for (let rowOffset = 0; rowOffset < rownum; rowOffset++) {
+            for (let colOffset = 0; colOffset < colnum; colOffset++) {
+              const row = dropzoneRow + rowOffset;
+              const col = dropzoneCol + colOffset;
+              if (row >= 0 && row <= rownum - requiredHeight && col >= 0 && col <= colnum - requiredWidth) {
+                nearbyPositions.push({
+                  row,
+                  col,
+                  distance: Math.sqrt(
+                    Math.pow(row - dropzoneRow, 2) + Math.pow(col - dropzoneCol, 2)
+                  ),
+                });
+              }
+            }
+          }
+
+          // 根據距離排序位置
+          nearbyPositions.sort((a, b) => a.distance - b.distance);
+
+          let foundSpot = false;
+          for (let pos of nearbyPositions) {
+            let spotAvailable = true;
+            draggables.forEach((other) => {
+              if (other !== draggable) {
+                const otherRect = other.getBoundingClientRect();
+                const checkLeft = pos.col * (cellWidth + 10);
+                const checkTop = pos.row * (cellHeight + 10);
+                if (
+                  checkLeft < otherRect.left + otherRect.width &&
+                  checkLeft + draggableRect.width > otherRect.left &&
+                  checkTop < otherRect.top + otherRect.height &&
+                  checkTop + draggableRect.height > otherRect.top
+                ) {
+                  spotAvailable = false;
+                }
+              }
+            });
+            if (spotAvailable) {
+              draggable.style.left = `${pos.col * (cellWidth + 10)}px`;
+              draggable.style.top = `${pos.row * (cellHeight + 10)}px`;
+              foundSpot = true;
+              if (!dragDrop_arr.includes(e.target.id) && own_equipment.legstrap.includes(parseNumberFromString(e.target.id.replace('-', '')))) {
+                dragDrop_arr.push(parseNumberFromString(e.target.id.replace('-', '')));
+                dragDrop_arr_str.push(e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+                update_battleLegstrap();
+              }
+              e.target.style.zIndex = 1;
+              e.target.style.opacity = 1;
+              e.target.style.backgroundColor = 'transparent';
+              dragDrop_bgc[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.backgroundColor;
+              dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
+              saveUserData();
+              console.log(dragDrop_arr);
+              DragIn_Element.innerHTML = dragDrop_arr_str;
+              break;
+            }
+          }
+
+          if (!foundSpot) {
+            // 如果附近找不到合適的位置，則從整個網格中尋找
+            for (let row = 0; row <= rownum - requiredHeight; row++) {
+              for (let col = 0; col <= colnum - requiredWidth; col++) {
+                let spotAvailable = true;
+                draggables.forEach((other) => {
+                  if (other !== draggable) {
+                    const otherRect = other.getBoundingClientRect();
+                    const checkLeft = col * (cellWidth + 10);
+                    const checkTop = row * (cellHeight + 10);
+                    if (
+                      checkLeft < otherRect.left + otherRect.width &&
+                      checkLeft + draggableRect.width > otherRect.left &&
+                      checkTop < otherRect.top + otherRect.height &&
+                      checkTop + draggableRect.height > otherRect.top
+                    ) {
+                      spotAvailable = false;
+                    }
+                  }
+                });
+                if (spotAvailable) {
+                  draggable.style.left = `${col * (cellWidth + 10)}px`;
+                  draggable.style.top = `${row * (cellHeight + 10)}px`;
+                  if (!dragDrop_arr.includes(e.target.id) && own_equipment.legstrap.includes(parseNumberFromString(e.target.id.replace('-', '')))) {
+                    dragDrop_arr.push(parseNumberFromString(e.target.id.replace('-', '')));
+                    dragDrop_arr_str.push(e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+                    update_battleLegstrap();
+                  }
+                  e.target.style.zIndex = 1;
+                  e.target.style.opacity = 1;
+                  e.target.style.backgroundColor = 'transparent';
+                  dragDrop_bgc[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.backgroundColor;
+                  dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
+                  saveUserData();
+                  console.log(dragDrop_arr);
+                  DragIn_Element.innerHTML = dragDrop_arr_str;
+                  return;
+                } else {
+                  dragDrop_arr = dragDrop_arr.filter(item => item !== parseNumberFromString(e.target.id.replace('-', '')));
+                  dragDrop_arr_str = dragDrop_arr_str.filter(item => item !== e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+                  e.target.style.zIndex = '';
+                  e.target.style.opacity = '';
+                  e.target.style.backgroundColor = '';
+                  dragDrop_bgc[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.backgroundColor;
+                  dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
+                  saveUserData();
+                  console.log(dragDrop_arr);
+                  DragIn_Element.innerHTML = dragDrop_arr_str;
+                  update_battleLegstrap();
+                  return;
+                }
+              }
+            }
+          }
+        } else {
+          dragDrop_arr = dragDrop_arr.filter(item => item !== parseNumberFromString(e.target.id.replace('-', '')));
+          dragDrop_arr_str = dragDrop_arr_str.filter(item => item !== e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
+          e.target.style.zIndex = '';
+          e.target.style.opacity = 0.8;
+          e.target.style.backgroundColor = '#f003';
+          dragDrop_bgc[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.backgroundColor;
+          dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
+          saveUserData();
+          console.log(dragDrop_arr);
+          DragIn_Element.innerHTML = dragDrop_arr_str;
+          update_battleLegstrap();
+        }
+      });
+    }
   }
 
   function createDIV(classname, textContent, parent, func) {
@@ -1909,6 +2932,28 @@ var apputils = (function () {
   }
   function getRandomNumber(min, max) {
     return Math.random() * (max - min) + min;
+  }
+  function countOccurrences(array, targetValue) {
+    let count = 0;
+    array.forEach(element => {
+      if (element === targetValue) {
+        count++;
+      }
+    });
+    return count;
+  }
+  function uniq(array) {
+    return [...new Set(array)];
+  }
+  function parseNumberFromString(str) {
+    const matches = str.match(/[-\d.]+/g);
+
+    if (matches && matches.length > 0) {
+      const number = parseFloat(matches[0]);
+      return isNaN(number) ? NaN : number;
+    } else {
+      return NaN;
+    }
   }
   function update() {
     setTimeout(() => {
