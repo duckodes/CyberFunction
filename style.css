@@ -644,20 +644,21 @@ body {
 
 .legstrap-container {
   width: 100dvw;
-  height: 25dvh;
+  height: fit-content;
   position: fixed;
-  top: 37.5dvh;
+  bottom: 150px;
   left: 0;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   z-index: 3;
-  background: #000a;
+  background: #0005;
 }
 
 .legstrap-box {
-  width: 250px;
+  width: 100%;
+  max-width: 250px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

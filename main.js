@@ -485,6 +485,9 @@ var apputils = (function () {
         document.querySelector('.dragIn-arr').style.visibility = '';
       }
     })
+    evt.click('.legstrap-box-close', 0, () => {
+      document.querySelector('.legstrap-container').style.display = '';
+    })
 
     function showEncyclopediaINFO(languageData) {
       let encyclopedia_nums = document.querySelectorAll('.encyclopedia .item-all-btn').length;
@@ -676,6 +679,7 @@ var apputils = (function () {
         update_ui_e_hp();
         background_setup_loop.start();
         saveContinueBattle();
+        update_battleLegstrap();
       })
     }
     const background_setup_loop = loop(() => {
@@ -1329,6 +1333,11 @@ var apputils = (function () {
     })
     evt.click('.battle-me-box', 4, () => {
       setHCtrlPTE(4);
+      if (document.querySelector('.legstrap-container').style.display === '') {
+        document.querySelector('.legstrap-container').style.display = 'flex';
+      } else {
+        document.querySelector('.legstrap-container').style.display = '';
+      }
     })
     evt.click('.battle-me-box', 5, () => {
       setHCtrlPTE(5);
@@ -1737,6 +1746,9 @@ var apputils = (function () {
           }
         }
         DragIn_Element.innerHTML = dragDrop_arr_str;
+        dragDrop_bgc = ['#a005', dragDrop_bgc[1]];
+        dragDrop_opy = ['0.5', dragDrop_opy[1]];
+        dragDrop_pos = [[0, 0], [dragDrop_pos[1][0], dragDrop_pos[1][1]]];
         saveUserData();
         document.getElementById('draggable-0').remove();
       }
@@ -1750,6 +1762,9 @@ var apputils = (function () {
         }
         DragIn_Element.innerHTML = dragDrop_arr_str;
         saveUserData();
+        dragDrop_bgc = [dragDrop_bgc[0], '#a005'];
+        dragDrop_opy = [dragDrop_opy[0], '0.5'];
+        dragDrop_pos = [[dragDrop_pos[0][0], dragDrop_pos[0][1]], [0, 0]];
         document.getElementById('draggable-1').remove();
       }
       for (let i = 0; i < dragDrop_arr.length; i++) {
@@ -1765,6 +1780,11 @@ var apputils = (function () {
                   c.style.fontSize = '12px';
                   c.style.background = 'linear-gradient(to bottom, #3db3d045, #191325)';
                   c.style.zIndex = '2';
+                })
+                contextmenuutils.addItem(language_data.item.equipment.legstrap["0"] + '1%', (c) => {
+                  c.style.background = "#3db3d050";
+                  c.style.color = '#3db3d0';
+                  c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
                 })
                 for (let i = 0; i < get_dmg.length; i++) {
                   if (get_dmg[i] !== -1) {
@@ -1880,6 +1900,12 @@ var apputils = (function () {
                   c.addEventListener("touchend", () => {
                     c.style.background = "";
                   });
+                  c.addEventListener("mousedown", () => {
+                    c.style.background = "#3db3d050";
+                  });
+                  document.body.addEventListener("mouseup", () => {
+                    c.style.background = "";
+                  });
                 }
                 function ToMouse(c) {
                   c.style.left = (e.pageX) + "px";
@@ -1899,6 +1925,11 @@ var apputils = (function () {
                   c.style.fontSize = '12px';
                   c.style.background = 'linear-gradient(to bottom, #3db3d045, #191325)';
                   c.style.zIndex = '2';
+                })
+                contextmenuutils.addItem(language_data.item.equipment.legstrap["1"] + '2%', (c) => {
+                  c.style.background = "#3db3d050";
+                  c.style.color = '#3db3d0';
+                  c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
                 })
                 for (let i = 0; i < get_dmg.length; i++) {
                   if (get_dmg[i] !== -1) {
@@ -2012,6 +2043,12 @@ var apputils = (function () {
                     c.style.background = "#3db3d050";
                   });
                   c.addEventListener("touchend", () => {
+                    c.style.background = "";
+                  });
+                  c.addEventListener("mousedown", () => {
+                    c.style.background = "#3db3d050";
+                  });
+                  document.body.addEventListener("mouseup", () => {
                     c.style.background = "";
                   });
                 }
