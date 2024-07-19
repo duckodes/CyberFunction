@@ -898,6 +898,50 @@ body {
   background: #7c2020;
 }
 
+.store-info {
+  background: #0005;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.store-info>div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  max-width: 500px;
+  height: 200px;
+  background: #f7d967;
+  padding: 10px;
+  border: 5px solid;
+  border-image: linear-gradient(to left bottom, #c24347 5%, transparent 5%, transparent 45%, #c24347 45%, #c24347 55%, transparent 55%, transparent 95%, #c24347 95%) 1;
+}
+
+.store-info>div>.confirm {
+  width: 100px;
+  background: #ff4148;
+  text-align: center;
+  cursor: pointer;
+}
+
+.store-info>div>.confirm:hover {
+  width: 95px;
+  border-left: 5px solid #c7383d;
+}
+
+.store-info>div>.confirm:active {
+  opacity: 0.8;
+}
+
+
 .stat {
   display: none;
   justify-content: center;

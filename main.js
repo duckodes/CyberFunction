@@ -257,28 +257,40 @@ var apputils = (function () {
 
           createStoreItem(data.item.equipment.legstrap["0"] + '<br>' + data.item.store[0] + '1%' + data.item.store[1], 'img/chip.png', '75 BTC' + data.item.store[2], buy => {
             if (btc >= 75) {
-              btc -= 75;
-              document.querySelector('.nav-wallet-btc-data').textContent = btc;
-              saveOwnEquipment(own_equipment.legstrap, 0);
-              saveUserData();
+              storeItemInfo(75, data, cost => {
+                btc -= cost;
+                document.querySelector('.nav-wallet-btc-data').textContent = btc;
+                saveOwnEquipment(own_equipment.legstrap, 0);
+                saveUserData();
+              });
             } else {
-              buy.innerHTML = data.item.store[3];
-              setTimeout(() => {
-                buy.innerHTML = '75 BTC' + data.item.store[2];
-              }, 1000);
+              if (buy.innerHTML === '75 BTC' + data.item.store[2]) {
+                setTimeout(() => {
+                  buy.innerHTML = data.item.store[3];
+                  setTimeout(() => {
+                    buy.innerHTML = '75 BTC' + data.item.store[2];
+                  }, 1000);
+                }, 100);
+              }
             }
           });
           createStoreItem(data.item.equipment.legstrap["1"] + '<br>' + data.item.store[0] + '2%' + data.item.store[1], 'img/chip.png', '200 BTC' + data.item.store[2], buy => {
             if (btc >= 200) {
-              btc -= 200;
-              document.querySelector('.nav-wallet-btc-data').textContent = btc;
-              saveOwnEquipment(own_equipment.legstrap, 1);
-              saveUserData();
+              storeItemInfo(200, data, cost => {
+                btc -= cost;
+                document.querySelector('.nav-wallet-btc-data').textContent = btc;
+                saveOwnEquipment(own_equipment.legstrap, 1);
+                saveUserData();
+              });
             } else {
-              buy.innerHTML = data.item.store[3];
-              setTimeout(() => {
-                buy.innerHTML = '200 BTC' + data.item.store[2];
-              }, 1000);
+              if (buy.innerHTML === '200 BTC' + data.item.store[2]) {
+                setTimeout(() => {
+                  buy.innerHTML = data.item.store[3];
+                  setTimeout(() => {
+                    buy.innerHTML = '200 BTC' + data.item.store[2];
+                  }, 1000);
+                }, 100);
+              }
             }
           });
         })
@@ -1037,20 +1049,28 @@ var apputils = (function () {
               if (cal_def_dmg > 0) {
                 e_get_dmg[n] += cal_def_dmg;
                 update_ui_e_box_all();
-                document.getElementById('asciiArt' + enemies_id).style.color = 'red';
-                document.getElementById('asciiArt' + enemies_id).style.marginLeft = getRandomNumber(0, 50) + 'px';
-                document.getElementById('asciiArt' + enemies_id).style.marginTop = getRandomNumber(0, 50) + 'px';
+                if (document.getElementById('asciiArt' + enemies_id)) {
+                  document.getElementById('asciiArt' + enemies_id).style.color = 'red';
+                  document.getElementById('asciiArt' + enemies_id).style.marginLeft = getRandomNumber(0, 50) + 'px';
+                  document.getElementById('asciiArt' + enemies_id).style.marginTop = getRandomNumber(0, 50) + 'px';
+                }
                 setTimeout(() => {
-                  document.getElementById('asciiArt' + enemies_id).style.marginLeft = getRandomNumber(-20, -50) + 'px';
-                  document.getElementById('asciiArt' + enemies_id).style.marginTop = getRandomNumber(-20, -50) + 'px';
+                  if (document.getElementById('asciiArt' + enemies_id)) {
+                    document.getElementById('asciiArt' + enemies_id).style.marginLeft = getRandomNumber(-20, -50) + 'px';
+                    document.getElementById('asciiArt' + enemies_id).style.marginTop = getRandomNumber(-20, -50) + 'px';
+                  }
                   setTimeout(() => {
-                    document.getElementById('asciiArt' + enemies_id).style.marginLeft = getRandomNumber(0, 10) + 'px';
-                    document.getElementById('asciiArt' + enemies_id).style.marginTop = getRandomNumber(0, 10) + 'px';
+                    if (document.getElementById('asciiArt' + enemies_id)) {
+                      document.getElementById('asciiArt' + enemies_id).style.marginLeft = getRandomNumber(0, 10) + 'px';
+                      document.getElementById('asciiArt' + enemies_id).style.marginTop = getRandomNumber(0, 10) + 'px';
+                    }
                   }, 200);
                 }, 200);
                 setTimeout(() => {
-                  document.getElementById('asciiArt' + enemies_id).style.color = '#0000';
-                  document.getElementById('asciiArt' + enemies_id).style.marginLeft = '';
+                  if (document.getElementById('asciiArt' + enemies_id)) {
+                    document.getElementById('asciiArt' + enemies_id).style.color = '#0000';
+                    document.getElementById('asciiArt' + enemies_id).style.marginLeft = '';
+                  }
                 }, 500);
               }
             }
@@ -1147,6 +1167,8 @@ var apputils = (function () {
       innerHTML('.gameover-border', 0, '<div style="color: #c24347;">ESCAPE</div>');
       innerHTML('.gameover-info', 0, `<div style="color: #c24347;font-family: SdglitchdemoRegular-YzROj, CyberwarRegular-7BX0E;">YOU HAVE FLED THE BATTLEFIELD. <br>PUNISHMENT: ${get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * -5} BTC.</div>`);
       btc -= get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * 5;
+      const btc_data = document.querySelector('.nav-wallet-btc-data');
+      btc_data.textContent = btc;
       gameover();
       rolltimes = 2;
       update_rolltimes_btn();
@@ -2933,6 +2955,20 @@ var apputils = (function () {
       const buyButton = newDiv.querySelector('.buy');
       buyButton.addEventListener('click', (e) => {
         callback(e.target);
+      });
+    }
+    function storeItemInfo(cost, languageData, callback) {
+      document.querySelector('.store-info').style.display = 'flex';
+      document.querySelector('.store-info').addEventListener('click', (e) => {
+        if (e.target !== document.querySelector('.store-info>div')) {
+          document.querySelector('.store-info').style.display = '';
+        }
+      });
+      let calculate = btc - cost;
+      document.querySelector('.store-info>div').innerHTML = `${btc} BTC<br> -&emsp;&emsp;${cost}<br> = [${calculate}]BTC<div class="confirm">${languageData.item.store[2]}</div>`;
+      document.querySelector('.store-info>div>.confirm').addEventListener('click', () => {
+        callback(cost);
+        document.querySelector('.store-info').style.display = '';
       });
     }
   }
