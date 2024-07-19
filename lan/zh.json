@@ -2,6 +2,7 @@
     "nav": {
         "username": "用戶名稱",
         "guide": {
+            "store": "「商城」",
             "itemsEncyclopedia": "「物品百科」",
             "helmet": "「頭盔」",
             "jacket": "「上衣」",
@@ -98,7 +99,13 @@
             "boots": {
                 "0": "初級普通戰靴"
             }
-        }
+        },
+        "store": [
+            "增益效果",
+            "損傷",
+            "購買",
+            "餘額不足"
+        ]
     },
     "lobby": {
         "time": {

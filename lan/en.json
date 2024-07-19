@@ -2,6 +2,7 @@
     "nav": {
         "username": "USER NAME",
         "guide": {
+            "store": "「MALL」",
             "itemsEncyclopedia": "「ITEMS ENCYCLOPEDIA」",
             "helmet": "「HELMET」",
             "jacket": "「JACKET」",
@@ -98,7 +99,13 @@
             "boots": {
                 "0": "BASIC STANDARD COMBAT BOOTS"
             }
-        }
+        },
+        "store": [
+            "ENHANCEMENT EFFECT",
+            "RECOVER FROM INJURY",
+            "BUY",
+            "INSUFFICIENT BALANCE"
+        ]
     },
     "lobby": {
         "time": {

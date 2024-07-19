@@ -254,6 +254,33 @@ var apputils = (function () {
           updateOwnItemsUI(language_data);
 
           document.querySelector('.nav-username .f-10.en-set').textContent = language_data.nav.username;
+
+          createStoreItem(data.item.equipment.legstrap["0"] + '<br>' + data.item.store[0] + '1%' + data.item.store[1], 'img/chip.png', '75 BTC' + data.item.store[2], buy => {
+            if (btc >= 75) {
+              btc -= 75;
+              document.querySelector('.nav-wallet-btc-data').textContent = btc;
+              saveOwnEquipment(own_equipment.legstrap, 0);
+              saveUserData();
+            } else {
+              buy.innerHTML = data.item.store[3];
+              setTimeout(() => {
+                buy.innerHTML = '75 BTC' + data.item.store[2];
+              }, 1000);
+            }
+          });
+          createStoreItem(data.item.equipment.legstrap["1"] + '<br>' + data.item.store[0] + '2%' + data.item.store[1], 'img/chip.png', '200 BTC' + data.item.store[2], buy => {
+            if (btc >= 200) {
+              btc -= 200;
+              document.querySelector('.nav-wallet-btc-data').textContent = btc;
+              saveOwnEquipment(own_equipment.legstrap, 1);
+              saveUserData();
+            } else {
+              buy.innerHTML = data.item.store[3];
+              setTimeout(() => {
+                buy.innerHTML = '200 BTC' + data.item.store[2];
+              }, 1000);
+            }
+          });
         })
         .catch(error => {
           console.error('Fetch error:', error);
@@ -395,6 +422,15 @@ var apputils = (function () {
       showmenu(1);
       activeMenu = 1;
       saveUserData();
+    })
+    evt.click('.item-options .item-all-btn', 2, () => {
+      display('.item-all-btn', 0, 'none');
+      display('.item-all-btn', 1, 'none');
+      display('.item-all-btn', 2, 'none');
+      display('.item-all-btn', 3, 'none');
+      display('.store', 0, 'flex');
+
+      textContent('.nav-guide', 0, language_data.nav.guide.store);
     })
     let equip_nums = document.querySelectorAll('.equip .item-all-btn').length;
     let item_nums = 4 + equip_nums;
@@ -2145,6 +2181,7 @@ var apputils = (function () {
           display('.item-all-btn', 3, '');
           display('.equip', 0, '');
           display('.encyclopedia', 0, '');
+          display('.store', 0, '');
 
           textContent('.nav-guide', 0, languageData.nav.guide.item);
           break;
@@ -2877,6 +2914,25 @@ var apputils = (function () {
           DragIn_Element.innerHTML = dragDrop_arr_str;
           update_battleLegstrap();
         }
+      });
+    }
+
+    function createStoreItem(title, path, buyInner, callback) {
+      const storeItem = document.querySelector('.store-item');
+
+      const newDiv = document.createElement('div');
+
+      newDiv.innerHTML = `
+        <div class="store-item-title">${title}</div>
+        <div class="store-item-img" style="background-image: url(${path});background-size: cover;background-repeat: no-repeat;background-position: center;"></div>
+        <div class="buy">${buyInner}</div>
+      `;
+
+      storeItem.appendChild(newDiv);
+
+      const buyButton = newDiv.querySelector('.buy');
+      buyButton.addEventListener('click', (e) => {
+        callback(e.target);
       });
     }
   }

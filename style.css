@@ -664,19 +664,19 @@ body {
   flex-wrap: wrap;
 }
 
-.legstrap-box>div{
+.legstrap-box>div {
   width: 50px;
   height: 50px;
   background: #000;
   border: 1px solid #00eeff;
 }
 
-.legstrap-box-close{
+.legstrap-box-close {
   color: white;
   cursor: pointer;
 }
 
-.legstrap-box-close:hover{
+.legstrap-box-close:hover {
   opacity: 0.5;
 }
 
@@ -791,6 +791,111 @@ body {
 
 .e-info-back {
   margin-left: 80dvw;
+}
+
+.store {
+  display: none;
+  flex-direction: column;
+  width: 100dvw;
+  max-width: 800px;
+  height: 300dvw;
+  max-height: 700px;
+}
+
+.store-nav {
+  width: 100%;
+  height: 100dvh;
+  min-height: 300px;
+  background: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  margin-top: 100px;
+}
+
+.store-nav div {
+  margin: 1px;
+  background: #000;
+  width: 80%;
+  height: 100%;
+  background-image: url(img/circuit_board.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.store-nav-title {
+  margin-top: -50px;
+  margin-left: 20px;
+  font-size: 48px;
+  color: #f7d967;
+  font-weight: bolder;
+}
+
+.store-item {
+  width: 100%;
+  height: 700px;
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.store-item>div {
+  margin: 10px;
+  background: #000;
+  width: 150px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  border: 2px solid;
+  border-image: linear-gradient(to left bottom, #c24347aa 10%, transparent 20%, transparent 80%, #c24347aa 90%) 1;
+}
+
+.store-item-title {
+  background: red;
+  width: 120px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 5px;
+  font-size: smaller;
+  line-height: 2;
+  border-right: 5px solid #962b2e;
+}
+
+.store-item-title:hover {
+  -webkit-line-clamp: 999;
+}
+
+.store-item-img {
+  margin: 10px;
+  height: 150px;
+}
+
+.buy {
+  cursor: pointer;
+  background: red;
+  width: 100px;
+  margin-left: 45px;
+  text-align: center;
+  border-left: 5px solid #962b2e;
+  transition: all 100ms ease-out;
+  font-family: CyberwarRegular-7BX0E;
+  font-size: medium;
+}
+
+.buy:hover {
+  background: #ad2b2b;
+}
+
+.buy:active {
+  background: #7c2020;
 }
 
 .stat {
