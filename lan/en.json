@@ -48,7 +48,8 @@
         "noLoad": "⚠︎ Chip not yet inserted",
         "reroll": "REMOVE CHIP",
         "exit": "ESCAPE",
-        "loading": "SYSTEM LOADING.."
+        "loading": "SYSTEM LOADING..",
+        "quantity": "QUANTITY"
     },
     "item": {
         "options": {

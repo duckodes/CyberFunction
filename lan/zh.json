@@ -48,7 +48,8 @@
         "noLoad": "⚠︎ 晶片尚未輸入",
         "reroll": "拆除晶片",
         "exit": "逃跑",
-        "loading": "系統加載中.."
+        "loading": "系統加載中..",
+        "quantity": "數量"
     },
     "item": {
         "options": {

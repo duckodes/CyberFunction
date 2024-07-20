@@ -261,6 +261,7 @@ var apputils = (function () {
                 btc -= cost;
                 document.querySelector('.nav-wallet-btc-data').textContent = btc;
                 saveOwnEquipment(own_equipment.legstrap, 0);
+                update_dragDrop_arr_str();
                 saveUserData();
               });
             } else {
@@ -280,6 +281,7 @@ var apputils = (function () {
                 btc -= cost;
                 document.querySelector('.nav-wallet-btc-data').textContent = btc;
                 saveOwnEquipment(own_equipment.legstrap, 1);
+                update_dragDrop_arr_str();
                 saveUserData();
               });
             } else {
@@ -1788,6 +1790,15 @@ var apputils = (function () {
         b.style.color = '';
       }
     }
+    function update_dragDrop_arr_str() {
+      dragDrop_arr_str = [''];
+      for (let i = 0; i < dragDrop_arr.length; i++) {
+        if (document.getElementById(`draggable-${dragDrop_arr[i]}`) !== null) {
+          dragDrop_arr_str.push(document.getElementById(`draggable-${dragDrop_arr[i]}`).getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(`draggable-${dragDrop_arr[i]}`.replace('-', ''))));
+        }
+      }
+      DragIn_Element.innerHTML = dragDrop_arr_str;
+    }
     function update_battleLegstrap() {
       document.querySelector('.legstrap-box').innerHTML = '';
       if (dragDrop_arr.filter(item => item !== -1).length === 0) {
@@ -1797,13 +1808,7 @@ var apputils = (function () {
       }
       if (document.getElementById('draggable-0') && own_equipment.legstrap && !own_equipment.legstrap.includes(0)) {
         dragDrop_arr = dragDrop_arr.filter(item => item !== 0); console.log(dragDrop_arr);
-        dragDrop_arr_str = [''];
-        for (let i = 0; i < dragDrop_arr.length; i++) {
-          if (document.getElementById(`draggable-${dragDrop_arr[i]}`) !== null) {
-            dragDrop_arr_str.push(document.getElementById(`draggable-${dragDrop_arr[i]}`).getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(`draggable-${dragDrop_arr[i]}`.replace('-', ''))));
-          }
-        }
-        DragIn_Element.innerHTML = dragDrop_arr_str;
+        update_dragDrop_arr_str();
         dragDrop_bgc = ['#a005', dragDrop_bgc[1]];
         dragDrop_opy = ['0.5', dragDrop_opy[1]];
         dragDrop_pos = [[0, 0], [dragDrop_pos[1][0], dragDrop_pos[1][1]]];
@@ -1812,13 +1817,7 @@ var apputils = (function () {
       }
       if (document.getElementById('draggable-1') && own_equipment.legstrap && !own_equipment.legstrap.includes(1)) {
         dragDrop_arr = dragDrop_arr.filter(item => item !== 1); console.log(dragDrop_arr);
-        dragDrop_arr_str = [''];
-        for (let i = 0; i < dragDrop_arr.length; i++) {
-          if (document.getElementById(`draggable-${dragDrop_arr[i]}`) !== null) {
-            dragDrop_arr_str.push(document.getElementById(`draggable-${dragDrop_arr[i]}`).getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(`draggable-${dragDrop_arr[i]}`.replace('-', ''))));
-          }
-        }
-        DragIn_Element.innerHTML = dragDrop_arr_str;
+        update_dragDrop_arr_str();
         saveUserData();
         dragDrop_bgc = [dragDrop_bgc[0], '#a005'];
         dragDrop_opy = [dragDrop_opy[0], '0.5'];
@@ -1841,14 +1840,19 @@ var apputils = (function () {
                 })
                 contextmenuutils.addItem(language_data.item.equipment.legstrap["0"] + '1%', (c) => {
                   c.style.background = "#3db3d050";
+                  c.style.color = '#f7d967';
+                  c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
+                })
+                contextmenuutils.addItem(language_data.battle.quantity + ':' + countOccurrences(own_equipment.legstrap, 0), (c) => {
+                  c.style.background = "#3db3d050";
                   c.style.color = '#3db3d0';
                   c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
                 })
                 for (let i = 0; i < get_dmg.length; i++) {
-                  if (get_dmg[i] !== -1) {
+                  if (get_dmg[i] !== -1 && get_dmg[i] > 0) {
                     switch (i) {
                       case 0:
-                        contextmenuutils.addItem('+頭部', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.helmet, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -1863,7 +1867,7 @@ var apputils = (function () {
                         })
                         break;
                       case 1:
-                        contextmenuutils.addItem('+上衣', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.jacket, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -1878,7 +1882,7 @@ var apputils = (function () {
                         })
                         break;
                       case 2:
-                        contextmenuutils.addItem('+左手', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.leftWeapon, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -1893,7 +1897,7 @@ var apputils = (function () {
                         })
                         break;
                       case 3:
-                        contextmenuutils.addItem('+右手', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.rightWeapon, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -1908,7 +1912,7 @@ var apputils = (function () {
                         })
                         break;
                       case 4:
-                        contextmenuutils.addItem('+腿掛', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.legStrap, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -1923,7 +1927,7 @@ var apputils = (function () {
                         })
                         break;
                       case 5:
-                        contextmenuutils.addItem('+靴子', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.boots, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -1949,6 +1953,7 @@ var apputils = (function () {
                   c.addEventListener("click", () => {
                     if (get_dmg[4] !== -1) {
                       callback();
+                      update_dragDrop_arr_str();
                     }
                     contextmenuutils.remove();
                   });
@@ -1986,14 +1991,19 @@ var apputils = (function () {
                 })
                 contextmenuutils.addItem(language_data.item.equipment.legstrap["1"] + '2%', (c) => {
                   c.style.background = "#3db3d050";
+                  c.style.color = '#f7d967';
+                  c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
+                })
+                contextmenuutils.addItem(language_data.battle.quantity + ':' + countOccurrences(own_equipment.legstrap, 1), (c) => {
+                  c.style.background = "#3db3d050";
                   c.style.color = '#3db3d0';
                   c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
                 })
                 for (let i = 0; i < get_dmg.length; i++) {
-                  if (get_dmg[i] !== -1) {
+                  if (get_dmg[i] !== -1 && get_dmg[i] > 0) {
                     switch (i) {
                       case 0:
-                        contextmenuutils.addItem('+頭部', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.helmet, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2008,7 +2018,7 @@ var apputils = (function () {
                         })
                         break;
                       case 1:
-                        contextmenuutils.addItem('+上衣', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.jacket, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2023,7 +2033,7 @@ var apputils = (function () {
                         })
                         break;
                       case 2:
-                        contextmenuutils.addItem('+左手', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.leftWeapon, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2038,7 +2048,7 @@ var apputils = (function () {
                         })
                         break;
                       case 3:
-                        contextmenuutils.addItem('+右手', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.rightWeapon, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2053,7 +2063,7 @@ var apputils = (function () {
                         })
                         break;
                       case 4:
-                        contextmenuutils.addItem('+腿掛', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.legStrap, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2068,7 +2078,7 @@ var apputils = (function () {
                         })
                         break;
                       case 5:
-                        contextmenuutils.addItem('+靴子', (c) => {
+                        contextmenuutils.addItem('>>' + language_data.item.equip.boots, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2094,6 +2104,7 @@ var apputils = (function () {
                   c.addEventListener("click", () => {
                     if (get_dmg[4] !== -1) {
                       callback();
+                      update_dragDrop_arr_str();
                     }
                     contextmenuutils.remove();
                   });
