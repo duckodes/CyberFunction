@@ -91,6 +91,14 @@
     background-color: #fff5;
 }
 
+#store-0 {
+    background-image: url(../img/items/OralRestorativeMedication.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: -35px;
+    background-color: #fff5;
+}
+
 #draggable-1 {
     background-image: url(../img/items/tourniquet.png);
     background-size: cover;
@@ -104,6 +112,14 @@
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
+    background-color: #fff5;
+}
+
+#store-1 {
+    background-image: url(../img/items/tourniquet.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     background-color: #fff5;
 }
 

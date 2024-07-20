@@ -255,7 +255,7 @@ var apputils = (function () {
 
           document.querySelector('.nav-username .f-10.en-set').textContent = language_data.nav.username;
 
-          createStoreItem(data.item.equipment.legstrap["0"] + '<br>' + data.item.store[0] + '1%' + data.item.store[1], 'img/chip.png', '75 BTC' + data.item.store[2], buy => {
+          createStoreItem(data.item.equipment.legstrap["0"] + '<br>' + data.item.store[0] + '1%' + data.item.store[1], 'store-0', '75 BTC' + data.item.store[2], buy => {
             if (btc >= 75) {
               storeItemInfo(75, data, cost => {
                 btc -= cost;
@@ -275,7 +275,7 @@ var apputils = (function () {
               }
             }
           });
-          createStoreItem(data.item.equipment.legstrap["1"] + '<br>' + data.item.store[0] + '2%' + data.item.store[1], 'img/chip.png', '200 BTC' + data.item.store[2], buy => {
+          createStoreItem(data.item.equipment.legstrap["1"] + '<br>' + data.item.store[0] + '2%' + data.item.store[1], 'store-1', '200 BTC' + data.item.store[2], buy => {
             if (btc >= 200) {
               storeItemInfo(200, data, cost => {
                 btc -= cost;
@@ -2950,14 +2950,14 @@ var apputils = (function () {
       });
     }
 
-    function createStoreItem(title, path, buyInner, callback) {
+    function createStoreItem(title, imgID, buyInner, callback) {
       const storeItem = document.querySelector('.store-item');
 
       const newDiv = document.createElement('div');
 
       newDiv.innerHTML = `
         <div class="store-item-title">${title}</div>
-        <div class="store-item-img" style="background-image: url(${path});background-size: cover;background-repeat: no-repeat;background-position: center;"></div>
+        <div class="store-item-img" id="${imgID}"></div>
         <div class="buy">${buyInner}</div>
       `;
 
