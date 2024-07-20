@@ -1278,8 +1278,9 @@ body {
 .footer {
   position: fixed;
   bottom: 0;
-  width: 95.5dvw;
-  border-top: 0.5px solid #353535;
+  width: 100dvw;
+  border: 0.5px solid;
+  border-image: linear-gradient(to right, transparent 5%,#353535 5%, #353535 95%, transparent 95%) 1;
   background: #151520;
   display: flex;
   align-items: center;
