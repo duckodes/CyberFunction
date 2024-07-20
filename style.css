@@ -807,7 +807,7 @@ body {
   width: 100%;
   height: 100dvh;
   min-height: 300px;
-  background: red;
+  background: var(--store-nav-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -820,7 +820,7 @@ body {
   background: #000;
   width: 80%;
   height: 100%;
-  background-image: url(img/circuit_board.png);
+  background-image: var(--store-nav-bg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

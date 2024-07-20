@@ -2982,6 +2982,44 @@ var apputils = (function () {
         document.querySelector('.store-info').style.display = '';
       });
     }
+    // store nav update
+    store_nav();
+    function store_nav() {
+      const currentTimestamp = Date.now();
+      const date = new Date(currentTimestamp);
+      const dayOfWeek = date.getDay();
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const firstDayOfMonth = new Date(year, month, 1);
+      const firstDayOfWeek = firstDayOfMonth.getDay();
+      const weekOfMonth = Math.ceil((date.getDate() + firstDayOfWeek) / 7);
+      switch (dayOfWeek) {
+        case 0:
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(17, 20))}.jpg)`);
+          break;
+        case 1:
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          break;
+        case 2:
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          break;
+        case 3:
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          break;
+        case 4:
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          break;
+        case 5:
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          break;
+        case 6:
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          break;
+
+        default:
+          break;
+      }
+    }
   }
 
   function createDIV(classname, textContent, parent, func) {
