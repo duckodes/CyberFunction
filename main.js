@@ -2995,25 +2995,25 @@ var apputils = (function () {
       const weekOfMonth = Math.ceil((date.getDate() + firstDayOfWeek) / 7);
       switch (dayOfWeek) {
         case 0:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(17, 20))}.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 19))}.jpg)`);
           break;
         case 1:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_11.jpg)`);
           break;
         case 2:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_2.jpg)`);
           break;
         case 3:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_15.jpg)`);
           break;
         case 4:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_4.jpg)`);
           break;
         case 5:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_16.jpg)`);
           break;
         case 6:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 17))}.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 19))}.jpg)`);
           break;
 
         default:
