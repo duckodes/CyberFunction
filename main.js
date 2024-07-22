@@ -171,10 +171,8 @@ var apputils = (function () {
       });
 
       // update wallet
-      const btc_data = document.querySelector('.nav-wallet-btc-data');
-      const etc_data = document.querySelector('.nav-wallet-etc-data');
-      btc_data.textContent = btc;
-      etc_data.textContent = etc;
+      update_btc_UI();
+      update_etc_UI();
 
       // settings language
       fetch('lan/' + language + '.json')
@@ -255,46 +253,7 @@ var apputils = (function () {
 
           document.querySelector('.nav-username .f-10.en-set').textContent = language_data.nav.username;
 
-          createStoreItem(data.item.equipment.legstrap["0"] + '<br>' + data.item.store[0] + '1%' + data.item.store[1], 'store-0', '75 BTC' + data.item.store[2], buy => {
-            if (btc >= 75) {
-              storeItemInfo(75, data, cost => {
-                btc -= cost;
-                document.querySelector('.nav-wallet-btc-data').textContent = btc;
-                saveOwnEquipment(own_equipment.legstrap, 0);
-                update_dragDrop_arr_str();
-                saveUserData();
-              });
-            } else {
-              if (buy.innerHTML === '75 BTC' + data.item.store[2]) {
-                setTimeout(() => {
-                  buy.innerHTML = data.item.store[3];
-                  setTimeout(() => {
-                    buy.innerHTML = '75 BTC' + data.item.store[2];
-                  }, 1000);
-                }, 100);
-              }
-            }
-          });
-          createStoreItem(data.item.equipment.legstrap["1"] + '<br>' + data.item.store[0] + '2%' + data.item.store[1], 'store-1', '200 BTC' + data.item.store[2], buy => {
-            if (btc >= 200) {
-              storeItemInfo(200, data, cost => {
-                btc -= cost;
-                document.querySelector('.nav-wallet-btc-data').textContent = btc;
-                saveOwnEquipment(own_equipment.legstrap, 1);
-                update_dragDrop_arr_str();
-                saveUserData();
-              });
-            } else {
-              if (buy.innerHTML === '200 BTC' + data.item.store[2]) {
-                setTimeout(() => {
-                  buy.innerHTML = data.item.store[3];
-                  setTimeout(() => {
-                    buy.innerHTML = '200 BTC' + data.item.store[2];
-                  }, 1000);
-                }, 100);
-              }
-            }
-          });
+          initStoreItem(data);
         })
         .catch(error => {
           console.error('Fetch error:', error);
@@ -348,6 +307,14 @@ var apputils = (function () {
       document.querySelector('.lan-options').style.display = '';
       location.reload();
     });
+    function update_btc_UI() {
+      const btc_data = document.querySelector('.nav-wallet-btc-data');
+      btc_data.textContent = btc;
+    }
+    function update_etc_UI() {
+      const etc_data = document.querySelector('.nav-wallet-etc-data');
+      etc_data.textContent = etc;
+    }
 
     // events
     evt.click('.menu-btn', 0, () => {
@@ -518,10 +485,12 @@ var apputils = (function () {
         document.querySelector('.dropbase').style.visibility = 'visible';
         document.querySelector('.dragIn-arr-title').style.visibility = 'visible';
         document.querySelector('.dragIn-arr').style.visibility = 'visible';
+        document.querySelector('.dropbase-close').style.visibility = 'visible';
       } else {
         document.querySelector('.dropbase').style.visibility = '';
         document.querySelector('.dragIn-arr-title').style.visibility = '';
         document.querySelector('.dragIn-arr').style.visibility = '';
+        document.querySelector('.dropbase-close').style.visibility = '';
       }
     })
     evt.click('.dragIn-arr-close div', 0, () => {
@@ -529,12 +498,20 @@ var apputils = (function () {
         document.querySelector('.dropbase').style.visibility = 'visible';
         document.querySelector('.dragIn-arr-title').style.visibility = 'visible';
         document.querySelector('.dragIn-arr').style.visibility = 'visible';
+        document.querySelector('.dropbase-close').style.visibility = 'visible';
       } else {
         document.querySelector('.dropbase').style.visibility = '';
         document.querySelector('.dragIn-arr-title').style.visibility = '';
         document.querySelector('.dragIn-arr').style.visibility = '';
+        document.querySelector('.dropbase-close').style.visibility = '';
       }
     })
+    evt.click('.dropbase-close', 0, () => {
+      document.querySelector('.dropbase').style.visibility = '';
+      document.querySelector('.dragIn-arr-title').style.visibility = '';
+      document.querySelector('.dragIn-arr').style.visibility = '';
+      document.querySelector('.dropbase-close').style.visibility = '';
+    });
     evt.click('.legstrap-box-close', 0, () => {
       document.querySelector('.legstrap-container').style.display = '';
     })
@@ -979,7 +956,7 @@ var apputils = (function () {
       }
     }
     evt.click('.roll', 0, () => {
-      if (checkArr(battle_arr_data, 'N/A')) {
+      if (checkArrEx(battle_arr_data, 'N/A', 4)) {
         StartRoll();
       } else {
         document.querySelector('.roll').style.color = '#c24347';
@@ -1116,8 +1093,7 @@ var apputils = (function () {
             innerHTML('.gameover-border', 0, '<div style="color: #c24347;">DEFEAT</div>');
             innerHTML('.gameover-info', 0, `<div style="color: #c24347;font-family: SdglitchdemoRegular-YzROj, CyberwarRegular-7BX0E;">REPAIR COSTS: ${get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * -3} BTC.</div>`);
             btc -= get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * 3;
-            const btc_data = document.querySelector('.nav-wallet-btc-data');
-            btc_data.textContent = btc;
+            update_btc_UI();
             saveUserData();
 
             gameover();
@@ -1128,8 +1104,7 @@ var apputils = (function () {
             innerHTML('.gameover-border', 0, '<div style="color: #f7d967;">VICTORY</div>');
             innerHTML('.gameover-info', 0, `<div style="color: #f7d967;">AUTOMATIC REPAIRS FREE OF CHARGE.<br>REWARD: ${reward}</div>`);
             btc += reward;
-            const btc_data = document.querySelector('.nav-wallet-btc-data');
-            btc_data.textContent = btc;
+            update_btc_UI();
             saveUserData();
 
             gameover();
@@ -1169,8 +1144,7 @@ var apputils = (function () {
       innerHTML('.gameover-border', 0, '<div style="color: #c24347;">ESCAPE</div>');
       innerHTML('.gameover-info', 0, `<div style="color: #c24347;font-family: SdglitchdemoRegular-YzROj, CyberwarRegular-7BX0E;">YOU HAVE FLED THE BATTLEFIELD. <br>PUNISHMENT: ${get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * -5} BTC.</div>`);
       btc -= get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * 5;
-      const btc_data = document.querySelector('.nav-wallet-btc-data');
-      btc_data.textContent = btc;
+      update_btc_UI();
       gameover();
       rolltimes = 2;
       update_rolltimes_btn();
@@ -1393,7 +1367,7 @@ var apputils = (function () {
     })
     evt.click('.battle-me-box', 4, () => {
       setHCtrlPTE(4);
-      if (document.querySelector('.legstrap-container').style.display === '') {
+      if (document.querySelector('.legstrap-container').style.display === '' && get_hctrl === -1) {
         document.querySelector('.legstrap-container').style.display = 'flex';
       } else {
         document.querySelector('.legstrap-container').style.display = '';
@@ -1574,7 +1548,6 @@ var apputils = (function () {
     function saveOwnEquipment(t, item_id) {
       t.push(item_id);
       updateOwnItemsUI(language_data);
-      saveUserData();
     }
 
     function updateOwnItemsUI(languageData) {
@@ -1589,15 +1562,15 @@ var apputils = (function () {
       if (document.getElementById('draggable-1')) {
         document.getElementById('draggable-1').remove();
       }
-      for (var i = 0; i < own_equipment.helmet.length; i++) {
-        switch (own_equipment.helmet[i]) {
+      for (var i = 0; i < uniq(own_equipment.helmet).length; i++) {
+        switch (uniq(own_equipment.helmet)[i]) {
           case 0:
-            createDIV('item-all-btn', languageData.item.equipment.helmet["0"], document.querySelectorAll('.equip .color-0')[0], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.helmet["0"] + ' 𐄂 ' + countOccurrences(own_equipment.helmet, 0), document.querySelectorAll('.equip .color-0')[0], (b) => {
               itemOption(b, 0, own_equipment.helmet[i]);
             });
             break;
           case 1:
-            createDIV('item-all-btn', languageData.item.equipment.helmet["1"], document.querySelectorAll('.equip .color-0')[0], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.helmet["1"] + ' 𐄂 ' + countOccurrences(own_equipment.helmet, 1), document.querySelectorAll('.equip .color-0')[0], (b) => {
               itemOption(b, 0, own_equipment.helmet[i]);
             });
             break;
@@ -1606,10 +1579,10 @@ var apputils = (function () {
           // Tab to edit
         }
       }
-      for (var i = 0; i < own_equipment.jacket.length; i++) {
-        switch (own_equipment.jacket[i]) {
+      for (var i = 0; i < uniq(own_equipment.jacket).length; i++) {
+        switch (uniq(own_equipment.jacket)[i]) {
           case 0:
-            createDIV('item-all-btn', languageData.item.equipment.jacket["0"], document.querySelectorAll('.equip .color-0')[1], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.jacket["0"] + ' 𐄂 ' + countOccurrences(own_equipment.jacket, 0), document.querySelectorAll('.equip .color-0')[1], (b) => {
               itemOption(b, 1, own_equipment.jacket[i]);
             });
             break;
@@ -1618,30 +1591,30 @@ var apputils = (function () {
           // Tab to edit
         }
       }
-      for (var i = 0; i < own_equipment.lweapon.length; i++) {
-        switch (own_equipment.lweapon[i]) {
+      for (var i = 0; i < uniq(own_equipment.lweapon).length; i++) {
+        switch (uniq(own_equipment.lweapon)[i]) {
           case 0:
-            createDIV('item-all-btn', languageData.item.equipment.weapon["0"], document.querySelectorAll('.equip .color-0')[2], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.weapon["0"] + ' 𐄂 ' + countOccurrences(own_equipment.lweapon, 0), document.querySelectorAll('.equip .color-0')[2], (b) => {
               itemOption(b, 2, own_equipment.lweapon[i]);
             });
             break;
           case 1:
-            createDIV('item-all-btn', languageData.item.equipment.weapon["1"], document.querySelectorAll('.equip .color-0')[2], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.weapon["1"] + ' 𐄂 ' + countOccurrences(own_equipment.lweapon, 1), document.querySelectorAll('.equip .color-0')[2], (b) => {
               itemOption(b, 2, own_equipment.lweapon[i]);
             });
             break;
           case 2:
-            createDIV('item-all-btn', languageData.item.equipment.weapon["2"], document.querySelectorAll('.equip .color-0')[2], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.weapon["2"] + ' 𐄂 ' + countOccurrences(own_equipment.lweapon, 2), document.querySelectorAll('.equip .color-0')[2], (b) => {
               itemOption(b, 2, own_equipment.lweapon[i]);
             });
             break;
           case 3:
-            createDIV('item-all-btn', languageData.item.equipment.weapon["3"], document.querySelectorAll('.equip .color-0')[2], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.weapon["3"] + ' 𐄂 ' + countOccurrences(own_equipment.lweapon, 3), document.querySelectorAll('.equip .color-0')[2], (b) => {
               itemOption(b, 2, own_equipment.lweapon[i]);
             });
             break;
           case 4:
-            createDIV('item-all-btn', languageData.item.equipment.weapon["4"], document.querySelectorAll('.equip .color-0')[2], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.weapon["4"] + ' 𐄂 ' + countOccurrences(own_equipment.lweapon, 4), document.querySelectorAll('.equip .color-0')[2], (b) => {
               itemOption(b, 2, own_equipment.lweapon[i]);
             });
             break;
@@ -1650,30 +1623,30 @@ var apputils = (function () {
           // Tab to edit
         }
       }
-      for (var i = 0; i < own_equipment.rweapon.length; i++) {
-        switch (own_equipment.rweapon[i]) {
+      for (var i = 0; i < uniq(own_equipment.rweapon).length; i++) {
+        switch (uniq(own_equipment.rweapon)[i]) {
           case 0:
-            createDIV('item-all-btn', languageData.item.equipment.weapon["0"], document.querySelectorAll('.equip .color-0')[3], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.weapon["0"] + ' 𐄂 ' + countOccurrences(own_equipment.rweapon, 0), document.querySelectorAll('.equip .color-0')[3], (b) => {
               itemOption(b, 3, own_equipment.rweapon[i]);
             });
             break;
           case 1:
-            createDIV('item-all-btn', languageData.item.equipment.weapon["1"], document.querySelectorAll('.equip .color-0')[3], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.weapon["1"] + ' 𐄂 ' + countOccurrences(own_equipment.rweapon, 1), document.querySelectorAll('.equip .color-0')[3], (b) => {
               itemOption(b, 3, own_equipment.rweapon[i]);
             });
             break;
           case 2:
-            createDIV('item-all-btn', languageData.item.equipment.weapon["2"], document.querySelectorAll('.equip .color-0')[3], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.weapon["2"] + ' 𐄂 ' + countOccurrences(own_equipment.rweapon, 2), document.querySelectorAll('.equip .color-0')[3], (b) => {
               itemOption(b, 3, own_equipment.rweapon[i]);
             });
             break;
           case 3:
-            createDIV('item-all-btn', languageData.item.equipment.weapon["3"], document.querySelectorAll('.equip .color-0')[3], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.weapon["3"] + ' 𐄂 ' + countOccurrences(own_equipment.rweapon, 3), document.querySelectorAll('.equip .color-0')[3], (b) => {
               itemOption(b, 3, own_equipment.rweapon[i]);
             });
             break;
           case 4:
-            createDIV('item-all-btn', languageData.item.equipment.weapon["4"], document.querySelectorAll('.equip .color-0')[3], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.weapon["4"] + ' 𐄂 ' + countOccurrences(own_equipment.rweapon, 4), document.querySelectorAll('.equip .color-0')[3], (b) => {
               itemOption(b, 3, own_equipment.rweapon[i]);
             });
             break;
@@ -1701,10 +1674,10 @@ var apputils = (function () {
           // Tab to edit
         }
       }
-      for (var i = 0; i < own_equipment.boots.length; i++) {
-        switch (own_equipment.boots[i]) {
+      for (var i = 0; i < uniq(own_equipment.boots).length; i++) {
+        switch (uniq(own_equipment.boots)[i]) {
           case 0:
-            createDIV('item-all-btn', languageData.item.equipment.boots["0"], document.querySelectorAll('.equip .color-0')[5], (b) => {
+            createDIV('item-all-btn', languageData.item.equipment.boots["0"] + ' 𐄂 ' + countOccurrences(own_equipment.boots, 0), document.querySelectorAll('.equip .color-0')[5], (b) => {
               itemOption(b, 5, own_equipment.boots[i]);
             });
             break;
@@ -1747,7 +1720,7 @@ var apputils = (function () {
             c.addEventListener("click", () => {
               save_equipdata(n, -1);
               set_get_dmg_default();
-              b.style.color = '';
+              update_equip_color(b, n, item_id);
             })
           })
         } else {
@@ -1756,9 +1729,118 @@ var apputils = (function () {
             c.addEventListener("click", () => {
               save_equipdata(n, item_id);
               set_get_dmg_default();
-              b.style.color = '#f7d967';
+              update_equip_color(b, n, item_id);
             })
           })
+          if (!((n === 0 && item_id === 0) || (n === 3 && item_id === 1))) {
+            let refund = 0;
+            switch (n) {
+              case 0:
+                switch (item_id) {
+                  case 1:
+                    refund = 1500;
+                    break;
+
+                  default:
+                    break;
+                }
+                break;
+              case 1:
+                switch (item_id) {
+                  case 0:
+                    refund = 750;
+                    break;
+
+                  default:
+                    break;
+                }
+                break;
+              case 2:
+                switch (item_id) {
+                  case 0:
+                    refund = 510;
+                    break;
+                  case 2:
+                    refund = 600;
+                    break;
+                  case 3:
+                    refund = 300;
+                    break;
+                  case 4:
+                    refund = 880;
+                    break;
+
+                  default:
+                    break;
+                }
+                break;
+              case 3:
+                switch (item_id) {
+                  case 0:
+                    refund = 510;
+                    break;
+                  case 2:
+                    refund = 600;
+                    break;
+                  case 3:
+                    refund = 300;
+                    break;
+                  case 4:
+                    refund = 880;
+                    break;
+
+                  default:
+                    break;
+                }
+                break;
+              case 5:
+                switch (item_id) {
+                  case 0:
+                    refund = 200;
+                    break;
+
+                  default:
+                    break;
+                }
+                break;
+
+              default:
+                break;
+            }
+            contextmenuutils.addItem(language_data.item.equip.contextmenu["2"] + `(${refund})`, (c) => {
+              defaultset(c);
+              c.addEventListener("click", () => {
+                switch (n) {
+                  case 0:
+                    own_equipment.helmet.splice(own_equipment.helmet.indexOf(item_id), 1);
+                    btc += refund;
+                    break;
+                  case 1:
+                    own_equipment.jacket.splice(own_equipment.jacket.indexOf(item_id), 1);
+                    btc += refund;
+                    break;
+                  case 2:
+                    own_equipment.lweapon.splice(own_equipment.lweapon.indexOf(item_id), 1);
+                    btc += refund;
+                    break;
+                  case 3:
+                    own_equipment.rweapon.splice(own_equipment.rweapon.indexOf(item_id), 1);
+                    btc += refund;
+                    break;
+                  case 5:
+                    own_equipment.boots.splice(own_equipment.boots.indexOf(item_id), 1);
+                    btc += refund;
+                    break;
+
+                  default:
+                    break;
+                }
+                updateOwnItemsUI(language_data);
+                update_btc_UI();
+                saveUserData();
+              })
+            })
+          }
         }
         function defaultset(c) {
           c.style.color = '#3db3d0';
@@ -2968,18 +3050,98 @@ var apputils = (function () {
         callback(e.target);
       });
     }
-    function storeItemInfo(cost, languageData, callback) {
+    function storeItemInfo(cost, storeInfoImg, languageData, callback) {
       document.querySelector('.store-info').style.display = 'flex';
       document.querySelector('.store-info').addEventListener('click', (e) => {
-        if (e.target !== document.querySelector('.store-info>div')) {
+        if (e.target !== document.querySelector('.store-info>div') && e.target !== document.querySelector('.store-info>div>.store-info-img')) {
           document.querySelector('.store-info').style.display = '';
         }
       });
       let calculate = btc - cost;
-      document.querySelector('.store-info>div').innerHTML = `${btc} BTC<br> -&emsp;&emsp;${cost}<br> = [${calculate}]BTC<div class="confirm">${languageData.item.store[2]}</div>`;
+      document.querySelector('.store-info>div').innerHTML = `<div class="store-info-img polygon-tr-bl" id="${storeInfoImg}"></div>${btc} BTC<br> -&emsp;&emsp;${cost}<br> = [${calculate}]BTC<div class="confirm">${languageData.item.store[2]}</div>`;
       document.querySelector('.store-info>div>.confirm').addEventListener('click', () => {
         callback(cost);
         document.querySelector('.store-info').style.display = '';
+      });
+    }
+    function initStoreItem(languageData) {
+      createStoreItem(languageData.item.equipment.legstrap["0"] + '<br>' + languageData.item.store[0] + '1%' + languageData.item.store[1], 'store-0', '75 BTC' + languageData.item.store[2], buy => {
+        if (btc >= 75) {
+          storeItemInfo(75, 'store-info-0', languageData, cost => {
+            btc -= cost;
+            document.querySelector('.nav-wallet-btc-data').textContent = btc;
+            saveOwnEquipment(own_equipment.legstrap, 0);
+            update_dragDrop_arr_str();
+            saveUserData();
+          });
+        } else {
+          if (buy.innerHTML === '75 BTC' + languageData.item.store[2]) {
+            setTimeout(() => {
+              buy.innerHTML = languageData.item.store[3];
+              setTimeout(() => {
+                buy.innerHTML = '75 BTC' + languageData.item.store[2];
+              }, 1000);
+            }, 100);
+          }
+        }
+      });
+      createStoreItem(languageData.item.equipment.legstrap["1"] + '<br>' + languageData.item.store[0] + '2%' + languageData.item.store[1], 'store-1', '200 BTC' + languageData.item.store[2], buy => {
+        if (btc >= 200) {
+          storeItemInfo(200, 'store-info-1', languageData, cost => {
+            btc -= cost;
+            document.querySelector('.nav-wallet-btc-data').textContent = btc;
+            saveOwnEquipment(own_equipment.legstrap, 1);
+            update_dragDrop_arr_str();
+            saveUserData();
+          });
+        } else {
+          if (buy.innerHTML === '200 BTC' + languageData.item.store[2]) {
+            setTimeout(() => {
+              buy.innerHTML = languageData.item.store[3];
+              setTimeout(() => {
+                buy.innerHTML = '200 BTC' + languageData.item.store[2];
+              }, 1000);
+            }, 100);
+          }
+        }
+      });
+      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-2', '1700 BTC' + languageData.item.store[2], buy => {
+        if (btc >= 1700) {
+          storeItemInfo(1700, 'store-info-2', languageData, cost => {
+            btc -= cost;
+            document.querySelector('.nav-wallet-btc-data').textContent = btc;
+            saveOwnEquipment(own_equipment.lweapon, 0);
+            saveUserData();
+          });
+        } else {
+          if (buy.innerHTML === '1700 BTC' + languageData.item.store[2]) {
+            setTimeout(() => {
+              buy.innerHTML = languageData.item.store[3];
+              setTimeout(() => {
+                buy.innerHTML = '1700 BTC' + languageData.item.store[2];
+              }, 1000);
+            }, 100);
+          }
+        }
+      });
+      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-2', '1700 BTC' + languageData.item.store[2], buy => {
+        if (btc >= 1700) {
+          storeItemInfo(1700, 'store-info-2', languageData, cost => {
+            btc -= cost;
+            document.querySelector('.nav-wallet-btc-data').textContent = btc;
+            saveOwnEquipment(own_equipment.rweapon, 0);
+            saveUserData();
+          });
+        } else {
+          if (buy.innerHTML === '1700 BTC' + languageData.item.store[2]) {
+            setTimeout(() => {
+              buy.innerHTML = languageData.item.store[3];
+              setTimeout(() => {
+                buy.innerHTML = '1700 BTC' + languageData.item.store[2];
+              }, 1000);
+            }, 100);
+          }
+        }
       });
     }
     // store nav update
@@ -3032,6 +3194,17 @@ var apputils = (function () {
   function checkArr(arr, tar) {
     // 使用 every() 方法來檢查每個元素是否都是 tar
     return arr.every(element => element === tar);
+  }
+  function checkArrEx(arr, tar, excludeIndex) {
+    // 使用 every() 方法來檢查每個元素是否都是 tar，並且排除特定的索引
+    return arr.every((element, index) => {
+      // 檢查是否為要排除的索引，如果是則返回 true (即不排除)
+      if (index === excludeIndex) {
+        return true;
+      }
+      // 否則檢查是否都是 tar
+      return element === tar;
+    });
   }
   function findRandomNonNegativeOne(arr) {
     const filteredArr = arr.filter(num => num !== -1);

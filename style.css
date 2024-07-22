@@ -328,6 +328,7 @@ body {
   width: 100%;
   word-wrap: break-word;
   font-size: 16px;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .gameover {
@@ -717,6 +718,12 @@ body {
 
 .equip .color-0 {
   padding: 5px;
+  border-top: 0.5px solid;
+  border-image: linear-gradient(to right, transparent, #868686, transparent) 1;
+}
+
+.equip .color-0:first-child {
+  border: none;
 }
 
 .equip>.open-base {
@@ -728,6 +735,7 @@ body {
   cursor: pointer;
   color: #fff;
   width: fit-content;
+  font-size: 50px;
 }
 
 .equip .open:hover {
@@ -866,6 +874,7 @@ body {
   text-overflow: ellipsis;
   padding: 5px;
   font-size: smaller;
+  font-family: 'Courier New', Courier, monospace;
   line-height: 2;
   border-right: 5px solid #962b2e;
 }
@@ -919,11 +928,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   width: 100%;
   max-width: 500px;
-  height: 200px;
-  background: #f7d967;
+  height: fit-content;
+  background: #b3fff9c7;
   padding: 10px;
-  border: 5px solid;
-  border-image: linear-gradient(to left bottom, #c24347 5%, transparent 5%, transparent 45%, #c24347 45%, #c24347 55%, transparent 55%, transparent 95%, #c24347 95%) 1;
+  border: 5px solid #000;
+}
+
+.store-info>div>.store-info-img{
+  width: 100%;
+  max-width: 300px;
+  height: 70dvw;
+  max-height: 300px;
+  border: 10px solid #b9fff3;
 }
 
 .store-info>div>.confirm {
@@ -942,6 +958,17 @@ body {
   opacity: 0.8;
 }
 
+.store-info>p {
+  position: fixed;
+  bottom: 35px;
+  color: #fff;
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.store-info>p:hover {
+  color: #fff5;
+}
 
 .stat {
   display: none;
@@ -970,7 +997,7 @@ body {
   margin: 15px;
   margin-bottom: 150px;
   width: 100dvw;
-  background: linear-gradient(to bottom, #a3e2ff5e, transparent);
+  /* background: linear-gradient(to bottom, #a3e2ff5e, transparent); */
   width: 70%;
   max-width: 500px;
 }
@@ -989,7 +1016,6 @@ body {
   background: #6fd6ff1a;
   color: #f7d967;
   padding: 5px;
-  margin: 5px;
   width: fit-content;
   padding-left: 2%;
   padding-right: 2%;
@@ -1281,7 +1307,7 @@ body {
   bottom: 0;
   width: 100dvw;
   border: 0.5px solid;
-  border-image: linear-gradient(to right, transparent 5%,#353535 5%, #353535 95%, transparent 95%) 1;
+  border-image: linear-gradient(to right, transparent 5%, #353535 5%, #353535 95%, transparent 95%) 1;
   background: #151520;
   display: flex;
   align-items: center;

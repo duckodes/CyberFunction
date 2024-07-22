@@ -1,0 +1,44 @@
+#store-0 {
+    background-image: url(../img/items/OralRestorativeMedication.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #fff5;
+}
+
+#store-info-0 {
+    background-image: url(../img/items/OralRestorativeMedication.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#store-1 {
+    background-image: url(../img/items/tourniquet.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #fff5;
+}
+
+#store-info-1 {
+    background-image: url(../img/items/tourniquet.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#store-2 {
+    background-image: url(../img/items/SquareAndRoundCrossDhield.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #fff5;
+}
+
+#store-info-2 {
+    background-image: url(../img/items/SquareAndRoundCrossDhield.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}

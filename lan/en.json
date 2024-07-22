@@ -68,7 +68,8 @@
             "boots": "BOOTS",
             "contextmenu": {
                 "0": "REMOVE",
-                "1": "EQUIPMENT"
+                "1": "EQUIPMENT",
+                "2": "DISASSEMBLE"
             }
         },
         "encyclopedia": {
@@ -105,7 +106,10 @@
             "ENHANCEMENT EFFECT",
             "RECOVER FROM INJURY",
             "BUY",
-            "INSUFFICIENT BALANCE"
+            "INSUFFICIENT BALANCE",
+            "CHIP CODE",
+            "LEFT HAND",
+            "RIGHT HAND"
         ]
     },
     "lobby": {
