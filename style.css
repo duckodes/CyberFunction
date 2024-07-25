@@ -1074,12 +1074,10 @@ body {
 }
 
 #message {
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
   width: 90%;
   outline: none;
   border: none;
+  border-radius: 0;
   right: 0;
   height: 30px;
   background: linear-gradient(to right, #4fdcff42, transparent);
