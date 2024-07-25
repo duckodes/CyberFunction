@@ -103,15 +103,18 @@
             }
         },
         "store": [
-            "ENHANCEMENT EFFECT",
-            "RECOVER FROM INJURY",
+            "RECOVER",
+            "DAMAGE",
             "BUY",
             "INSUFFICIENT BALANCE",
             "CHIP CODE",
             "LEFT HAND",
             "RIGHT HAND",
             "WEAPON",
-            "LEGSTRAP"
+            "LEGSTRAP",
+            "OTHER",
+            "THIGH BAG SPACE",
+            "FULL"
         ]
     },
     "lobby": {

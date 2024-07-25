@@ -847,22 +847,25 @@ body {
 
 .store-item {
   width: 100%;
-  margin-top: 50px;
   display: flex;
-  align-items: center;
   justify-content: center;
   flex-wrap: wrap;
 }
 
 .store-topic {
-  color: #ff454b;
-  text-shadow: 1px 1px 5px #f00, 1px 1px 10px #f00;
-  font-weight: 700;
-  border-bottom: 0.5px solid #ff000049;
-  text-align: center;
-  width: 70%;
-  margin-left: 15%;
   margin-top: 100px;
+  color: #ff454baa;
+  text-shadow: 1px 1px 5px #f00a, 1px 1px 10px #f00a;
+  font-weight: 700;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.store-topic>div {
+  border-bottom: 0.5px solid #ff000049;
+  width: 80%;
 }
 
 .store-item>div {

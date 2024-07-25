@@ -155,6 +155,8 @@ var apputils = (function () {
       etc = userObj.userData.etc;
       own_equipment = userObj.userData.ownitems;
       equip_data = userObj.userData.equipment;
+      colnum = userObj.userData.dragdrop.colrow[0];
+      rownum = userObj.userData.dragdrop.colrow[1];
       dragDrop_arr = userObj.userData.dragdrop.arr;
       dragDrop_arr_str = userObj.userData.dragdrop.str;
       dragDrop_pos = userObj.userData.dragdrop.pos;
@@ -251,6 +253,7 @@ var apputils = (function () {
 
           updateOwnItemsUI(language_data);
           update_State_UI();
+          updateDragBox();
 
           document.querySelector('.nav-username .f-10.en-set').textContent = language_data.nav.username;
 
@@ -267,6 +270,7 @@ var apputils = (function () {
         ownitems: own_equipment,
         equipment: equip_data,
         dragdrop: {
+          colrow: [colnum, rownum],
           arr: dragDrop_arr,
           str: dragDrop_arr_str,
           pos: dragDrop_pos,
@@ -1457,6 +1461,7 @@ var apputils = (function () {
         weapon: [1700, 500, 3280, 2550, 700],
         legstrap: [75, 200],
         boots: [500],
+        thigh_bag_space: 20000
       }
     }
     function equipItemAbility(languageData) {
@@ -2477,31 +2482,23 @@ var apputils = (function () {
     }
     // DragDropInit
     const dropzone = document.querySelector('.dropzone');
-    const colnum = 5;
-    const rownum = 5;
+    let colnum = 0;
+    let rownum = 0;
     let dragDrop_arr = [];
     let dragDrop_arr_str = [];
     let dragDrop_pos = [[0, 0], [0, 0]];
     let dragDrop_bgc = ['#a005', '#a005'];
     let dragDrop_opy = [1, 1];
     const DragIn_Element = document.querySelector('.dragIn-arr');
-    document.documentElement.style.setProperty('--col-num', `${colnum}`);
-    document.documentElement.style.setProperty('--row-num', `${rownum}`);
-    for (let i = 0; i < rownum * colnum; i++) {
-      dropzone.innerHTML += '<div></div>';
+
+    function updateDragBox() {
+      dropzone.innerHTML = '';
+      document.documentElement.style.setProperty('--col-num', `${colnum}`);
+      document.documentElement.style.setProperty('--row-num', `${rownum}`);
+      for (let i = 0; i < rownum * colnum; i++) {
+        dropzone.innerHTML += '<div></div>';
+      }
     }
-    // createDraggable('draggable1', 1, 1);
-    // createDraggable('draggable2', 1, 2);
-    // createDraggable('draggable3', 1, 3);
-    // createDraggable('draggable4', 2, 1);
-    // createDraggable('draggable5', 2, 2);
-    // createDraggable('draggable6', 3, 1);
-    // draggableObj(document.getElementById('draggable1'), 1, 1);
-    // draggableObj(document.getElementById('draggable2'), 1, 2);
-    // draggableObj(document.getElementById('draggable3'), 1, 3);
-    // draggableObj(document.getElementById('draggable4'), 2, 1);
-    // draggableObj(document.getElementById('draggable5'), 2, 2);
-    // draggableObj(document.getElementById('draggable6'), 3, 1);
 
     function createDraggable(draggableID, rW, rH, dataContent) {
       const draggable = document.createElement('div');
@@ -3172,6 +3169,24 @@ var apputils = (function () {
         callback(e.target);
       });
     }
+    function createStoreItem2(title, imgID, buyInner, callback) {
+      const storeItem = document.querySelectorAll('.store-item')[2];
+
+      const newDiv = document.createElement('div');
+
+      newDiv.innerHTML = `
+        <div class="store-item-title">${title}</div>
+        <div class="store-item-img" id="${imgID}"></div>
+        <div class="buy">${buyInner}</div>
+      `;
+
+      storeItem.appendChild(newDiv);
+
+      const buyButton = newDiv.querySelector('.buy');
+      buyButton.addEventListener('click', (e) => {
+        callback(e.target);
+      });
+    }
     function storeItemInfo(cost, storeInfoImg, languageData, callback) {
       document.querySelector('.store-info').style.display = 'flex';
       document.querySelector('.store-info').addEventListener('click', (e) => {
@@ -3187,8 +3202,9 @@ var apputils = (function () {
       });
     }
     function initStoreItem(languageData) {
-      document.querySelectorAll('.store-topic')[0].textContent = languageData.item.store[7];
-      document.querySelectorAll('.store-topic')[1].textContent = languageData.item.store[8];
+      document.querySelectorAll('.store-topic>div')[0].textContent = languageData.item.store[7];
+      document.querySelectorAll('.store-topic>div')[1].textContent = languageData.item.store[8];
+      document.querySelectorAll('.store-topic>div')[2].textContent = languageData.item.store[9];
       createStoreItem1(languageData.item.equipment.legstrap["0"] + '<br>' + languageData.item.store[0] + '1%' + languageData.item.store[1], 'store-0', itemStruct.cost.legstrap[0] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.legstrap[0]) {
           storeItemInfo(itemStruct.cost.legstrap[0], 'store-info-0', languageData, cost => {
@@ -3300,6 +3316,36 @@ var apputils = (function () {
               buy.innerHTML = languageData.item.store[3];
               setTimeout(() => {
                 buy.innerHTML = itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2];
+              }, 1000);
+            }, 100);
+          }
+        }
+      });
+      createStoreItem2(languageData.item.store[10] + '<br>' + `➥ ${(colnum > 4 ? 5 : colnum + 1)} ✕ ${(rownum > 4 ? 5 + '<br>( ' + languageData.item.store[11] + ' ) ' : rownum + 1)}`, 'store-4', itemStruct.cost.thigh_bag_space + ' BTC' + languageData.item.store[2], buy => {
+        if (btc >= itemStruct.cost.thigh_bag_space && colnum <= 4 && rownum <= 4) {
+          storeItemInfo(itemStruct.cost.thigh_bag_space, 'store-info-4', languageData, cost => {
+            btc -= cost;
+            document.querySelector('.nav-wallet-btc-data').textContent = btc;
+            colnum += 1;
+            rownum += 1;
+            updateDragBox();
+            saveUserData();
+          });
+        } else if (colnum > 4 && rownum > 4) {
+          if (buy.innerHTML === itemStruct.cost.thigh_bag_space + ' BTC' + languageData.item.store[2]) {
+            setTimeout(() => {
+              buy.innerHTML = languageData.item.store[10] + languageData.item.store[11];
+              setTimeout(() => {
+                buy.innerHTML = itemStruct.cost.thigh_bag_space + ' BTC' + languageData.item.store[2];
+              }, 1000);
+            }, 100);
+          }
+        } else {
+          if (buy.innerHTML === itemStruct.cost.thigh_bag_space + ' BTC' + languageData.item.store[2]) {
+            setTimeout(() => {
+              buy.innerHTML = languageData.item.store[3];
+              setTimeout(() => {
+                buy.innerHTML = itemStruct.cost.thigh_bag_space + ' BTC' + languageData.item.store[2];
               }, 1000);
             }, 100);
           }

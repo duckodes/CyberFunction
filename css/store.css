@@ -32,7 +32,7 @@
 
 #store-2 {
     background-image: var(--items-weapon-0);
-    background-size: cover;
+    background-size: 140%;
     background-repeat: no-repeat;
     background-position: center;
     background-color: #fff5;
@@ -55,6 +55,21 @@
 
 #store-info-3 {
     background-image: var(--items-weapon-1);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#store-4 {
+    background-image: var(--items-thigh-bag-space);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #fff5;
+}
+
+#store-info-4 {
+    background-image: var(--items-thigh-bag-space);
     background-size: 100%;
     background-repeat: no-repeat;
     background-position: center;
