@@ -1754,7 +1754,6 @@ var apputils = (function () {
               update_State_UI();
             })
           })
-          refundItem();
         } else {
           contextmenuutils.addItem(language_data.item.equip.contextmenu["1"], (c) => {
             defaultset(c);
@@ -3155,6 +3154,24 @@ var apputils = (function () {
         callback(e.target);
       });
     }
+    function createStoreItem1(title, imgID, buyInner, callback) {
+      const storeItem = document.querySelectorAll('.store-item')[1];
+
+      const newDiv = document.createElement('div');
+
+      newDiv.innerHTML = `
+        <div class="store-item-title">${title}</div>
+        <div class="store-item-img" id="${imgID}"></div>
+        <div class="buy">${buyInner}</div>
+      `;
+
+      storeItem.appendChild(newDiv);
+
+      const buyButton = newDiv.querySelector('.buy');
+      buyButton.addEventListener('click', (e) => {
+        callback(e.target);
+      });
+    }
     function storeItemInfo(cost, storeInfoImg, languageData, callback) {
       document.querySelector('.store-info').style.display = 'flex';
       document.querySelector('.store-info').addEventListener('click', (e) => {
@@ -3163,14 +3180,16 @@ var apputils = (function () {
         }
       });
       let calculate = btc - cost;
-      document.querySelector('.store-info>div').innerHTML = `<div class="store-info-img polygon-tr-bl" id="${storeInfoImg}"></div>${btc} BTC<br> -&emsp;&emsp;${cost}<br> = [${calculate}]BTC<div class="confirm">${languageData.item.store[2]}</div>`;
+      document.querySelector('.store-info>div').innerHTML = `<div class="store-info-img polygon-all" id="${storeInfoImg}"></div>${btc} BTC<br> -&emsp;&emsp;${cost}<br> = [${calculate}]BTC<div class="confirm">${languageData.item.store[2]}</div>`;
       document.querySelector('.store-info>div>.confirm').addEventListener('click', () => {
         callback(cost);
         document.querySelector('.store-info').style.display = '';
       });
     }
     function initStoreItem(languageData) {
-      createStoreItem(languageData.item.equipment.legstrap["0"] + '<br>' + languageData.item.store[0] + '1%' + languageData.item.store[1], 'store-0', itemStruct.cost.legstrap[0] + ' BTC' + languageData.item.store[2], buy => {
+      document.querySelectorAll('.store-topic')[0].textContent = languageData.item.store[7];
+      document.querySelectorAll('.store-topic')[1].textContent = languageData.item.store[8];
+      createStoreItem1(languageData.item.equipment.legstrap["0"] + '<br>' + languageData.item.store[0] + '1%' + languageData.item.store[1], 'store-0', itemStruct.cost.legstrap[0] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.legstrap[0]) {
           storeItemInfo(itemStruct.cost.legstrap[0], 'store-info-0', languageData, cost => {
             btc -= cost;
@@ -3190,7 +3209,7 @@ var apputils = (function () {
           }
         }
       });
-      createStoreItem(languageData.item.equipment.legstrap["1"] + '<br>' + languageData.item.store[0] + '2%' + languageData.item.store[1], 'store-1', itemStruct.cost.legstrap[1] + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem1(languageData.item.equipment.legstrap["1"] + '<br>' + languageData.item.store[0] + '2%' + languageData.item.store[1], 'store-1', itemStruct.cost.legstrap[1] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.legstrap[1]) {
           storeItemInfo(itemStruct.cost.legstrap[1], 'store-info-1', languageData, cost => {
             btc -= cost;
@@ -3253,7 +3272,26 @@ var apputils = (function () {
           storeItemInfo(itemStruct.cost.weapon[1], 'store-info-3', languageData, cost => {
             btc -= cost;
             document.querySelector('.nav-wallet-btc-data').textContent = btc;
-            saveOwnEquipment(own_equipment.rweapon, 0);
+            saveOwnEquipment(own_equipment.lweapon, 1);
+            saveUserData();
+          });
+        } else {
+          if (buy.innerHTML === itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2]) {
+            setTimeout(() => {
+              buy.innerHTML = languageData.item.store[3];
+              setTimeout(() => {
+                buy.innerHTML = itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2];
+              }, 1000);
+            }, 100);
+          }
+        }
+      });
+      createStoreItem(languageData.item.equipment.weapon["1"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-3', itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2], buy => {
+        if (btc >= itemStruct.cost.weapon[1]) {
+          storeItemInfo(itemStruct.cost.weapon[1], 'store-info-3', languageData, cost => {
+            btc -= cost;
+            document.querySelector('.nav-wallet-btc-data').textContent = btc;
+            saveOwnEquipment(own_equipment.rweapon, 1);
             saveUserData();
           });
         } else {
