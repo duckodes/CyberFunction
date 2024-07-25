@@ -546,6 +546,7 @@ body {
 
 .reroll input[type="range"] {
   appearance: none;
+  -moz-appearance: none;
   -webkit-appearance: none;
   width: 100%;
   height: 100%;
@@ -557,6 +558,7 @@ body {
 
 .reroll input[type="range"]::-webkit-slider-thumb {
   appearance: none;
+  -moz-appearance: none;
   -webkit-appearance: none;
   width: 60px;
   height: 25px;
@@ -1072,10 +1074,12 @@ body {
 }
 
 #message {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
   width: 90%;
   outline: none;
   border: none;
-  border-radius: none;
   right: 0;
   height: 30px;
   background: linear-gradient(to right, #4fdcff42, transparent);
