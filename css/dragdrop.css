@@ -1,3 +1,4 @@
+@import 'root.css';
 .dropbase {
     user-select: none;
     -moz-user-select: none;
@@ -76,14 +77,14 @@
 }
 
 #draggable-0 {
-    background-image: url(../img/items/OralRestorativeMedication.png);
+    background-image: var(--items-legstrap-0);
     background-size: 150% 80%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 #draggable-0--battle {
-    background-image: url(../img/items/OralRestorativeMedication.png);
+    background-image: var(--items-legstrap-0);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
@@ -92,14 +93,14 @@
 }
 
 #draggable-1 {
-    background-image: url(../img/items/tourniquet.png);
+    background-image: var(--items-legstrap-1);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 #draggable-1--battle {
-    background-image: url(../img/items/tourniquet.png);
+    background-image: var(--items-legstrap-1);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;

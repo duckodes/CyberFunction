@@ -1,0 +1,6 @@
+:root {
+    --items-weapon-0: url(../img/items/weapon/SquareAndRoundCrossShield.png);
+    --items-weapon-1: url(../img/items/weapon/LightWeightParingKnife.png);
+    --items-legstrap-0: url(../img/items/legstrap/OralRestorativeMedication.png);
+    --items-legstrap-1: url(../img/items/legstrap/tourniquet.png);
+}

@@ -250,6 +250,7 @@ var apputils = (function () {
           equipItemAbility(language_data);
 
           updateOwnItemsUI(language_data);
+          update_State_UI();
 
           document.querySelector('.nav-username .f-10.en-set').textContent = language_data.nav.username;
 
@@ -1429,86 +1430,115 @@ var apputils = (function () {
         });
       }
     });
+    let itemStruct = {
+      ability: {
+        helmet: [
+          ['0%DEF', '1%DEF', '1%DEF', '1%DEF', '1%DEF', '1%DEF'], // 初級普通頭盔
+          ['2%DEF', '1%DEF', '1%DEF', '1%DEF', '2%DEF', '2%DEF'], // 克羅爾ㄧ型鋼盔
+        ],
+        jacket: [
+          ['1%DEF', '2%DEF', '1%DEF', '1%DEF', '0%DEF', '0%DEF'], // 初級普通戰甲
+        ],
+        weapon: [
+          ['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF'], // 方圓十字盾
+          ['1%DMG', '1%DMG', '1%DMG', '1%DMG', '0%DMG', '1%DMG'], // 輕便水果刀
+          ['3%DMG', '2%DMG', '1%DMG', '1%DMG', '2%DMG', '3%DMG'], // 中式文武菜刀
+          ['1%DMG', '0%DMG', '1%DMG', '5%DMG', '0%DMG', '1%DMG'], // 低伏電擊棒
+          ['2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG'], // 輕便手榴彈
+        ],
+        boots: [
+          ['0%DEF', '1%DEF', '0%DEF', '1%DEF', '2%DEF', '1%DEF'], // 初級普通戰靴
+        ],
+        default: ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A']
+      },
+      cost: {
+        helmet: [500, 2100],
+        jacket: [500],
+        weapon: [1700, 500, 3280, 2550, 700],
+        legstrap: [75, 200],
+        boots: [500],
+      }
+    }
     function equipItemAbility(languageData) {
       // helmet
       switch (equip_data[0]) {
         case 0:
-          setItemData(item_data.helmet, '1%DEF', '1%DEF', '1%DEF', '1%DEF', '1%DEF', '1%DEF');
+          setItemData(item_data.helmet, ...itemStruct.ability.helmet[0]);
           currentEquipName.helmet = languageData.item.equipment.helmet["0"];
           break;
         case 1:
-          setItemData(item_data.helmet, '2%DEF', '1%DEF', '1%DEF', '1%DEF', '2%DEF', '1%DEF');
+          setItemData(item_data.helmet, ...itemStruct.ability.helmet[1]);
           currentEquipName.helmet = languageData.item.equipment.helmet["1"];
           break;
 
         default:
-          setItemData(item_data.helmet, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          setItemData(item_data.helmet, ...itemStruct.ability.default);
           currentEquipName.helmet = '';
       }
       // jacket
       switch (equip_data[1]) {
         case 0:
-          setItemData(item_data.jacket, '1%DEF', '1%RD', '1%DEF', '1%RD', '1%DEF', '1%RD');
+          setItemData(item_data.jacket, ...itemStruct.ability.jacket[0]);
           currentEquipName.jacket = languageData.item.equipment.jacket["0"];
           break;
 
         default:
-          setItemData(item_data.jacket, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          setItemData(item_data.jacket, ...itemStruct.ability.default);
           currentEquipName.jacket = '';
       }
       // lweapon
       switch (equip_data[2]) {
         case 0:
-          setItemData(item_data.lweapon, '1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF');
+          setItemData(item_data.lweapon, ...itemStruct.ability.weapon[0]);
           currentEquipName.lweapon = languageData.item.equipment.weapon["0"];
           break;
         case 1:
-          setItemData(item_data.lweapon, '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG');
+          setItemData(item_data.lweapon, ...itemStruct.ability.weapon[1]);
           currentEquipName.lweapon = languageData.item.equipment.weapon["1"];
           break;
         case 2:
-          setItemData(item_data.lweapon, '3%DMG', '2%DMG', '1%DMG', '1%DMG', '2%DMG', '3%DMG');
+          setItemData(item_data.lweapon, ...itemStruct.ability.weapon[2]);
           currentEquipName.lweapon = languageData.item.equipment.weapon["2"];
           break;
         case 3:
-          setItemData(item_data.lweapon, '1%DMG', '0%DMG', '1%DMG', '5%DMG', '0%DMG', '1%DMG');
+          setItemData(item_data.lweapon, ...itemStruct.ability.weapon[3]);
           currentEquipName.lweapon = languageData.item.equipment.weapon["3"];
           break;
         case 4:
-          setItemData(item_data.lweapon, '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG');
+          setItemData(item_data.lweapon, ...itemStruct.ability.weapon[4]);
           currentEquipName.lweapon = languageData.item.equipment.weapon["4"];
           break;
 
         default:
-          setItemData(item_data.lweapon, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          setItemData(item_data.lweapon, ...itemStruct.ability.default);
           currentEquipName.lweapon = '';
       }
       // rweapon
       switch (equip_data[3]) {
         case 0:
-          setItemData(item_data.rweapon, '1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF')
+          setItemData(item_data.rweapon, ...itemStruct.ability.weapon[0])
           currentEquipName.rweapon = languageData.item.equipment.weapon["0"];
           break;
         case 1:
-          setItemData(item_data.rweapon, '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG', '1%DMG')
+          setItemData(item_data.rweapon, ...itemStruct.ability.weapon[1])
           currentEquipName.rweapon = languageData.item.equipment.weapon["1"];
           break;
         case 2:
-          setItemData(item_data.lweapon, '3%DMG', '2%DMG', '1%DMG', '1%DMG', '2%DMG', '3%DMG');
+          setItemData(item_data.rweapon, ...itemStruct.ability.weapon[2]);
           currentEquipName.rweapon = languageData.item.equipment.weapon["2"];
           break;
         case 3:
-          setItemData(item_data.lweapon, '1%DMG', '0%DMG', '1%DMG', '5%DMG', '0%DMG', '1%DMG');
+          setItemData(item_data.rweapon, ...itemStruct.ability.weapon[3]);
           currentEquipName.rweapon = languageData.item.equipment.weapon["3"];
           break;
         case 4:
-          setItemData(item_data.lweapon, '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG', '2%DMG');
+          setItemData(item_data.rweapon, ...itemStruct.ability.weapon[4]);
           currentEquipName.rweapon = languageData.item.equipment.weapon["4"];
           break;
 
         default:
           // Tab to edit
-          setItemData(item_data.rweapon, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          setItemData(item_data.rweapon, ...itemStruct.ability.default);
           currentEquipName.rweapon = '';
       }
       // legstrap
@@ -1519,7 +1549,7 @@ var apputils = (function () {
           break;
 
         default:
-          setItemData(item_data.legstrap, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          setItemData(item_data.legstrap, ...itemStruct.ability.default);
           currentEquipName.legstrap = '';
       }
       // boots
@@ -1530,7 +1560,7 @@ var apputils = (function () {
           break;
 
         default:
-          setItemData(item_data.boots, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A');
+          setItemData(item_data.boots, ...itemStruct.ability.default);
           currentEquipName.boots = '';
       }
     }
@@ -1721,8 +1751,10 @@ var apputils = (function () {
               save_equipdata(n, -1);
               set_get_dmg_default();
               update_equip_color(b, n, item_id);
+              update_State_UI();
             })
           })
+          refundItem();
         } else {
           contextmenuutils.addItem(language_data.item.equip.contextmenu["1"], (c) => {
             defaultset(c);
@@ -1730,15 +1762,41 @@ var apputils = (function () {
               save_equipdata(n, item_id);
               set_get_dmg_default();
               update_equip_color(b, n, item_id);
+              update_State_UI();
             })
           })
-          if (!((n === 0 && item_id === 0) || (n === 3 && item_id === 1))) {
+          refundItem();
+        }
+        function defaultset(c) {
+          c.style.color = '#3db3d0';
+          c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
+          c.addEventListener("click", () => {
+            contextmenuutils.remove();
+          });
+          c.addEventListener("touchstart", () => {
+            c.style.background = "#3db3d050";
+          });
+          c.addEventListener("touchend", () => {
+            c.style.background = "";
+          });
+        }
+
+        function ToMouse(c) {
+          c.style.left = (e.pageX) + "px";
+          c.style.top = (e.pageY) + "px";
+        }
+
+        function refundItem() {
+          if (!((n === 0 && item_id === 0 && countOccurrences(own_equipment.helmet, 0) <= 1) || (n === 3 && item_id === 1 && countOccurrences(own_equipment.rweapon, 1) <= 1))) {
             let refund = 0;
             switch (n) {
               case 0:
                 switch (item_id) {
+                  case 0:
+                    refund = itemStruct.cost.helmet[0] * 0.3;
+                    break;
                   case 1:
-                    refund = 1500;
+                    refund = itemStruct.cost.helmet[1] * 0.3;
                     break;
 
                   default:
@@ -1748,7 +1806,7 @@ var apputils = (function () {
               case 1:
                 switch (item_id) {
                   case 0:
-                    refund = 750;
+                    refund = itemStruct.cost.jacket[0] * 0.3;
                     break;
 
                   default:
@@ -1758,16 +1816,19 @@ var apputils = (function () {
               case 2:
                 switch (item_id) {
                   case 0:
-                    refund = 510;
+                    refund = itemStruct.cost.weapon[0] * 0.3;
+                    break;
+                  case 1:
+                    refund = itemStruct.cost.weapon[1] * 0.3;
                     break;
                   case 2:
-                    refund = 600;
+                    refund = itemStruct.cost.weapon[2] * 0.3;
                     break;
                   case 3:
-                    refund = 300;
+                    refund = itemStruct.cost.weapon[3] * 0.3;
                     break;
                   case 4:
-                    refund = 880;
+                    refund = itemStruct.cost.weapon[4] * 0.3;
                     break;
 
                   default:
@@ -1777,16 +1838,19 @@ var apputils = (function () {
               case 3:
                 switch (item_id) {
                   case 0:
-                    refund = 510;
+                    refund = itemStruct.cost.weapon[0] * 0.3;
+                    break;
+                  case 1:
+                    refund = itemStruct.cost.weapon[1] * 0.3;
                     break;
                   case 2:
-                    refund = 600;
+                    refund = itemStruct.cost.weapon[2] * 0.3;
                     break;
                   case 3:
-                    refund = 300;
+                    refund = itemStruct.cost.weapon[3] * 0.3;
                     break;
                   case 4:
-                    refund = 880;
+                    refund = itemStruct.cost.weapon[4] * 0.3;
                     break;
 
                   default:
@@ -1796,7 +1860,7 @@ var apputils = (function () {
               case 5:
                 switch (item_id) {
                   case 0:
-                    refund = 200;
+                    refund = itemStruct.cost.boots[0] * 0.3;
                     break;
 
                   default:
@@ -1807,7 +1871,8 @@ var apputils = (function () {
               default:
                 break;
             }
-            contextmenuutils.addItem(language_data.item.equip.contextmenu["2"] + `(${refund})`, (c) => {
+            contextmenuutils.addItem(language_data.item.equip.contextmenu["2"] + ` ${refund} BTC`, (c) => {
+              c.style.fontFamily = 'CyberwarRegular-7BX0E';
               defaultset(c);
               c.addEventListener("click", () => {
                 switch (n) {
@@ -1841,24 +1906,6 @@ var apputils = (function () {
               })
             })
           }
-        }
-        function defaultset(c) {
-          c.style.color = '#3db3d0';
-          c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
-          c.addEventListener("click", () => {
-            contextmenuutils.remove();
-          });
-          c.addEventListener("touchstart", () => {
-            c.style.background = "#3db3d050";
-          });
-          c.addEventListener("touchend", () => {
-            c.style.background = "";
-          });
-        }
-
-        function ToMouse(c) {
-          c.style.left = (e.pageX) + "px";
-          c.style.top = (e.pageY) + "px";
         }
       })
     }
@@ -2214,6 +2261,65 @@ var apputils = (function () {
           default:
             break;
         }
+      }
+    }
+
+    function update_State_UI() {
+      switch (equip_data[0]) {
+        case 0:
+
+          break;
+
+        default:
+          break;
+      }
+      switch (equip_data[1]) {
+        case 0:
+
+          break;
+
+        default:
+          break;
+      }
+      switch (equip_data[2]) {
+        case 0:
+          document.querySelector('.s-weapon-l').style.setProperty('--state-weapon-l-bg', getProperty('--items-weapon-0'));
+          break;
+        case 1:
+          document.querySelector('.s-weapon-l').style.setProperty('--state-weapon-l-bg', getProperty('--items-weapon-1'));
+          break;
+
+        default:
+          document.querySelector('.s-weapon-l').style.setProperty('--state-weapon-l-bg', 'none');
+          break;
+      }
+      switch (equip_data[3]) {
+        case 0:
+          document.querySelector('.s-weapon-r').style.setProperty('--state-weapon-r-bg', getProperty('--items-weapon-0'));
+          break;
+        case 1:
+          document.querySelector('.s-weapon-r').style.setProperty('--state-weapon-r-bg', getProperty('--items-weapon-1'));
+          break;
+
+        default:
+          document.querySelector('.s-weapon-r').style.setProperty('--state-weapon-r-bg', 'none');
+          break;
+      }
+      switch (equip_data[4]) {
+        case 0:
+
+          break;
+
+        default:
+          break;
+      }
+      switch (equip_data[5]) {
+        case 0:
+
+          break;
+
+        default:
+          break;
       }
     }
 
@@ -3031,7 +3137,6 @@ var apputils = (function () {
         }
       });
     }
-
     function createStoreItem(title, imgID, buyInner, callback) {
       const storeItem = document.querySelector('.store-item');
 
@@ -3065,9 +3170,9 @@ var apputils = (function () {
       });
     }
     function initStoreItem(languageData) {
-      createStoreItem(languageData.item.equipment.legstrap["0"] + '<br>' + languageData.item.store[0] + '1%' + languageData.item.store[1], 'store-0', '75 BTC' + languageData.item.store[2], buy => {
-        if (btc >= 75) {
-          storeItemInfo(75, 'store-info-0', languageData, cost => {
+      createStoreItem(languageData.item.equipment.legstrap["0"] + '<br>' + languageData.item.store[0] + '1%' + languageData.item.store[1], 'store-0', itemStruct.cost.legstrap[0] + ' BTC' + languageData.item.store[2], buy => {
+        if (btc >= itemStruct.cost.legstrap[0]) {
+          storeItemInfo(itemStruct.cost.legstrap[0], 'store-info-0', languageData, cost => {
             btc -= cost;
             document.querySelector('.nav-wallet-btc-data').textContent = btc;
             saveOwnEquipment(own_equipment.legstrap, 0);
@@ -3075,19 +3180,19 @@ var apputils = (function () {
             saveUserData();
           });
         } else {
-          if (buy.innerHTML === '75 BTC' + languageData.item.store[2]) {
+          if (buy.innerHTML === itemStruct.cost.legstrap[0] + ' BTC' + languageData.item.store[2]) {
             setTimeout(() => {
               buy.innerHTML = languageData.item.store[3];
               setTimeout(() => {
-                buy.innerHTML = '75 BTC' + languageData.item.store[2];
+                buy.innerHTML = itemStruct.cost.legstrap[0] + ' BTC' + languageData.item.store[2];
               }, 1000);
             }, 100);
           }
         }
       });
-      createStoreItem(languageData.item.equipment.legstrap["1"] + '<br>' + languageData.item.store[0] + '2%' + languageData.item.store[1], 'store-1', '200 BTC' + languageData.item.store[2], buy => {
-        if (btc >= 200) {
-          storeItemInfo(200, 'store-info-1', languageData, cost => {
+      createStoreItem(languageData.item.equipment.legstrap["1"] + '<br>' + languageData.item.store[0] + '2%' + languageData.item.store[1], 'store-1', itemStruct.cost.legstrap[1] + ' BTC' + languageData.item.store[2], buy => {
+        if (btc >= itemStruct.cost.legstrap[1]) {
+          storeItemInfo(itemStruct.cost.legstrap[1], 'store-info-1', languageData, cost => {
             btc -= cost;
             document.querySelector('.nav-wallet-btc-data').textContent = btc;
             saveOwnEquipment(own_equipment.legstrap, 1);
@@ -3095,49 +3200,68 @@ var apputils = (function () {
             saveUserData();
           });
         } else {
-          if (buy.innerHTML === '200 BTC' + languageData.item.store[2]) {
+          if (buy.innerHTML === itemStruct.cost.legstrap[1] + ' BTC' + languageData.item.store[2]) {
             setTimeout(() => {
               buy.innerHTML = languageData.item.store[3];
               setTimeout(() => {
-                buy.innerHTML = '200 BTC' + languageData.item.store[2];
+                buy.innerHTML = itemStruct.cost.legstrap[1] + ' BTC' + languageData.item.store[2];
               }, 1000);
             }, 100);
           }
         }
       });
-      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-2', '1700 BTC' + languageData.item.store[2], buy => {
-        if (btc >= 1700) {
-          storeItemInfo(1700, 'store-info-2', languageData, cost => {
+      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-2', itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2], buy => {
+        if (btc >= itemStruct.cost.weapon[0]) {
+          storeItemInfo(itemStruct.cost.weapon[0], 'store-info-2', languageData, cost => {
             btc -= cost;
             document.querySelector('.nav-wallet-btc-data').textContent = btc;
             saveOwnEquipment(own_equipment.lweapon, 0);
             saveUserData();
           });
         } else {
-          if (buy.innerHTML === '1700 BTC' + languageData.item.store[2]) {
+          if (buy.innerHTML === itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2]) {
             setTimeout(() => {
               buy.innerHTML = languageData.item.store[3];
               setTimeout(() => {
-                buy.innerHTML = '1700 BTC' + languageData.item.store[2];
+                buy.innerHTML = itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2];
               }, 1000);
             }, 100);
           }
         }
       });
-      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-2', '1700 BTC' + languageData.item.store[2], buy => {
-        if (btc >= 1700) {
-          storeItemInfo(1700, 'store-info-2', languageData, cost => {
+      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-2', itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2], buy => {
+        if (btc >= itemStruct.cost.weapon[0]) {
+          storeItemInfo(itemStruct.cost.weapon[0], 'store-info-2', languageData, cost => {
             btc -= cost;
             document.querySelector('.nav-wallet-btc-data').textContent = btc;
             saveOwnEquipment(own_equipment.rweapon, 0);
             saveUserData();
           });
         } else {
-          if (buy.innerHTML === '1700 BTC' + languageData.item.store[2]) {
+          if (buy.innerHTML === itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2]) {
             setTimeout(() => {
               buy.innerHTML = languageData.item.store[3];
               setTimeout(() => {
-                buy.innerHTML = '1700 BTC' + languageData.item.store[2];
+                buy.innerHTML = itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2];
+              }, 1000);
+            }, 100);
+          }
+        }
+      });
+      createStoreItem(languageData.item.equipment.weapon["1"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-3', itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2], buy => {
+        if (btc >= itemStruct.cost.weapon[1]) {
+          storeItemInfo(itemStruct.cost.weapon[1], 'store-info-3', languageData, cost => {
+            btc -= cost;
+            document.querySelector('.nav-wallet-btc-data').textContent = btc;
+            saveOwnEquipment(own_equipment.rweapon, 0);
+            saveUserData();
+          });
+        } else {
+          if (buy.innerHTML === itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2]) {
+            setTimeout(() => {
+              buy.innerHTML = languageData.item.store[3];
+              setTimeout(() => {
+                buy.innerHTML = itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2];
               }, 1000);
             }, 100);
           }
@@ -3246,6 +3370,9 @@ var apputils = (function () {
   }
   function opacity(element, n, style) {
     document.querySelectorAll(element)[n].style.opacity = style;
+  }
+  function getProperty(property) {
+    return getComputedStyle(document.documentElement).getPropertyValue(property);
   }
 
   function centerMapScroll() {

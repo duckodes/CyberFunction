@@ -1,5 +1,7 @@
+@import 'root.css';
+
 #store-0 {
-    background-image: url(../img/items/OralRestorativeMedication.png);
+    background-image: var(--items-legstrap-0);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -7,14 +9,14 @@
 }
 
 #store-info-0 {
-    background-image: url(../img/items/OralRestorativeMedication.png);
+    background-image: var(--items-legstrap-0);
     background-size: 100%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 #store-1 {
-    background-image: url(../img/items/tourniquet.png);
+    background-image: var(--items-legstrap-1);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -22,14 +24,14 @@
 }
 
 #store-info-1 {
-    background-image: url(../img/items/tourniquet.png);
+    background-image: var(--items-legstrap-1);
     background-size: 100%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 #store-2 {
-    background-image: url(../img/items/SquareAndRoundCrossDhield.png);
+    background-image: var(--items-weapon-0);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -37,7 +39,22 @@
 }
 
 #store-info-2 {
-    background-image: url(../img/items/SquareAndRoundCrossDhield.png);
+    background-image: var(--items-weapon-0);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#store-3 {
+    background-image: var(--items-weapon-1);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #fff5;
+}
+
+#store-info-3 {
+    background-image: var(--items-weapon-1);
     background-size: 100%;
     background-repeat: no-repeat;
     background-position: center;

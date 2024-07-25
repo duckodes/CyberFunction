@@ -1,0 +1,13 @@
+.s-weapon-r {
+    background-image: var(--state-weapon-r-bg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.s-weapon-l {
+    background-image: var(--state-weapon-l-bg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
