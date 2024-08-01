@@ -2271,10 +2271,11 @@ var apputils = (function () {
     function update_State_UI() {
       switch (equip_data[0]) {
         case 0:
-
+          document.querySelector('.s-helmet').style.setProperty('--state-helmet-bg', getProperty('--items-helmet-0'));
           break;
 
         default:
+          document.querySelector('.s-helmet').style.setProperty('--state-helmet-bg', 'none');
           break;
       }
       switch (equip_data[1]) {

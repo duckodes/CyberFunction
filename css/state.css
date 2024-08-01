@@ -1,3 +1,10 @@
+.s-helmet {
+    background-image: var(--state-helmet-bg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .s-weapon-r {
     background-image: var(--state-weapon-r-bg);
     background-size: cover;

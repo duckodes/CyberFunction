@@ -1,5 +1,6 @@
 :root {
     --items-thigh-bag-space: url(../img/space.png);
+    --items-helmet-0: url(../img/items/helmet/BasicStandardHelmet.png);
     --items-weapon-0: url(../img/items/weapon/SquareAndRoundCrossShield.png);
     --items-weapon-1: url(../img/items/weapon/LightWeightParingKnife.png);
     --items-legstrap-0: url(../img/items/legstrap/OralRestorativeMedication.png);

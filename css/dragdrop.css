@@ -108,34 +108,6 @@
     background-color: #fff5;
 }
 
-#draggable3 {
-    background-image: url(../img/monster/slime/red_slime.png);
-    background-size: 150% 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-#draggable4 {
-    background-image: url(../img/monster/slime/red_slime.png);
-    background-size: 80% 150%;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-#draggable5 {
-    background-image: url(../img/monster/slime/red_slime.png);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-#draggable6 {
-    background-image: url(../img/monster/slime/red_slime.png);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
 .dropzone {
     grid-column: 1 / span var(--col-num);
     grid-row: 1 / span var(--row-num);
