@@ -140,7 +140,7 @@ var apputils = (function () {
   function def() {
     // user data
     var btc = 0;
-    var etc = 0;
+    var eth = 0;
     var language;
     var activeMenu;
     userObj.on('change', updateUserData);
@@ -152,7 +152,7 @@ var apputils = (function () {
     }
     function getUserData() {
       btc = userObj.userData.btc;
-      etc = userObj.userData.etc;
+      eth = userObj.userData.eth;
       own_equipment = userObj.userData.ownitems;
       equip_data = userObj.userData.equipment;
       colnum = userObj.userData.dragdrop.colrow[0];
@@ -174,7 +174,7 @@ var apputils = (function () {
 
       // update wallet
       update_btc_UI();
-      update_etc_UI();
+      update_eth_UI();
 
       // settings language
       fetch('lan/' + language + '.json')
@@ -258,6 +258,7 @@ var apputils = (function () {
           document.querySelector('.nav-username .f-10.en-set').textContent = language_data.nav.username;
 
           initStoreItem(data);
+          menuAction();
         })
         .catch(error => {
           console.error('Fetch error:', error);
@@ -266,7 +267,7 @@ var apputils = (function () {
     function saveUserData() {
       userObj.userData = {
         btc: btc,
-        etc: etc,
+        eth: eth,
         ownitems: own_equipment,
         equipment: equip_data,
         dragdrop: {
@@ -316,69 +317,72 @@ var apputils = (function () {
       const btc_data = document.querySelector('.nav-wallet-btc-data');
       btc_data.textContent = btc;
     }
-    function update_etc_UI() {
-      const etc_data = document.querySelector('.nav-wallet-etc-data');
-      etc_data.textContent = etc;
+    function update_eth_UI() {
+      const eth_data = document.querySelector('.nav-wallet-eth-data');
+      eth_data.textContent = eth;
     }
 
     // events
-    evt.click('.menu-btn', 0, () => {
-      showmenu(0);
-      activeMenu = 0;
-      saveUserData();
-      centerMapScroll();
-      isBattle ? background_setup_loop.start() : background_setup_loop.stop();
-    })
-    evt.click('.menu-btn', 1, () => {
-      activeMenu = 1;
-      saveUserData();
-      if (document.querySelector('.item').style.display === 'flex') {
-        showmenu(1);
-        display('.e-helmet', 0, '');
-        display('.e-jacket', 0, '');
-        display('.e-weapon', 0, '');
-        display('.e-legstrap', 0, '');
-        display('.e-boots', 0, '');
-        display('.e-info', 0, '');
-      } else {
-        display('.battle', 0, '');
-        display('.map', 0, '');
-        display('.item', 0, 'flex');
-        display('.stat', 0, '');
-        display('.lobby', 0, '');
-        display('.settings', 0, '');
+    function menuAction() {
+      evt.click('.menu-btn', 0, () => {
+        showmenu(0);
+        activeMenu = 0;
+        saveUserData();
+        centerMapScroll();
+        isBattle ? background_setup_loop.start() : background_setup_loop.stop();
+      })
+      evt.click('.menu-btn', 1, () => {
+        activeMenu = 1;
+        saveUserData();
+        if (document.querySelector('.item').style.display === 'flex') {
+          showmenu(1);
+          display('.e-helmet', 0, '');
+          display('.e-jacket', 0, '');
+          display('.e-weapon', 0, '');
+          display('.e-legstrap', 0, '');
+          display('.e-boots', 0, '');
+          display('.e-info', 0, '');
+        } else {
+          display('.battle', 0, '');
+          display('.map', 0, '');
+          display('.item', 0, 'flex');
+          display('.stat', 0, '');
+          display('.lobby', 0, '');
+          display('.settings', 0, '');
 
-        document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#7ea4c1');
-        document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-        document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+          document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#7ea4c1');
+          document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
 
-        textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 1, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
-        textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
-        textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 1, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
+          textShadow('.menu-btn', 2, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
+          textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
-        textContent('.nav-guide', 0, language_data.nav.guide.item);
-      }
-    })
-    evt.click('.menu-btn', 2, () => {
-      showmenu(2);
-      activeMenu = 2;
-      saveUserData();
-    })
-    evt.click('.menu-btn', 3, () => {
-      showmenu(3);
-      activeMenu = 3;
-      saveUserData();
-      document.querySelector('.lobby-hint').style.display = '';
-    })
-    evt.click('.menu-btn', 4, () => {
-      showmenu(4);
-      activeMenu = 4;
-      saveUserData();
-    })
+          textContent('.nav-guide', 0, language_data.nav.guide.item);
+        }
+      })
+      evt.click('.menu-btn', 2, () => {
+        showmenu(2);
+        activeMenu = 2;
+        saveUserData();
+      })
+      evt.click('.menu-btn', 3, () => {
+        showmenu(3);
+        activeMenu = 3;
+        saveUserData();
+        document.querySelector('.lobby-hint').style.display = '';
+      })
+      evt.click('.menu-btn', 4, () => {
+        showmenu(4);
+        activeMenu = 4;
+        saveUserData();
+      })
+    }
+
     evt.click('.item-options .item-all-btn', 0, (e) => {
       if (!isBattle) {
         display('.item-all-btn', 0, 'none');
@@ -3322,7 +3326,7 @@ var apputils = (function () {
           }
         }
       });
-      createStoreItem2(languageData.item.store[10] + '<br>' + `➥ ${(colnum > 4 ? 5 : colnum + 1)} ✕ ${(rownum > 4 ? 5 + '<br>( ' + languageData.item.store[11] + ' ) ' : rownum + 1)}`, 'store-4', itemStruct.cost.thigh_bag_space + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem2(languageData.item.store[10] + '<br>' + `⇪ ${(colnum > 4 ? 5 : colnum + 1)} ✕ ${(rownum > 4 ? 5 + '<br>( ' + languageData.item.store[11] + ' ) ' : rownum + 1)}`, 'store-4', itemStruct.cost.thigh_bag_space + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.thigh_bag_space && colnum <= 4 && rownum <= 4) {
           storeItemInfo(itemStruct.cost.thigh_bag_space, 'store-info-4', languageData, cost => {
             btc -= cost;
