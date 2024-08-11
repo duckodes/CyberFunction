@@ -1024,12 +1024,13 @@ body {
   margin-bottom: 150px;
   width: 100dvw;
   /* background: linear-gradient(to bottom, #a3e2ff5e, transparent); */
-  width: 70%;
-  max-width: 500px;
+  align-items: center;
 }
 
 #messages {
   color: #fff;
+  width: 100%;
+  max-width: 500px;
 }
 
 .msg-row {

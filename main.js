@@ -791,7 +791,8 @@ var apputils = (function () {
       ability_set('.battle-jacket', 1);
       ability_set('.battle-weapon-l', 2);
       ability_set('.battle-weapon-r', 3);
-      ability_set('.battle-legstrap', 4);
+      //ability_set('.battle-legstrap', 4);
+      textContent('.battle-legstrap', 0, battle_arr_data[4].replace('N/A', `${colnum} ✕ ${rownum}`).replace('0', `${colnum} ✕ ${rownum}`));
       ability_set('.battle-boots', 5);
       function ability_set(t, n) {
         textContent(t, 0, battle_arr_data[n].replace('N/A', '⛶').replace('%DMG', ' 🩸').replace('%DEF', ' ⛨').replace('%RD', ' ✙'));
@@ -1554,7 +1555,8 @@ var apputils = (function () {
       switch (equip_data[4]) {
         case 0:
           setItemData(item_data.legstrap, '0', '0', '0', '0', '0', '0');
-          currentEquipName.legstrap = languageData.item.equipment.legstrap["0"];
+          //currentEquipName.legstrap = languageData.item.equipment.legstrap["0"];
+          currentEquipName.legstrap = `${colnum} ✕ ${rownum}`;
           break;
 
         default:
