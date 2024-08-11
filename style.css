@@ -9,7 +9,7 @@
 }
 
 .color-0 {
-  color: #3db3d0;
+  color: #bcfff9;
 }
 
 body {
@@ -132,6 +132,7 @@ body {
   position: fixed;
   background: linear-gradient(to right, #191325, #3db3d050, #191325);
   background: linear-gradient(to right, #191325, #353535, #191325);
+  background: #252525;
   width: 100dvw;
   height: 97.5dvh;
   border-radius: 10px;
@@ -140,6 +141,7 @@ body {
 .nav {
   background: linear-gradient(to bottom, #c24347, transparent);
   background: linear-gradient(to bottom, #191325, transparent);
+  background: #202020;
   color: #f7d967;
   padding: 10px;
   margin-top: 5px;
@@ -164,6 +166,8 @@ body {
   align-items: center;
   justify-content: center;
   margin-top: 30px;
+  color: #bcfff9;
+  text-shadow: 1px 1px 5px #bcfff999, 1px 1px 5px #bcfff999;
 }
 
 .nav-guide {
@@ -186,7 +190,7 @@ body {
 }
 
 .map {
-  background: #191325;
+  background: #252525;
   display: none;
   justify-content: center;
   width: 100dvw;
@@ -373,7 +377,7 @@ body {
 }
 
 .battle {
-  background: #191325;
+  background: #202020;
   display: none;
   flex-direction: column;
   align-items: center;
@@ -461,7 +465,7 @@ body {
 }
 
 .battle-me-boxes {
-  background: linear-gradient(to top, #191325, #191325, transparent);
+  background: linear-gradient(to top, #202020, #202020, transparent);
   padding-top: 35px;
   padding-bottom: 35px;
   display: flex;
@@ -624,7 +628,7 @@ body {
 .battle-top-block {
   width: 100%;
   height: 35px;
-  background: #191325;
+  background: #202020;
   position: fixed;
   z-index: 2;
 }
@@ -700,13 +704,13 @@ body {
   width: 70dvw;
   max-width: 500px;
   height: 50px;
-  color: #3db3d0;
+  color: #bcfff9;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  text-shadow: 1px 1px 5px #1e588d, 1px 1px 5px #1e588d;
-  box-shadow: 1px 1px 2px #1e588d, -1px -1px 2px #1e588d;
+  text-shadow: 1px 1px 5px #bcfff999, 1px 1px 5px #bcfff999;
+  box-shadow: 1px 1px 2px #bcfff9, -1px -1px 2px #bcfff9;
   margin: 10px;
 }
 
@@ -908,6 +912,18 @@ body {
 .store-item-img {
   margin: 10px;
   height: 150px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1px;
+}
+
+.store-item-img::before {
+  content: '';
+  grid-column: 1 / span 3;
+  grid-row: 1 / span 3;
+  background: linear-gradient(45deg, #e0e0e050 25%, transparent 25%, transparent 50%, #e0e0e050 50%, #e0e0e050 75%, transparent 75%, transparent);
+  background-size: 5px 5px;
 }
 
 .buy {
@@ -951,9 +967,11 @@ body {
   width: 100%;
   max-width: 500px;
   height: fit-content;
-  background: #c24347;
+  background: #252525;
   padding: 10px;
-  border: 5px solid #f7d967;
+  border-bottom: 5px solid #c24347;
+  color: #b9fff3;
+  text-shadow: 1px 1px 5px #bcfff999, 1px 1px 5px #bcfff999;
 }
 
 .store-info>div>.store-info-img {
@@ -962,9 +980,20 @@ body {
   height: 70dvw;
   max-height: 300px;
   border: 10px solid #b9fff3;
-  background-color: #f7d967;
-  --store-info-border-image-color: #f7ff8a;
+  --store-info-border-image-color: #c24347;
   border-image: linear-gradient(to left bottom, var(--store-info-border-image-color) 10%, transparent 20%, transparent 30%, var(--store-info-border-image-color) 40%, var(--store-info-border-image-color) 60%, transparent 70%, transparent 80%, var(--store-info-border-image-color) 90%) 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1px;
+}
+
+.store-info>div>.store-info-img::before {
+  content: '';
+  grid-column: 1 / span 3;
+  grid-row: 1 / span 3;
+  background: linear-gradient(45deg, #e0e0e050 25%, transparent 25%, transparent 50%, #e0e0e050 50%, #e0e0e050 75%, transparent 75%, transparent);
+  background-size: 5px 5px;
 }
 
 .store-info>div>.confirm {
@@ -972,6 +1001,8 @@ body {
   background: #ff4148;
   text-align: center;
   cursor: pointer;
+  color: #000;
+  text-shadow: none;
 }
 
 .store-info>div>.confirm:hover {
@@ -1024,6 +1055,7 @@ body {
   margin-bottom: 170px;
   width: 100dvw;
   /* background: linear-gradient(to bottom, #a3e2ff5e, transparent); */
+  background: #252525;
 }
 
 #messages {
@@ -1088,6 +1120,7 @@ body {
   right: 0;
   height: 30px;
   background: linear-gradient(to right, #4fdcff42, transparent);
+  border: 1px solid #96eaffaf;
   color: #fff;
   font-size: 20px;
   padding: 5px;
@@ -1329,7 +1362,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #151520;
 }
 
 .footer {
@@ -1338,7 +1370,7 @@ body {
   width: 100dvw;
   border: 0.5px solid;
   border-image: linear-gradient(to right, transparent 5%, #353535 5%, #353535 95%, transparent 95%) 1;
-  background: #151520;
+  background: #202020;
   display: flex;
   align-items: center;
   justify-content: center;

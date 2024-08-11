@@ -355,6 +355,11 @@ var apputils = (function () {
           document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+          document.querySelectorAll('.menu-btn-text')[0].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[1].style.color = '#bcfff9';
+          document.querySelectorAll('.menu-btn-text')[2].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[3].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[4].style.color = '';
 
           textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 1, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
@@ -2356,6 +2361,11 @@ var apputils = (function () {
             document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
             document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
             document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+            document.querySelectorAll('.menu-btn-text')[0].style.color = '#bcfff9';
+            document.querySelectorAll('.menu-btn-text')[1].style.color = '';
+            document.querySelectorAll('.menu-btn-text')[2].style.color = '';
+            document.querySelectorAll('.menu-btn-text')[3].style.color = '';
+            document.querySelectorAll('.menu-btn-text')[4].style.color = '';
 
             textShadow('.menu-btn', 0, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
             textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -2377,6 +2387,11 @@ var apputils = (function () {
             document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
             document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
             document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+            document.querySelectorAll('.menu-btn-text')[0].style.color = '#bcfff9';
+            document.querySelectorAll('.menu-btn-text')[1].style.color = '';
+            document.querySelectorAll('.menu-btn-text')[2].style.color = '';
+            document.querySelectorAll('.menu-btn-text')[3].style.color = '';
+            document.querySelectorAll('.menu-btn-text')[4].style.color = '';
 
             textShadow('.menu-btn', 0, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
             textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -2400,6 +2415,11 @@ var apputils = (function () {
           document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+          document.querySelectorAll('.menu-btn-text')[0].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[1].style.color = '#bcfff9';
+          document.querySelectorAll('.menu-btn-text')[2].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[3].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[4].style.color = '';
 
           textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 1, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
@@ -2430,6 +2450,11 @@ var apputils = (function () {
           document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#7ea4c1');
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+          document.querySelectorAll('.menu-btn-text')[0].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[1].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[2].style.color = '#bcfff9';
+          document.querySelectorAll('.menu-btn-text')[3].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[4].style.color = '';
 
           textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -2452,6 +2477,11 @@ var apputils = (function () {
           document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#7ea4c1');
           document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+          document.querySelectorAll('.menu-btn-text')[0].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[1].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[2].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[3].style.color = '#bcfff9';
+          document.querySelectorAll('.menu-btn-text')[4].style.color = '';
 
           textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -2474,6 +2504,11 @@ var apputils = (function () {
           document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#8fb5d2');
+          document.querySelectorAll('.menu-btn-text')[0].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[1].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[2].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[3].style.color = '';
+          document.querySelectorAll('.menu-btn-text')[4].style.color = '#bcfff9';
 
           textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
