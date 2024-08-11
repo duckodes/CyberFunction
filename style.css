@@ -1018,18 +1018,17 @@ body {
 
 .lobby {
   display: none;
+  align-items: center;
   flex-direction: column;
   overflow: auto;
-  margin: 15px;
-  margin-bottom: 150px;
+  margin-bottom: 170px;
   width: 100dvw;
   /* background: linear-gradient(to bottom, #a3e2ff5e, transparent); */
-  align-items: center;
 }
 
 #messages {
   color: #fff;
-  width: 100%;
+  width: 95%;
   max-width: 500px;
 }
 
