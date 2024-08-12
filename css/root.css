@@ -5,4 +5,11 @@
     --items-weapon-1: url(../img/items/weapon/LightWeightParingKnife.png);
     --items-legstrap-0: url(../img/items/legstrap/OralRestorativeMedication.png);
     --items-legstrap-1: url(../img/items/legstrap/tourniquet.png);
+    /*colors*/
+    --color-main: #252525;
+    --color-high-light: #bcfff9;
+    --color-high-light-darkness: #bcfff999;
+    /*fonts*/
+    --font-0: SdglitchdemoRegular-YzROj;
+    --font-1: CyberwarRegular-7BX0E;
 }

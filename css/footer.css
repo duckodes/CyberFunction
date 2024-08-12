@@ -1,0 +1,53 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100dvw;
+    border: 0.5px solid;
+    border-image: linear-gradient(to right, transparent 5%, #353535 5%, #353535 95%, transparent 95%) 1;
+    background: #202020;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    z-index: 2;
+}
+
+.footer:hover {
+    cursor: pointer;
+}
+
+.menu-btn {
+    font-size: 20px;
+    text-shadow: 1px 1px 5px #3db3d0, 1px 1px 5px #c24347;
+    width: 100%;
+    text-align: center;
+}
+
+.lobby-hint {
+    display: none;
+    fill: #ffd95e;
+    animation-name: lobby-hint;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes lobby-hint {
+    0% {
+        opacity: 0;
+        cx: 18;
+        cy: 11;
+    }
+
+    20% {
+        opacity: 1;
+        r: 6;
+    }
+
+    100% {
+        opacity: 0;
+        r: 6;
+        cx: 18;
+        cy: 11;
+    }
+}

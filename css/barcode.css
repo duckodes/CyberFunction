@@ -1,0 +1,21 @@
+.barcode {
+    width: 100px;
+    height: 30px;
+    background: linear-gradient(to right,
+            var(--color-high-light-darkness) 0%, var(--color-high-light-darkness) 3%,
+            transparent 3%, transparent 7%,
+            var(--color-high-light-darkness) 7%, var(--color-high-light-darkness) 12%,
+            transparent 12%, transparent 18%,
+            var(--color-high-light-darkness) 18%, var(--color-high-light-darkness) 22%,
+            transparent 22%, transparent 30%,
+            var(--color-high-light-darkness) 30%, var(--color-high-light-darkness) 40%,
+            transparent 40%, transparent 48%,
+            var(--color-high-light-darkness) 48%, var(--color-high-light-darkness) 55%,
+            transparent 55%, transparent 70%,
+            var(--color-high-light-darkness) 70%, var(--color-high-light-darkness) 85%,
+            transparent 85%, transparent 95%,
+            var(--color-high-light-darkness) 95%, var(--color-high-light-darkness) 100%
+        );
+    background-size: 20px 100%;
+    cursor: pointer;
+}

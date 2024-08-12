@@ -622,21 +622,6 @@ var apputils = (function () {
       })
     }
 
-    setTimeout(() => {
-      for (var i = 0; i < document.querySelectorAll('.item-all-btn').length; i++) {
-        item_btn(i);
-      }
-    }, 1);
-
-    function item_btn(n) {
-      evt.touchstart('.item-all-btn', n, () => {
-        boxShadow('.item-all-btn', n, '3px 3px 2px #1e588d, -3px -3px 2px #1e588d');
-      })
-      evt.touchend('.item-all-btn', n, () => {
-        boxShadow('.item-all-btn', n, '1px 1px 2px #1e588d, -1px -1px 2px #1e588d');
-      })
-    }
-
     let enemies_id = -1;
     let enemies_items = [{
       helmet: ['2%DEF', '1%DEF', '2%DEF', '3%DEF', '1%DEF', '1%DEF'],
@@ -2983,7 +2968,7 @@ var apputils = (function () {
         ismousedown = false;
       });
       draggable.addEventListener('mouseup', (e) => {
-        if (isBattle)
+        if (!ismousedown || isBattle)
           return;
         // 检查是否有包含 dropzone 里面 div 小格子的中心点
         const dropzone = document.querySelector('.dropzone');
@@ -3407,25 +3392,25 @@ var apputils = (function () {
       const weekOfMonth = Math.ceil((date.getDate() + firstDayOfWeek) / 7);
       switch (dayOfWeek) {
         case 0:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 19))}.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(../img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 19))}.jpg)`);
           break;
         case 1:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_11.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(../img/store/store_nav_11.jpg)`);
           break;
         case 2:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_2.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(../img/store/store_nav_2.jpg)`);
           break;
         case 3:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_15.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(../img/store/store_nav_15.jpg)`);
           break;
         case 4:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_4.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(../img/store/store_nav_4.jpg)`);
           break;
         case 5:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_16.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(../img/store/store_nav_16.jpg)`);
           break;
         case 6:
-          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 19))}.jpg)`);
+          document.querySelector('.store-nav').style.setProperty('--store-nav-bg', `url(../img/store/store_nav_${Math.floor(getRandomNumber(weekOfMonth + dayOfWeek, 19))}.jpg)`);
           break;
 
         default:
