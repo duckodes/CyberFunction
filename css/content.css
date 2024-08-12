@@ -112,19 +112,20 @@
 }
 
 .map-info-border {
-    background: linear-gradient(to bottom, #191338, #3db3d030, #191338);
-    border: 2px solid #3db3d070;
+    border: 2px solid var(--color-high-light);
     border-radius: 3px;
     width: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    background: linear-gradient(45deg, #e0e0e020 25%, transparent 25%, transparent 50%, #e0e0e020 50%, #e0e0e020 75%, transparent 75%, transparent);
+    background-size: 5px 5px;
 }
 
 .map-info-avt {
     background: #fff3;
-    border: 2px solid #3db3d070;
+    border: 2px solid var(--color-high-light);
     width: 100px;
     height: 100px;
     margin: 10px;
@@ -584,6 +585,10 @@
 
 .back-btn:hover {
     cursor: pointer;
+}
+
+.back-btn:active {
+    color: var(--color-high-light-darkness);
 }
 
 .e-helmet,

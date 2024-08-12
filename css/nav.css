@@ -21,15 +21,17 @@
     font-size: 10px;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     color: var(--color-high-light);
     text-shadow: 1px 1px 5px var(--color-high-light-darkness), 1px 1px 5px var(--color-high-light-darkness);
 }
-.nav-wallet-btc-data{
-    font-size: 12px;
+
+.nav-wallet-btc-data {
+    font-size: 17px;
 }
-.nav-wallet-eth-data{
+
+.nav-wallet-eth-data {
     font-size: 12px;
 }
 

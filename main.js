@@ -351,7 +351,7 @@ var apputils = (function () {
           display('.settings', 0, '');
 
           document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-          document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#7ea4c1');
+          document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', 'var(--color-high-light)');
           document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
@@ -669,7 +669,7 @@ var apputils = (function () {
           defaultset(c);
           c.addEventListener('click', () => {
             display('.map-info', 0, 'flex');
-            document.querySelector('.map-info-title').innerHTML = language_data.enemies.name[randomEnemiesNum] + '<br>' + language_data.enemies.info[randomEnemiesNum] + '<br><br>' + '\'' + language_data.map.enemies.info.chipCode + '：<br>\'' + JSON.stringify(enemies_items[enemies_id], null, 2).toUpperCase().replace(/],/g, '],<br><br>').replace(/:/g, ' >>>').replace('{', '').replace('}', '<br><br>>> ' + language_data.map.enemies.info.loading);
+            document.querySelector('.map-info-title').innerHTML = language_data.enemies.name[randomEnemiesNum] + '<br>' + language_data.enemies.info[randomEnemiesNum] + '<br><br>' + '\'' + language_data.map.enemies.info.chipCode + '：<br>\'' + JSON.stringify(enemies_items[enemies_id], null, 2).toUpperCase().replace(/],/g, '],<br><br>').replace(/:/g, ' >>>').replace('{', '').replace('}', '<br><br>>> ' + language_data.map.enemies.info.loading) + '<div class="barcode"></div>';
           })
         })
         function defaultset(c) {
@@ -2341,12 +2341,12 @@ var apputils = (function () {
             display('.lobby', 0, '');
             display('.settings', 0, '');
 
-            document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#7ea4c1');
+            document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', 'var(--color-high-light)');
             document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
             document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
             document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-            document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
-            document.querySelectorAll('.menu-btn-text')[0].style.color = '#bcfff9';
+            document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+            document.querySelectorAll('.menu-btn-text')[0].style.color = 'var(--color-high-light)';
             document.querySelectorAll('.menu-btn-text')[1].style.color = '';
             document.querySelectorAll('.menu-btn-text')[2].style.color = '';
             document.querySelectorAll('.menu-btn-text')[3].style.color = '';
@@ -2367,12 +2367,12 @@ var apputils = (function () {
             display('.lobby', 0, '');
             display('.settings', 0, '');
 
-            document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#7ea4c1');
+            document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', 'var(--color-high-light)');
             document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
             document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
             document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-            document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
-            document.querySelectorAll('.menu-btn-text')[0].style.color = '#bcfff9';
+            document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff48');
+            document.querySelectorAll('.menu-btn-text')[0].style.color = 'var(--color-high-light)';
             document.querySelectorAll('.menu-btn-text')[1].style.color = '';
             document.querySelectorAll('.menu-btn-text')[2].style.color = '';
             document.querySelectorAll('.menu-btn-text')[3].style.color = '';
@@ -2396,12 +2396,12 @@ var apputils = (function () {
           display('.settings', 0, '');
 
           document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-          document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#7ea4c1');
+          document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', 'var(--color-high-light)');
           document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn-text')[0].style.color = '';
-          document.querySelectorAll('.menu-btn-text')[1].style.color = '#bcfff9';
+          document.querySelectorAll('.menu-btn-text')[1].style.color = 'var(--color-high-light)';
           document.querySelectorAll('.menu-btn-text')[2].style.color = '';
           document.querySelectorAll('.menu-btn-text')[3].style.color = '';
           document.querySelectorAll('.menu-btn-text')[4].style.color = '';
@@ -2432,12 +2432,12 @@ var apputils = (function () {
 
           document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-          document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#7ea4c1');
+          document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', 'var(--color-high-light)');
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn-text')[0].style.color = '';
           document.querySelectorAll('.menu-btn-text')[1].style.color = '';
-          document.querySelectorAll('.menu-btn-text')[2].style.color = '#bcfff9';
+          document.querySelectorAll('.menu-btn-text')[2].style.color = 'var(--color-high-light)';
           document.querySelectorAll('.menu-btn-text')[3].style.color = '';
           document.querySelectorAll('.menu-btn-text')[4].style.color = '';
 
@@ -2460,12 +2460,12 @@ var apputils = (function () {
           document.querySelectorAll('.menu-btn')[0].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-          document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#7ea4c1');
-          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
+          document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', 'var(--color-high-light)');
+          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn-text')[0].style.color = '';
           document.querySelectorAll('.menu-btn-text')[1].style.color = '';
           document.querySelectorAll('.menu-btn-text')[2].style.color = '';
-          document.querySelectorAll('.menu-btn-text')[3].style.color = '#bcfff9';
+          document.querySelectorAll('.menu-btn-text')[3].style.color = 'var(--color-high-light)';
           document.querySelectorAll('.menu-btn-text')[4].style.color = '';
 
           textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
@@ -2488,12 +2488,12 @@ var apputils = (function () {
           document.querySelectorAll('.menu-btn')[1].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[2].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
-          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#8fb5d2');
+          document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', 'var(--color-high-light)');
           document.querySelectorAll('.menu-btn-text')[0].style.color = '';
           document.querySelectorAll('.menu-btn-text')[1].style.color = '';
           document.querySelectorAll('.menu-btn-text')[2].style.color = '';
           document.querySelectorAll('.menu-btn-text')[3].style.color = '';
-          document.querySelectorAll('.menu-btn-text')[4].style.color = '#bcfff9';
+          document.querySelectorAll('.menu-btn-text')[4].style.color = 'var(--color-high-light)';
 
           textShadow('.menu-btn', 0, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 1, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
