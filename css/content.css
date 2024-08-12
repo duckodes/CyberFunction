@@ -880,7 +880,7 @@
 .msg-row {
     display: flex;
     flex-direction: row;
-    background: linear-gradient(45deg, #e0e0e050 25%, transparent 25%, transparent 50%, #e0e0e050 50%, #e0e0e050 75%, transparent 75%, transparent);
+    background: linear-gradient(45deg, #e0e0e020 25%, transparent 25%, transparent 50%, #e0e0e020 50%, #e0e0e020 75%, transparent 75%, transparent);
     background-size: 5px 5px;
 }
 
