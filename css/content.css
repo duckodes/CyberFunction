@@ -850,6 +850,8 @@
     height: 100%;
     position: fixed;
     zoom: 150%;
+    background: linear-gradient(45deg, #e0e0e010 25%, transparent 25%, transparent 50%, #e0e0e010 50%, #e0e0e010 75%, transparent 75%, transparent);
+    background-size: 5px 5px;
 }
 
 .content-stat {
@@ -866,7 +868,7 @@
     align-items: center;
     flex-direction: column;
     overflow: auto;
-    margin-bottom: 170px;
+    margin-bottom: 175px;
     width: 100dvw;
     background: var(--color-main);
 }
