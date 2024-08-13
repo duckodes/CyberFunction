@@ -2322,6 +2322,15 @@ var apputils = (function () {
         default:
           break;
       }
+      createRadarChart({
+        parentElement: document.querySelector('.stat'),
+        labels: ['攻擊', '防禦', '等級', '爆發', '穿透傷害', '怪力'],
+        data: [1, 1, 2, 1, 5, 1],
+        radius: 80,
+        mainColor: '#bcfff930',
+        dataColor: '#bcfff9',
+        dataFill: '#bcfff999'
+      });
     }
 
     initEnemy();
@@ -3425,6 +3434,93 @@ var apputils = (function () {
     div.textContent = textContent;
     parent.appendChild(div);
     func(div);
+  }
+  function createRadarChart({ parentElement = document.body, labels = ['A', 'B', 'C', 'D', 'E', 'F'], data = [5, 4, 3, 2, 4, 5], radius = 50, mainColor = '#ddd', dataColor = '#00f', dataFill = '#00f2' }) {
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    container.style.display = 'none';
+    container.style.flexDirection = 'column';
+    container.style.alignItems = 'center';
+    container.style.justifyContent = 'center';
+    container.style.background = 'linear-gradient(135deg, #222 25%, #222a 25%, #222a 50%, #222 50%, #222 75%, #222a 75%, #222a)';
+    container.style.backgroundSize = '5px 5px';
+    container.style.transition = 'all 200ms linear';
+    container.onclick = () => {
+      container.style.display = 'none';
+    };
+    parentElement.appendChild(container);
+    const div = document.createElement('div');
+    div.className = 'radar-chart';
+    div.style.width = radius * 4 + 'px';
+    div.style.height = radius * 4 + 'px';
+    container.appendChild(div);
+    const canvas = document.createElement('canvas');
+    canvas.id = 'radarChart';
+    canvas.width = parseInt(div.style.width);
+    canvas.height = parseInt(div.style.height);
+    div.appendChild(canvas);
+    const close = document.createElement('div');
+    close.textContent = '×';
+    close.style.color = '#fff';
+    close.style.cursor = 'pointer';
+    container.appendChild(close);
+    const open = document.createElement('div');
+    open.textContent = 'ⓘ';
+    open.style.width = 'fit-content';
+    open.style.height = 'fit-content';
+    open.style.color = '#fff';
+    open.style.cursor = 'pointer';
+    open.style.position = 'fixed';
+    open.style.bottom = '50px';
+    open.style.right = '10px';
+    open.onclick = () => {
+      if (container.style.display === 'flex') {
+        container.style.display = 'none';
+      } else {
+        container.style.display = 'flex';
+      }
+    };
+    parentElement.appendChild(open);
+
+    const ctx = canvas.getContext('2d');
+    const angle = Math.PI * 2 / data.length;
+
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+
+    for (let r = 1; r <= 5; r++) {
+      ctx.beginPath();
+      for (let i = 0; i < data.length; i++) {
+        const x = radius * (r / 5) * Math.cos(angle * i);
+        const y = radius * (r / 5) * Math.sin(angle * i);
+        ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = mainColor;
+      ctx.stroke();
+    }
+
+    ctx.beginPath();
+    data.forEach((value, index) => {
+      const x = radius * (value / 5) * Math.cos(angle * index);
+      const y = radius * (value / 5) * Math.sin(angle * index);
+      if (index === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.strokeStyle = dataColor;
+    ctx.stroke();
+    ctx.fillStyle = dataFill;
+    ctx.fill();
+
+    labels.forEach((label, index) => {
+      const x = (radius + 20 + label.length * 10) * Math.cos(angle * index);
+      const y = (radius + 20 + label.length * 10) * Math.sin(angle * index);
+      ctx.fillText(label, x, y);
+    });
   }
   function checkArr(arr, tar) {
     // 使用 every() 方法來檢查每個元素是否都是 tar
