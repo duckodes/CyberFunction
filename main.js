@@ -259,6 +259,13 @@ var apputils = (function () {
 
           initStoreItem(data);
           menuAction();
+          const systemInfo =
+            `Platform: ${navigator.platform}
+User Agent: ${navigator.userAgent}
+Memory: ${navigator.deviceMemory ? navigator.deviceMemory + ' GB' : 'Not available'}
+Screen Resolution: ${window.screen.width} x ${window.screen.height}
+Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
+          document.getElementById('system-info').textContent = systemInfo;
         })
         .catch(error => {
           console.error('Fetch error:', error);

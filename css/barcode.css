@@ -14,8 +14,6 @@
             transparent 55%, transparent 70%,
             var(--color-high-light-darkness) 70%, var(--color-high-light-darkness) 85%,
             transparent 85%, transparent 95%,
-            var(--color-high-light-darkness) 95%, var(--color-high-light-darkness) 100%
-        );
+            var(--color-high-light-darkness) 95%, var(--color-high-light-darkness) 100%);
     background-size: 20px 100%;
-    cursor: pointer;
 }

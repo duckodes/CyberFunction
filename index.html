@@ -15,6 +15,12 @@
 
   <!-- Custom Styles -->
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/font.css">
+  <link rel="stylesheet" href="css/root.css">
+  <link rel="stylesheet" href="css/sign.css">
+  <link rel="stylesheet" href="css/nav.css">
+  <link rel="stylesheet" href="css/content.css">
+  <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="css/default.css">
   <link rel="stylesheet" href="css/circuitboardgenerator.css">
   <link rel="stylesheet" href="https://lib.duckode.com/css/contextmenuutils.css">
@@ -427,10 +433,12 @@
         <div class="settings">
           <div class="settings-username">
             <div class="f-10 en-set">代號</div>
-            <div class="barcode"></div>
             <input type="text">
             <div class="username-update">✓</div>
           </div>
+          <svg id="barcode"></svg>
+          <div id="qrcode"></div>
+          <br>
           <div class="language en-set">
             <div class="lan-row">
               <div class="lan-now">
@@ -457,6 +465,7 @@
             登出
           </div>
 
+          <pre id="system-info"></pre>
         </div>
         <!--content end-->
       </div>
@@ -576,6 +585,8 @@
     <div class="dragIn-arr" style="word-break: break-all"></div>
   </div>
 
+  <script src="js/JsBarcode.all.min.js"></script>
+  <script src="js/qrcode.min.js"></script>
   <script src="https://lib.duckode.com/js/storageutils.min.js"></script>
   <script src="https://lib.duckode.com/js/contextmenuutils.min.js"></script>
   <!-- Project -->
@@ -709,6 +720,23 @@
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
         const uid = user.uid;
+        JsBarcode("#barcode", user.uid, {
+          format: "CODE128",
+          fontSize: 12,
+          font: "Arial",
+          lineColor: "#bcfff999",
+          background: 'transparent',
+          width: 1,
+          height: 40,
+          displayValue: true
+        });
+        new QRCode(document.getElementById('qrcode'), {
+          text: user.uid,
+          width: 128,
+          height: 128,
+          colorDark: '#bcfff950',
+          colorLight: 'transparent',
+        });
 
         sign_container.remove();
         canvas.style.display = 'block';
@@ -817,7 +845,6 @@
       createUserWithEmailAndPassword(auth, account.value, password.value)
         .then((userCredential) => {
           UpdateProfile(userCredential.user.email.replace(/@.*?(?=@|$)/g, ''));
-          signOutUser();
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -840,6 +867,7 @@
         settings_username_input.value = auth.currentUser.displayName;
         nav_username.innerHTML = `${auth.currentUser.displayName}<br><div class="f-10 en-set">${language_data.nav.username}</div>`;
         console.log('Profile updated!');
+        signOutUser();
         // ...
       }).catch((error) => {
         // An error occurred
