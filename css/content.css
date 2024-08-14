@@ -868,6 +868,53 @@
     padding-bottom: 200px;
 }
 
+.radar-chart-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #222 25%, #222a 25%, #222a 50%, #222 50%, #222 75%, #222a 75%, #222a);
+    background-size: 5px 5px;
+}
+
+.radar-chart-container .radar-chart-area {
+    transition: all 200ms linear;
+}
+
+.radar-chart-container .close {
+    color: #fff;
+    cursor: pointer;
+}
+
+.radar-chart-container .close:hover {
+    color: #fff5;
+}
+
+.stat .radar-chart-open {
+    width: fit-content;
+    height: fit-content;
+    color: #fff5;
+    cursor: pointer;
+    position: fixed;
+    bottom: 50px;
+    right: 10px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.stat .radar-chart-open:hover {
+    color: #fff;
+}
+
+.stat .radar-chart-open:active {
+    color: #fff2;
+}
+
 .lobby {
     display: none;
     align-items: center;
@@ -1118,7 +1165,7 @@
     color: #858585;
 }
 
-#system-info{
+#system-info {
     font-size: xx-small;
     color: var(--color-high-light);
     text-align: center;

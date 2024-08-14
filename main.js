@@ -3481,50 +3481,30 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     });
     const container = document.createElement('div');
     container.className = 'radar-chart-container';
-    container.style.position = 'fixed';
-    container.style.top = '0';
-    container.style.left = '0';
-    container.style.width = '100%';
-    container.style.height = '100%';
-    container.style.display = 'none';
-    container.style.flexDirection = 'column';
-    container.style.alignItems = 'center';
-    container.style.justifyContent = 'center';
-    container.style.background = 'linear-gradient(135deg, #222 25%, #222a 25%, #222a 50%, #222 50%, #222 75%, #222a 75%, #222a)';
-    container.style.backgroundSize = '5px 5px';
     container.onclick = () => {
       container.style.display = 'none';
     };
     parentElement.appendChild(container);
     const div = document.createElement('div');
-    div.className = 'radar-chart';
+    div.className = 'radar-chart-area';
     div.style.width = radius * 4 + 'px';
     div.style.height = radius * 4 + 'px';
-    div.style.transition = 'all 200ms linear';
     div.style.scale = window.innerWidth / window.innerHeight > 1 ? window.innerWidth > window.innerHeight ? window.innerHeight / window.innerWidth < 1 ? 0.7 : window.innerHeight / window.innerWidth : 1 : window.innerWidth / window.innerHeight < 0.5 ? 0.6 : window.innerWidth / window.innerHeight;
     window.addEventListener('resize', () => {
       div.style.scale = window.innerWidth / window.innerHeight > 1 ? window.innerWidth > window.innerHeight ? window.innerHeight / window.innerWidth < 1 ? 0.7 : window.innerHeight / window.innerWidth : 1 : window.innerWidth / window.innerHeight < 0.5 ? 0.6 : window.innerWidth / window.innerHeight;
     });
     container.appendChild(div);
     const canvas = document.createElement('canvas');
-    canvas.id = 'radarChart';
     canvas.width = parseInt(div.style.width);
     canvas.height = parseInt(div.style.height);
     div.appendChild(canvas);
     const close = document.createElement('div');
+    close.className = 'close';
     close.textContent = '×';
-    close.style.color = '#fff';
-    close.style.cursor = 'pointer';
     container.appendChild(close);
     const open = document.createElement('div');
+    open.className = 'radar-chart-open';
     open.textContent = 'ⓘ';
-    open.style.width = 'fit-content';
-    open.style.height = 'fit-content';
-    open.style.color = '#fff';
-    open.style.cursor = 'pointer';
-    open.style.position = 'fixed';
-    open.style.bottom = '50px';
-    open.style.right = '10px';
     open.onclick = () => {
       if (container.style.display === 'flex') {
         container.style.display = 'none';
@@ -3635,9 +3615,6 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
   }
   function textShadow(element, n, style) {
     document.querySelectorAll(element)[n].style.textShadow = style;
-  }
-  function boxShadow(element, n, style) {
-    document.querySelectorAll(element)[n].style.boxShadow = style;
   }
   function textContent(element, n, t) {
     document.querySelectorAll(element)[n].textContent = t;
