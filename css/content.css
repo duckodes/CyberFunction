@@ -542,10 +542,16 @@
     padding: 5px;
     border-top: 0.5px solid;
     border-image: linear-gradient(to right, transparent, #868686, transparent) 1;
+    text-shadow: -7px 0px 3px #bcfff950, 5px 5px 3px #bcfff950;
 }
 
 .equip .color-0:first-child {
     border: none;
+}
+
+.equip .color-0 .item-all-btn {
+    color: #777;
+    text-shadow: 1px 1px 5px #222, 1px 1px 5px #222;
 }
 
 .equip>.open-base {
@@ -721,6 +727,7 @@
     font-family: 'Courier New', Courier, monospace;
     line-height: 2;
     border-right: 5px solid #962b2e;
+    overflow-wrap: break-word;
 }
 
 .store-item-title:hover {

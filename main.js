@@ -363,7 +363,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           document.querySelectorAll('.menu-btn')[3].querySelector('svg').setAttribute('fill', '#9ce0ff48');
           document.querySelectorAll('.menu-btn')[4].querySelector('svg').setAttribute('fill', '#9ce0ff70');
           document.querySelectorAll('.menu-btn-text')[0].style.color = '';
-          document.querySelectorAll('.menu-btn-text')[1].style.color = '#bcfff9';
+          document.querySelectorAll('.menu-btn-text')[1].style.color = 'var(--color-high-light)';
           document.querySelectorAll('.menu-btn-text')[2].style.color = '';
           document.querySelectorAll('.menu-btn-text')[3].style.color = '';
           document.querySelectorAll('.menu-btn-text')[4].style.color = '';
@@ -2333,7 +2333,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       }
       createRadarChart({
         parentElement: document.querySelector('.stat'),
-        labels: [`最大承受損傷值 ${getMaxBearDMG() * 10}`, `恢復 ${getCheck('RD') * 10}`, `裝備數量 ${getEquip()}`, `防禦 ${getCheck('DEF') * 10}`, '技能樹 0', `攻擊 ${getCheck('DMG') * 10}`],
+        labels: [`承受損傷值 ${getMaxBearDMG() * 10}`, `恢復 ${getCheck('RD') * 10}`, `裝備數量 ${getEquip()}`, `防禦 ${getCheck('DEF') * 10}`, '魔法 0', `攻擊 ${getCheck('DMG') * 10}`],
         data: [getMaxBearDMG(), getCheck('RD'), getEquip(), getCheck('DEF'), 0, getCheck('DMG')],
         radius: 100,
         mainColor: '#bcfff930',
@@ -2344,32 +2344,30 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
         return get_bear_dmg / 10;
       }
       function getCheck(check) {
-        function sumNumbers(arr) {
+        function maxNumberBeforeField(arr) {
           return arr
             .filter(item => item.includes(check))
-            .reduce((sum, item) => {
+            .reduce((max, item) => {
               const match = item.match(/^(\d+)/);
               if (match) {
-                return sum + parseFloat(match[1]);
+                const number = parseFloat(match[1]);
+                return number > max ? number : max;
               }
-              return sum;
+              return max;
             }, 0);
         }
-        return (sumNumbers(item_data.helmet) +
-          sumNumbers(item_data.jacket) +
-          sumNumbers(item_data.lweapon) +
-          sumNumbers(item_data.rweapon) +
-          sumNumbers(item_data.boots)) / 10;
+        return (maxNumberBeforeField(item_data.helmet) +
+          maxNumberBeforeField(item_data.jacket) +
+          maxNumberBeforeField(item_data.lweapon) +
+          maxNumberBeforeField(item_data.rweapon) +
+          maxNumberBeforeField(item_data.boots)) / 10;
       }
       function getEquip() {
         function countNonNegativeValues(arr) {
           return arr.filter(value => value >= 0).length;
         }
-        return (countNonNegativeValues(own_equipment.helmet) +
-          countNonNegativeValues(own_equipment.jacket) +
-          countNonNegativeValues(own_equipment.lweapon) +
-          countNonNegativeValues(own_equipment.rweapon) +
-          countNonNegativeValues(own_equipment.boots));
+        console.log(equip_data);
+        return equip_data[4] >= 0 ? countNonNegativeValues(equip_data) - 1 : countNonNegativeValues(equip_data);
       }
     }
 
@@ -3321,7 +3319,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           }
         }
       });
-      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-2', itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[0], 'store-2', itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.weapon[0]) {
           storeItemInfo(itemStruct.cost.weapon[0], 'store-info-2', languageData, cost => {
             btc -= cost;
@@ -3340,7 +3338,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           }
         }
       });
-      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-2', itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[0], 'store-2', itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.weapon[0]) {
           storeItemInfo(itemStruct.cost.weapon[0], 'store-info-2', languageData, cost => {
             btc -= cost;
@@ -3359,7 +3357,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           }
         }
       });
-      createStoreItem(languageData.item.equipment.weapon["1"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-3', itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem(languageData.item.equipment.weapon["1"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[1], 'store-3', itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.weapon[1]) {
           storeItemInfo(itemStruct.cost.weapon[1], 'store-info-3', languageData, cost => {
             btc -= cost;
@@ -3378,7 +3376,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           }
         }
       });
-      createStoreItem(languageData.item.equipment.weapon["1"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + "['1%DEF', '2%DEF', '1%DEF', '1%DEF', '1%RD', '1%DEF']", 'store-3', itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem(languageData.item.equipment.weapon["1"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[1], 'store-3', itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.weapon[1]) {
           storeItemInfo(itemStruct.cost.weapon[1], 'store-info-3', languageData, cost => {
             btc -= cost;
