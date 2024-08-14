@@ -914,11 +914,21 @@
         });
       });
       onChildRemoved(limitlobbyRef, (snapshot) => {
-        document.getElementById(snapshot.key).innerHTML = '>>> SYSTEM DELETE';
+        document.getElementById(snapshot.key).innerHTML = '<svg id="sysdel"></svg>';
+        JsBarcode("#sysdel", '>>> SYSTEM DELETE ' + snapshot.key, {
+          format: "CODE128",
+          fontSize: document.getElementById(snapshot.key).parentElement.clientWidth / 30,
+          font: "Arial",
+          lineColor: "#bcfff999",
+          background: 'transparent',
+          width: document.getElementById(snapshot.key).parentElement.clientWidth / 500,
+          height: 20,
+          displayValue: true
+        });
         remove(child(lobbyRef, snapshot.key));
         setTimeout(() => {
           document.getElementById(snapshot.key).remove();
-        }, 1000);
+        }, 2000);
       });
     }
     function setMessageData(value) {

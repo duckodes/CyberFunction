@@ -1094,8 +1094,8 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           }, 1500);
 
           // GAME OVER
-          if (get_dmg[0] >= 10
-            || get_dmg[1] >= 10
+          if (get_dmg[0] >= get_bear_dmg
+            || get_dmg[1] >= get_bear_dmg
             || get_dmg[0] === -1 && get_dmg[1] === -1 && get_dmg[2] === -1 && get_dmg[3] === -1 && get_dmg[4] === -1 && get_dmg[5] === -1) {
             innerHTML('.gameover-border', 0, '<div style="color: #c24347;">DEFEAT</div>');
             innerHTML('.gameover-info', 0, `<div style="color: #c24347;font-family: SdglitchdemoRegular-YzROj, CyberwarRegular-7BX0E;">REPAIR COSTS: ${get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * -3} BTC.</div>`);
@@ -1106,7 +1106,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
             gameover();
             display('.gameover', 0, 'flex');
           }
-          if (e_get_dmg[0] >= 10 || e_get_dmg[1] >= 10) {
+          if (e_get_dmg[0] >= e_get_bear_dmg || e_get_dmg[1] >= e_get_bear_dmg) {
             var reward = Math.floor(getRandomNumber(e_get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0), e_get_dmg.reduce((accumulator, currentValue) => accumulator + (currentValue !== -1 ? currentValue : 0), 0) * 5));
             innerHTML('.gameover-border', 0, '<div style="color: #f7d967;">VICTORY</div>');
             innerHTML('.gameover-info', 0, `<div style="color: #f7d967;">AUTOMATIC REPAIRS FREE OF CHARGE.<br>REWARD: ${reward}</div>`);
@@ -1183,11 +1183,13 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
         display('.gameover', 0, '');
       }
     });
+    let get_bear_dmg = 10;
     let get_dmg_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     let get_def_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     let get_dmg = [0, 0, 0, 0, 0, 0];
     let set_get_dmg_default = () => { get_dmg = [checkArr(item_data.helmet, 'N/A') ? -1 : 0, checkArr(item_data.jacket, 'N/A') ? -1 : 0, checkArr(item_data.lweapon, 'N/A') ? -1 : 0, checkArr(item_data.rweapon, 'N/A') ? -1 : 0, checkArr(item_data.legstrap, 'N/A') ? -1 : 0, checkArr(item_data.boots, 'N/A') ? -1 : 0] };
     let get_rd_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
+    let e_get_bear_dmg = 10;
     let e_get_dmg_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     let e_get_def_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     let e_get_dmg = [0, 0, 0, 0, 0, 0];
@@ -2331,13 +2333,44 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       }
       createRadarChart({
         parentElement: document.querySelector('.stat'),
-        labels: ['攻擊', '防禦', '等級', '爆發', '穿透傷害', '怪力'],
-        data: [1, 1, 2, 1, 5, 1],
-        radius: 80,
+        labels: [`最大承受損傷值 ${getMaxBearDMG() * 10}`, `恢復 ${getCheck('RD') * 10}`, `裝備數量 ${getEquip()}`, `防禦 ${getCheck('DEF') * 10}`, '技能樹 0', `攻擊 ${getCheck('DMG') * 10}`],
+        data: [getMaxBearDMG(), getCheck('RD'), getEquip(), getCheck('DEF'), 0, getCheck('DMG')],
+        radius: 100,
         mainColor: '#bcfff930',
         dataColor: '#bcfff9',
         dataFill: '#bcfff999'
       });
+      function getMaxBearDMG() {
+        return get_bear_dmg / 10;
+      }
+      function getCheck(check) {
+        function sumNumbers(arr) {
+          return arr
+            .filter(item => item.includes(check))
+            .reduce((sum, item) => {
+              const match = item.match(/^(\d+)/);
+              if (match) {
+                return sum + parseFloat(match[1]);
+              }
+              return sum;
+            }, 0);
+        }
+        return (sumNumbers(item_data.helmet) +
+          sumNumbers(item_data.jacket) +
+          sumNumbers(item_data.lweapon) +
+          sumNumbers(item_data.rweapon) +
+          sumNumbers(item_data.boots)) / 10;
+      }
+      function getEquip() {
+        function countNonNegativeValues(arr) {
+          return arr.filter(value => value >= 0).length;
+        }
+        return (countNonNegativeValues(own_equipment.helmet) +
+          countNonNegativeValues(own_equipment.jacket) +
+          countNonNegativeValues(own_equipment.lweapon) +
+          countNonNegativeValues(own_equipment.rweapon) +
+          countNonNegativeValues(own_equipment.boots));
+      }
     }
 
     initEnemy();
@@ -3443,7 +3476,11 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     func(div);
   }
   function createRadarChart({ parentElement = document.body, labels = ['A', 'B', 'C', 'D', 'E', 'F'], data = [5, 4, 3, 2, 4, 5], radius = 50, mainColor = '#ddd', dataColor = '#00f', dataFill = '#00f2' }) {
+    document.querySelectorAll('.radar-chart-container').forEach(element => {
+      element.remove();
+    });
     const container = document.createElement('div');
+    container.className = 'radar-chart-container';
     container.style.position = 'fixed';
     container.style.top = '0';
     container.style.left = '0';
@@ -3455,7 +3492,6 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     container.style.justifyContent = 'center';
     container.style.background = 'linear-gradient(135deg, #222 25%, #222a 25%, #222a 50%, #222 50%, #222 75%, #222a 75%, #222a)';
     container.style.backgroundSize = '5px 5px';
-    container.style.transition = 'all 200ms linear';
     container.onclick = () => {
       container.style.display = 'none';
     };
@@ -3464,6 +3500,11 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     div.className = 'radar-chart';
     div.style.width = radius * 4 + 'px';
     div.style.height = radius * 4 + 'px';
+    div.style.transition = 'all 200ms linear';
+    div.style.scale = window.innerWidth / window.innerHeight > 1 ? window.innerWidth > window.innerHeight ? window.innerHeight / window.innerWidth < 1 ? 0.7 : window.innerHeight / window.innerWidth : 1 : window.innerWidth / window.innerHeight < 0.5 ? 0.6 : window.innerWidth / window.innerHeight;
+    window.addEventListener('resize', () => {
+      div.style.scale = window.innerWidth / window.innerHeight > 1 ? window.innerWidth > window.innerHeight ? window.innerHeight / window.innerWidth < 1 ? 0.7 : window.innerHeight / window.innerWidth : 1 : window.innerWidth / window.innerHeight < 0.5 ? 0.6 : window.innerWidth / window.innerHeight;
+    });
     container.appendChild(div);
     const canvas = document.createElement('canvas');
     canvas.id = 'radarChart';
@@ -3520,13 +3561,35 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     ctx.closePath();
     ctx.strokeStyle = dataColor;
     ctx.stroke();
-    ctx.fillStyle = dataFill;
+    ctx.fillStyle = dataFill; ctx.font = 'bold 10px Arial';
     ctx.fill();
 
     labels.forEach((label, index) => {
-      const x = (radius + 20 + label.length * 10) * Math.cos(angle * index);
-      const y = (radius + 20 + label.length * 10) * Math.sin(angle * index);
-      ctx.fillText(label, x, y);
+      let x = 0;
+      let y = 0;
+      switch (index) {
+        case 1:
+        case 2:
+        case 4:
+        case 5:
+          x = (radius + label.length * 10) * Math.cos(angle * index);
+          y = (radius + label.length * 10) * Math.sin(angle * index);
+          ctx.fillText(label, x, y);
+          break;
+        case 0:
+          x = (radius + 10) * Math.cos(angle * index);
+          y = (radius + 10) * Math.sin(angle * index);
+          ctx.fillText(label, x, y);
+          break;
+        case 3:
+          x = (radius + 20 + label.length * 10) * Math.cos(angle * index);
+          y = (radius + 20 + label.length * 10) * Math.sin(angle * index);
+          ctx.fillText(label, x, y);
+          break;
+
+        default:
+          break;
+      }
     });
   }
   function checkArr(arr, tar) {
