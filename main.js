@@ -2366,7 +2366,6 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
         function countNonNegativeValues(arr) {
           return arr.filter(value => value >= 0).length;
         }
-        console.log(equip_data);
         return equip_data[4] >= 0 ? countNonNegativeValues(equip_data) - 1 : countNonNegativeValues(equip_data);
       }
     }

@@ -567,6 +567,8 @@
         </div>
       </div>
 
+      <div class="profile-id"></div>
+
     </div>
   </app>
 
@@ -731,12 +733,26 @@
           displayValue: true
         });
         new QRCode(document.getElementById('qrcode'), {
-          text: user.uid,
+          text: location.href + '?pid=' + user.uid,
           width: 128,
           height: 128,
           colorDark: '#bcfff950',
           colorLight: 'transparent',
         });
+        // set user profile data
+        const parameterID = getParameterByName('pid', location.href);
+        if (parameterID !== null && parameterID !== '') {
+          document.querySelector('.profile-id').style.display = 'flex';
+          const publicRef = ref(db, `public/${parameterID}`);
+          get(publicRef).then((snapshot) => {
+            if (snapshot.exists()) {
+              document.querySelector('.profile-id').innerHTML += 
+              `<div style="color: #fff;">${snapshot.val().username}</div>`;
+            }
+          }).catch((error) => {
+            console.error(error);
+          });
+        }
 
         sign_container.remove();
         canvas.style.display = 'block';
@@ -744,7 +760,19 @@
         settings_username_input.value = user.displayName;
         nav_username.innerHTML = `${user.displayName}<br><div class="f-10 en-set"></div>`;
 
-        // user data
+        // user public data
+        const authPublicRef = ref(db, `public/${uid}`);
+        get(authPublicRef).then((snapshot) => {
+          if (!snapshot.exists()) {
+            // default
+            set(authPublicRef, {
+              username: auth.currentUser.displayName,
+            });
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+        // user private data
         const authRef = ref(db, `auth/${uid}`);
         get(authRef).then((snapshot) => {
           if (snapshot.exists()) {
@@ -991,6 +1019,14 @@
       minutes = minutes < 10 ? '0' + minutes : minutes;
 
       return `${month}/${day}/${hours}:${minutes} ${period}`;
+    }
+    function getParameterByName(name, url) {
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
   </script>
 </body>
