@@ -845,7 +845,7 @@
           });
         });
 
-        console.log(user);
+        //console.log(user);
       } else {
         // User is signed out
       }
@@ -935,7 +935,6 @@
         }
         updateCSSVariable('css/root.css', '--' + snapshot.key, data.uid);
         document.querySelectorAll(`.msg-id`).forEach(element => {
-          console.log(snapshot.key);
           element.addEventListener('click', (e) => {
             contextmenuutils.init(document.querySelector('.lobby'), (b, c) => {
               ToMouse(c);

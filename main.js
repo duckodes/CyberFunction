@@ -2584,7 +2584,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       draggable.style.backgroundColor = dragDrop_bgc[parseNumberFromString(draggableID.replace('-', ''))];
       draggable.style.opacity = dragDrop_opy[parseNumberFromString(draggableID.replace('-', ''))];
       DragIn_Element.innerHTML = dragDrop_arr_str;
-      console.log(draggableID);
+      //console.log(draggableID);
     }
 
     function draggableObj(draggable, rW, rH) {
