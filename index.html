@@ -719,6 +719,7 @@
     const parameterID = getParameterByName('pid', location.href);
     if (parameterID !== null && parameterID !== '') {
       const publicRef = ref(db, `public/${parameterID}`);
+      history.pushState({}, '', '/');
       get(publicRef).then((snapshot) => {
         if (snapshot.exists()) {
           document.querySelector('.profile-id').onclick = () => {
@@ -932,6 +933,47 @@
             <div class="msg-time">${ToAMPMYMD(data.time)}</div>
           </div>`;
         }
+        updateCSSVariable('css/root.css', '--' + snapshot.key, data.uid);
+        document.querySelectorAll(`.msg-id`).forEach(element => {
+          console.log(snapshot.key);
+          element.addEventListener('click', (e) => {
+            contextmenuutils.init(document.querySelector('.lobby'), (b, c) => {
+              ToMouse(c);
+              c.style.border = '1px solid var(--color-high-light)';
+              c.style.borderRadius = '0px';
+              c.style.background = 'linear-gradient(45deg, #555 25%, #252525 25%, #252525 50%, #555 50%, #555 75%, #252525 75%, #252525)';
+              c.style.backgroundSize = '5px 5px';
+              c.style.fontSize = '12px';
+              c.style.zIndex = '2';
+            })
+            contextmenuutils.addItem(language_data.footer.menuBtnText["2"], (c) => {
+              defaultset(c);
+            })
+            function defaultset(c) {
+              c.style.color = 'var(--color-high-light)';
+              c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
+              c.addEventListener('click', () => {
+                location.href = truncateAfterLastSlash(location.href) + '?pid=' + getCSSVariable('css/root.css', '--' + element.parentElement.id);
+              });
+              c.addEventListener('mousedown', () => {
+                c.style.background = 'var(--color-high-light-darkness)';
+              });
+              document.body.addEventListener('mouseup', () => {
+                c.style.background = '';
+              });
+              c.addEventListener('touchstart', () => {
+                c.style.background = 'var(--color-high-light-darkness)';
+              });
+              c.addEventListener('touchend', () => {
+                c.style.background = '';
+              });
+            }
+            function ToMouse(c) {
+              c.style.left = (e.pageX) + 'px';
+              c.style.top = (e.pageY) + 'px';
+            }
+          });
+        });
         document.querySelector(`#${snapshot.key} .msg-row .msg-msg`).textContent = data.message;
         document.querySelectorAll(".msg-del").forEach(element => {
           element.addEventListener("click", () => {
@@ -1032,6 +1074,66 @@
         return url;
       }
       return url.slice(0, lastIndex + 1);
+    }
+    function updateCSSVariable(targetHref, variableName, variableValue) {
+      const styleSheets = document.styleSheets;
+
+      let targetStyleSheet = null;
+      for (const sheet of styleSheets) {
+        if (sheet.href && sheet.href.includes(targetHref)) {
+          targetStyleSheet = sheet;
+          break;
+        }
+      }
+
+      if (targetStyleSheet) {
+        let ruleFound = false;
+
+        for (let i = 0; i < targetStyleSheet.cssRules.length; i++) {
+          const rule = targetStyleSheet.cssRules[i];
+
+          if (rule.selectorText === ':root') {
+            rule.style.setProperty(variableName, variableValue);
+            ruleFound = true;
+            break;
+          }
+        }
+
+        if (!ruleFound) {
+          targetStyleSheet.insertRule(`:root { ${variableName}: ${variableValue}; }`, targetStyleSheet.cssRules.length);
+        }
+      } else {
+        console.warn('Error sheet href not found');
+      }
+    }
+    function getCSSVariable(targetHref, variableName) {
+      const styleSheets = document.styleSheets;
+
+      let targetStyleSheet = null;
+      for (const sheet of styleSheets) {
+        if (sheet.href && sheet.href.includes(targetHref)) {
+          targetStyleSheet = sheet;
+          break;
+        }
+      }
+
+      if (targetStyleSheet) {
+        let variableValue = '';
+
+        for (let i = 0; i < targetStyleSheet.cssRules.length; i++) {
+          const rule = targetStyleSheet.cssRules[i];
+
+          if (rule.selectorText === ':root') {
+            variableValue = rule.style.getPropertyValue(variableName).trim();
+            break;
+          }
+        }
+
+        return variableValue;
+      } else {
+        console.warn('找不到指定路徑的樣式表');
+        return '';
+      }
     }
   </script>
 </body>
