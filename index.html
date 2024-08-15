@@ -726,9 +726,7 @@
           };
           document.querySelector('.profile-id').style.display = 'flex';
           document.querySelector('.profile-id').innerHTML += `
-              <div style="color: #fff;">
-                ${snapshot.val().username}
-              </div>
+              <div>${snapshot.val().username}</div>
               <div class="close-btn">&times;</div>`;
         }
       }).catch((error) => {
@@ -753,7 +751,7 @@
           displayValue: true
         });
         new QRCode(document.getElementById('qrcode'), {
-          text: location.href + '?pid=' + user.uid,
+          text: truncateAfterSlash(location.href) + '?pid=' + user.uid,
           width: 128,
           height: 128,
           colorDark: '#bcfff999',
@@ -1033,6 +1031,13 @@
       if (!results) return null;
       if (!results[2]) return '';
       return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+    function truncateAfterSlash(url) {
+      const index = url.indexOf('/');
+      if (index === -1) {
+        return url; // 如果没有斜杠，返回原字符串
+      }
+      return url.slice(0, index + 1); // 包含斜杠
     }
   </script>
 </body>
