@@ -724,7 +724,6 @@
         if (snapshot.exists()) {
           document.querySelector('.profile-id').onclick = () => {
             document.querySelector('.profile-id').style.display = '';
-            location.href = truncateAfterLastSlash(location.href);
           };
           document.querySelector('.profile-id').style.display = 'flex';
           document.querySelector('.profile-id').innerHTML += `
