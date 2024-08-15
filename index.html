@@ -723,6 +723,7 @@
         if (snapshot.exists()) {
           document.querySelector('.profile-id').onclick = () => {
             document.querySelector('.profile-id').style.display = '';
+            location.href = truncateAfterLastSlash(location.href);
           };
           document.querySelector('.profile-id').style.display = 'flex';
           document.querySelector('.profile-id').innerHTML += `
@@ -899,7 +900,6 @@
         settings_username_input.value = auth.currentUser.displayName;
         nav_username.innerHTML = `${auth.currentUser.displayName}<br><div class="f-10 en-set">${language_data.nav.username}</div>`;
         console.log('Profile updated!');
-        signOutUser();
         // ...
       }).catch((error) => {
         // An error occurred
