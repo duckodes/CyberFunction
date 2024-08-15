@@ -765,18 +765,6 @@
         settings_username_input.value = user.displayName;
         nav_username.innerHTML = `${user.displayName}<br><div class="f-10 en-set"></div>`;
 
-        // user public data
-        const authPublicRef = ref(db, `public/${uid}`);
-        get(authPublicRef).then((snapshot) => {
-          if (!snapshot.exists()) {
-            // default
-            set(authPublicRef, {
-              username: auth.currentUser.displayName,
-            });
-          }
-        }).catch((error) => {
-          console.error(error);
-        });
         // user private data
         const authRef = ref(db, `auth/${uid}`);
         get(authRef).then((snapshot) => {
@@ -900,6 +888,12 @@
         settings_username_input.value = auth.currentUser.displayName;
         nav_username.innerHTML = `${auth.currentUser.displayName}<br><div class="f-10 en-set">${language_data.nav.username}</div>`;
         console.log('Profile updated!');
+
+        // user public data
+        const authPublicRef = ref(db, `public/${auth.currentUser.uid}`);
+        set(authPublicRef, {
+          username: auth.currentUser.displayName,
+        });
         // ...
       }).catch((error) => {
         // An error occurred
