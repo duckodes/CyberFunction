@@ -715,6 +715,27 @@
       signOutUser();
     });
 
+    // set user profile data
+    const parameterID = getParameterByName('pid', location.href);
+    if (parameterID !== null && parameterID !== '') {
+      const publicRef = ref(db, `public/${parameterID}`);
+      get(publicRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          document.querySelector('.profile-id').onclick = () => {
+            document.querySelector('.profile-id').style.display = '';
+          };
+          document.querySelector('.profile-id').style.display = 'flex';
+          document.querySelector('.profile-id').innerHTML += `
+              <div style="color: #fff;">
+                ${snapshot.val().username}
+              </div>
+              <div class="close-btn">&times;</div>`;
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
+
     // check if login
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -738,27 +759,6 @@
           colorDark: '#bcfff999',
           colorLight: 'transparent',
         });
-
-        // set user profile data
-        const parameterID = getParameterByName('pid', location.href);
-        if (parameterID !== null && parameterID !== '') {
-          const publicRef = ref(db, `public/${parameterID}`);
-          get(publicRef).then((snapshot) => {
-            if (snapshot.exists()) {
-              document.querySelector('.profile-id').onclick = () => {
-                document.querySelector('.profile-id').style.display = '';
-              };
-              document.querySelector('.profile-id').style.display = 'flex';
-              document.querySelector('.profile-id').innerHTML += `
-              <div style="color: #fff;">
-                ${snapshot.val().username}
-              </div>
-              <div class="close-btn">&times;</div>`;
-            }
-          }).catch((error) => {
-            console.error(error);
-          });
-        }
 
         sign_container.remove();
         canvas.style.display = 'block';
