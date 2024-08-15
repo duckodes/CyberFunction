@@ -843,13 +843,6 @@
 .store-info>p {
     position: fixed;
     bottom: 35px;
-    color: #fff;
-    font-size: 35px;
-    cursor: pointer;
-}
-
-.store-info>p:hover {
-    color: #fff5;
 }
 
 .stat {
@@ -891,15 +884,6 @@
 
 .radar-chart-container .radar-chart-area {
     transition: all 200ms linear;
-}
-
-.radar-chart-container .close {
-    color: #fff;
-    cursor: pointer;
-}
-
-.radar-chart-container .close:hover {
-    color: #fff5;
 }
 
 .stat .radar-chart-open {

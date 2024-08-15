@@ -409,7 +409,7 @@
             </div>
             <div class="store-info">
               <div></div>
-              <p>&times;</p>
+              <p class="close-btn">&times;</p>
             </div>
           </div>
 
@@ -567,13 +567,11 @@
         </div>
       </div>
 
-      <div class="profile-id"></div>
-
     </div>
   </app>
 
   <div class="dropbase-close">
-    <div>&times;</div>
+    <div class="close-btn">&times;</div>
   </div>
   <div class="dropbase">
     <div class="dropzone">
@@ -586,6 +584,7 @@
     </div>
     <div class="dragIn-arr" style="word-break: break-all"></div>
   </div>
+  <div class="profile-id"></div>
 
   <script src="js/JsBarcode.all.min.js"></script>
   <script src="js/qrcode.min.js"></script>
@@ -739,15 +738,22 @@
           colorDark: '#bcfff999',
           colorLight: 'transparent',
         });
+
         // set user profile data
         const parameterID = getParameterByName('pid', location.href);
         if (parameterID !== null && parameterID !== '') {
-          document.querySelector('.profile-id').style.display = 'flex';
           const publicRef = ref(db, `public/${parameterID}`);
           get(publicRef).then((snapshot) => {
             if (snapshot.exists()) {
-              document.querySelector('.profile-id').innerHTML += 
-              `<div style="color: #fff;">${snapshot.val().username}</div>`;
+              document.querySelector('.profile-id').onclick = () => {
+                document.querySelector('.profile-id').style.display = '';
+              };
+              document.querySelector('.profile-id').style.display = 'flex';
+              document.querySelector('.profile-id').innerHTML += `
+              <div style="color: #fff;">
+                ${snapshot.val().username}
+              </div>
+              <div class="close-btn">&times;</div>`;
             }
           }).catch((error) => {
             console.error(error);

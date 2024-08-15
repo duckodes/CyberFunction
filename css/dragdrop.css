@@ -166,12 +166,5 @@
 }
 
 .dropbase-close>div {
-    cursor: pointer;
-    color: #fff;
-    font-size: 35px;
     margin-bottom: 50px;
-}
-
-.dropbase-close>div:hover {
-    color: #fff5;
 }

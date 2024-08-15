@@ -29,3 +29,14 @@
 .zh-set {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+
+.close-btn {
+    /* &times; */
+    cursor: pointer;
+    color: #fff;
+    font-size: 35px;
+}
+
+.close-btn:hover {
+    color: #fff5;
+}
