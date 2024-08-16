@@ -1939,21 +1939,16 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
               document.getElementById('draggable-0--battle').addEventListener('mousedown', (e) => {
                 contextmenuutils.init(document.body, (b, c) => {
                   ToMouse(c);
-                  c.style.border = '2px solid #3db3d050';
-                  c.style.borderRadius = '2px';
-                  c.style.fontSize = '12px';
-                  c.style.background = 'linear-gradient(to bottom, #3db3d045, #191325)';
-                  c.style.zIndex = '2';
                 })
                 contextmenuutils.addItem(language_data.item.equipment.legstrap["0"] + '1%', (c) => {
-                  c.style.background = "#3db3d050";
                   c.style.color = '#f7d967';
                   c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
+                  c.style.background = "var(--color-high-light-darkness)";
                 })
                 contextmenuutils.addItem(language_data.battle.quantity + ':' + countOccurrences(own_equipment.legstrap, 0), (c) => {
-                  c.style.background = "#3db3d050";
-                  c.style.color = '#3db3d0';
+                  c.style.color = 'var(--color-high-light)';
                   c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
+                  c.style.background = "var(--color-high-light-darkness)";
                 })
                 for (let i = 0; i < get_dmg.length; i++) {
                   if (get_dmg[i] !== -1 && get_dmg[i] > 0) {
@@ -2055,26 +2050,12 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                   }
                 }
                 function defaultset(c, callback) {
-                  c.style.color = '#3db3d0';
-                  c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
                   c.addEventListener("click", () => {
                     if (get_dmg[4] !== -1) {
                       callback();
                       update_dragDrop_arr_str();
                     }
                     contextmenuutils.remove();
-                  });
-                  c.addEventListener("touchstart", () => {
-                    c.style.background = "#3db3d050";
-                  });
-                  c.addEventListener("touchend", () => {
-                    c.style.background = "";
-                  });
-                  c.addEventListener("mousedown", () => {
-                    c.style.background = "#3db3d050";
-                  });
-                  document.body.addEventListener("mouseup", () => {
-                    c.style.background = "";
                   });
                 }
                 function ToMouse(c) {
@@ -2090,21 +2071,16 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
               document.getElementById('draggable-1--battle').addEventListener('mousedown', (e) => {
                 contextmenuutils.init(document.body, (b, c) => {
                   ToMouse(c);
-                  c.style.border = '2px solid #3db3d050';
-                  c.style.borderRadius = '2px';
-                  c.style.fontSize = '12px';
-                  c.style.background = 'linear-gradient(to bottom, #3db3d045, #191325)';
-                  c.style.zIndex = '2';
                 })
                 contextmenuutils.addItem(language_data.item.equipment.legstrap["1"] + '2%', (c) => {
-                  c.style.background = "#3db3d050";
                   c.style.color = '#f7d967';
                   c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
+                  c.style.background = "var(--color-high-light-darkness)";
                 })
                 contextmenuutils.addItem(language_data.battle.quantity + ':' + countOccurrences(own_equipment.legstrap, 1), (c) => {
-                  c.style.background = "#3db3d050";
-                  c.style.color = '#3db3d0';
+                  c.style.color = 'var(--color-high-light)';
                   c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
+                  c.style.background = "var(--color-high-light-darkness)";
                 })
                 for (let i = 0; i < get_dmg.length; i++) {
                   if (get_dmg[i] !== -1 && get_dmg[i] > 0) {
@@ -2206,26 +2182,12 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                   }
                 }
                 function defaultset(c, callback) {
-                  c.style.color = '#3db3d0';
-                  c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
                   c.addEventListener("click", () => {
                     if (get_dmg[4] !== -1) {
                       callback();
                       update_dragDrop_arr_str();
                     }
                     contextmenuutils.remove();
-                  });
-                  c.addEventListener("touchstart", () => {
-                    c.style.background = "#3db3d050";
-                  });
-                  c.addEventListener("touchend", () => {
-                    c.style.background = "";
-                  });
-                  c.addEventListener("mousedown", () => {
-                    c.style.background = "#3db3d050";
-                  });
-                  document.body.addEventListener("mouseup", () => {
-                    c.style.background = "";
                   });
                 }
                 function ToMouse(c) {
