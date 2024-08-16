@@ -163,6 +163,8 @@
     display: flex;
     justify-content: center;
     align-items: last baseline;
+    background: linear-gradient(135deg, #222 25%, #222a 25%, #222a 50%, #222 50%, #222 75%, #222a 75%, #222a);
+    background-size: 5px 5px;
 }
 
 .dropbase-close>div {

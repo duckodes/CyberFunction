@@ -591,8 +591,9 @@
   <script src="https://lib.duckode.com/js/storageutils.min.js"></script>
   <script src="https://lib.duckode.com/js/contextmenuutils.min.js"></script>
   <!-- Project -->
-  <script src="main.js"></script>
+  <script type="module" src="main.js"></script>
   <script type="module">
+    import { userObj, islanguage_data, continueBattleObj, isUndoObj, language_data } from '/main.js';
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     // TODO: Add SDKs for Firebase products that you want to use
@@ -937,33 +938,13 @@
           element.addEventListener('click', (e) => {
             contextmenuutils.init(document.querySelector('.lobby'), (b, c) => {
               ToMouse(c);
-              c.style.border = '1px solid var(--color-high-light)';
-              c.style.borderRadius = '0px';
-              c.style.background = 'linear-gradient(45deg, #555 25%, #252525 25%, #252525 50%, #555 50%, #555 75%, #252525 75%, #252525)';
-              c.style.backgroundSize = '5px 5px';
-              c.style.fontSize = '12px';
-              c.style.zIndex = '2';
             })
             contextmenuutils.addItem(language_data.footer.menuBtnText["2"], (c) => {
               defaultset(c);
             })
             function defaultset(c) {
-              c.style.color = 'var(--color-high-light)';
-              c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
               c.addEventListener('click', () => {
                 location.href = truncateAfterLastSlash(location.href) + '?pid=' + getCSSVariable('css/root.css', '--' + element.parentElement.id);
-              });
-              c.addEventListener('mousedown', () => {
-                c.style.background = 'var(--color-high-light-darkness)';
-              });
-              document.body.addEventListener('mouseup', () => {
-                c.style.background = '';
-              });
-              c.addEventListener('touchstart', () => {
-                c.style.background = 'var(--color-high-light-darkness)';
-              });
-              c.addEventListener('touchend', () => {
-                c.style.background = '';
               });
             }
             function ToMouse(c) {

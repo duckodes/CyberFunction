@@ -1,6 +1,6 @@
 console.log('CFO ver.0.0.0');
-var language_data;
-var islanguage_data = {
+export var language_data;
+export var islanguage_data = {
   _done: null,
   listeners: {
     change: []
@@ -33,7 +33,7 @@ var islanguage_data = {
     }
   }
 };
-var isUndoObj = {
+export var isUndoObj = {
   _isUndo: null,
   listeners: {
     change: []
@@ -66,7 +66,7 @@ var isUndoObj = {
     }
   }
 };
-var continueBattleObj = {
+export var continueBattleObj = {
   _continueBattleData: null,
   listeners: {
     change: []
@@ -99,7 +99,7 @@ var continueBattleObj = {
     }
   }
 };
-var userObj = {
+export var userObj = {
   _userData: null,
   listeners: {
     change: []
@@ -655,18 +655,14 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       evt.click('.map-enemies', i, (e) => {
         contextmenuutils.init(document.querySelector('.map'), (b, c) => {
           ToMouse(c);
-          c.style.border = '2px solid #3db3d050';
-          c.style.borderRadius = '2px';
-          c.style.fontSize = '12px';
-          c.style.background = 'linear-gradient(to bottom, #3db3d045, #191325)';
           c.style.zIndex = '2';
         })
         let randomEnemiesNum = Math.floor(getRandomNumber(0, language_data.enemies.name.length));
         enemies_id = randomEnemiesNum;
         contextmenuutils.addItem(language_data.enemies.name[randomEnemiesNum], (c) => {
-          c.style.background = "#3db3d050";
-          c.style.color = '#3db3d0';
+          c.style.color = 'var(--color-high-light)';
           c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
+          c.style.background = "var(--color-high-light-darkness)";
         })
         contextmenuutils.addItem(language_data.map.enemies.contextmenu["0"], (c) => {
           defaultset(c);
@@ -680,16 +676,8 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           })
         })
         function defaultset(c) {
-          c.style.color = '#3db3d0';
-          c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
           c.addEventListener("click", () => {
             contextmenuutils.remove();
-          });
-          c.addEventListener("touchstart", () => {
-            c.style.background = "#3db3d050";
-          });
-          c.addEventListener("touchend", () => {
-            c.style.background = "";
           });
         }
         function ToMouse(c) {
@@ -1736,23 +1724,12 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       }, 500);
     }
     function itemOption(b, n, item_id) {
-      function getElementIndex(element) {
-        let index = 0;
-        while ((element = element.previousElementSibling) != null) {
-          index++;
-        }
-        return index;
-      }
       update_equip_color(b, n, item_id);
       b.addEventListener('click', (e) => {
         if (isBattle)
           return;
         contextmenuutils.init(document.body, (b2, c) => {
           ToMouse(c);
-          c.style.border = '2px solid #3db3d050';
-          c.style.borderRadius = '2px';
-          c.style.fontSize = '12px';
-          c.style.background = 'linear-gradient(to bottom, #3db3d045, #191325)';
         })
         if (equip_data[n] === item_id) {
           contextmenuutils.addItem(language_data.item.equip.contextmenu["0"], (c) => {
@@ -1777,16 +1754,8 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           refundItem();
         }
         function defaultset(c) {
-          c.style.color = '#3db3d0';
-          c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
           c.addEventListener("click", () => {
             contextmenuutils.remove();
-          });
-          c.addEventListener("touchstart", () => {
-            c.style.background = "#3db3d050";
-          });
-          c.addEventListener("touchend", () => {
-            c.style.background = "";
           });
         }
 
