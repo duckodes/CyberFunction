@@ -728,7 +728,9 @@
           };
           document.querySelector('.profile-id').style.display = 'flex';
           document.querySelector('.profile-id').innerHTML += `
-              <div>${snapshot.val().username}</div>
+              <div>${snapshot.val().profile.username}</div>
+              <div>BTC: ${snapshot.val().wallet.btc}</div>
+              <div>ETH: ${snapshot.val().wallet.eth}</div>
               <div class="close-btn">&times;</div>`;
         }
       }).catch((error) => {
@@ -809,8 +811,19 @@
           console.error(error);
         });
         userObj.on('change', value => {
+          user.getIdToken().then(void 0).catch(e => {
+            if (window.confirm(language_data.beforeunload)) {
+              signOutUser();
+            }
+          });
           set(authRef, {
             data: value
+          });
+
+          // user public data
+          set(ref(db, `public/${user.uid}/wallet`), {
+            btc: value.btc,
+            eth: value.eth
           });
         });
         islanguage_data.on('change', (value) => {
@@ -845,7 +858,7 @@
           });
         });
 
-        //console.log(user);
+        // console.log(user);
       } else {
         // User is signed out
       }
@@ -891,8 +904,7 @@
         console.log('Profile updated!');
 
         // user public data
-        const authPublicRef = ref(db, `public/${auth.currentUser.uid}`);
-        set(authPublicRef, {
+        set(ref(db, `public/${auth.currentUser.uid}/profile`), {
           username: auth.currentUser.displayName,
         });
         // ...
@@ -954,6 +966,7 @@
           });
         });
         document.querySelector(`#${snapshot.key} .msg-row .msg-msg`).textContent = data.message;
+        document.querySelector(`#${snapshot.key} .msg-row .msg-msg`).style.color = data.color;
         document.querySelectorAll(".msg-del").forEach(element => {
           element.addEventListener("click", () => {
             remove(child(lobbyRef, element.parentElement.parentElement.id));
@@ -961,8 +974,8 @@
         });
       });
       onChildRemoved(limitlobbyRef, (snapshot) => {
-        document.getElementById(snapshot.key).innerHTML = '<svg id="sysdel"></svg>';
-        JsBarcode("#sysdel", '>>> SYSTEM DELETE ' + snapshot.key, {
+        document.getElementById(snapshot.key).innerHTML = `<svg id="barcode${snapshot.key}"></svg>`;
+        JsBarcode("#barcode" + snapshot.key, '>>> SYSTEM DELETE ' + snapshot.key, {
           format: "CODE128",
           fontSize: document.getElementById(snapshot.key).parentElement.clientWidth / 30,
           font: "Arial",

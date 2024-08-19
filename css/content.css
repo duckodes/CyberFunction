@@ -512,6 +512,8 @@
 .item-all-btn {
     border-top-right-radius: 8px;
     border-bottom-left-radius: 8px;
+    border: 1px solid var(--color-high-light-darkness);
+    border-radius: 10px;
     width: 70dvw;
     max-width: 500px;
     height: 50px;
@@ -938,6 +940,8 @@
     width: fit-content;
     padding-left: 2%;
     padding-right: 2%;
+    background-color: var(--color-high-light);
+    color: #000;
 }
 
 .msg-msg {
@@ -946,6 +950,9 @@
     padding: 5px;
     padding-left: 5%;
     width: 100%;
+    word-break: break-word;
+    border: 1px solid var(--color-high-light);
+    color: var(--color-high-light);
 }
 
 .msg-del {

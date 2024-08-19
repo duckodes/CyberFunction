@@ -160,5 +160,6 @@
             "NO PARTICULARLY OUTSTANDING ABILITIES",
             "POSSESSES DUAL ATTACKING CAPABILITIES"
         ]
-    }
+    },
+    "beforeunload": "Your session has expired. Please log in again."
 }

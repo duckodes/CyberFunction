@@ -3667,9 +3667,6 @@ const evt = (function () {
 }())
 
 apputils.def();
-function cls() {
-  localStorage.clear();
-}
 
 const asciiutils = (function () {
   return {
