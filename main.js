@@ -1,174 +1,46 @@
 console.log('CFO ver.0.0.0');
-export var language_data;
-export var islanguage_data = {
-  _done: null,
-  listeners: {
-    change: []
-  },
-  set done(value) {
-    this._done = value;
-    this.triggerChangeEvent(value);
-  },
-  get done() {
-    return this._done;
-  },
-  on: function (eventName, callback) {
-    if (this.listeners[eventName]) {
-      this.listeners[eventName].push(callback);
-    }
-  },
-  off: function (eventName, callback) {
-    if (this.listeners[eventName]) {
-      const index = this.listeners[eventName].indexOf(callback);
-      if (index !== -1) {
-        this.listeners[eventName].splice(index, 1);
-      }
-    }
-  },
-  triggerChangeEvent: function (value) {
-    if (this.listeners.change) {
-      this.listeners.change.forEach(function (callback) {
-        callback(value);
-      });
-    }
-  }
-};
-export var isUndoObj = {
-  _isUndo: null,
-  listeners: {
-    change: []
-  },
-  set isUndo(value) {
-    this._isUndo = value;
-    this.triggerChangeEvent(value);
-  },
-  get isUndo() {
-    return this._isUndo;
-  },
-  on: function (eventName, callback) {
-    if (this.listeners[eventName]) {
-      this.listeners[eventName].push(callback);
-    }
-  },
-  off: function (eventName, callback) {
-    if (this.listeners[eventName]) {
-      const index = this.listeners[eventName].indexOf(callback);
-      if (index !== -1) {
-        this.listeners[eventName].splice(index, 1);
-      }
-    }
-  },
-  triggerChangeEvent: function (value) {
-    if (this.listeners.change) {
-      this.listeners.change.forEach(function (callback) {
-        callback(value);
-      });
-    }
-  }
-};
-export var continueBattleObj = {
-  _continueBattleData: null,
-  listeners: {
-    change: []
-  },
-  set continueBattleData(value) {
-    this._continueBattleData = value;
-    this.triggerChangeEvent(value);
-  },
-  get continueBattleData() {
-    return this._continueBattleData;
-  },
-  on: function (eventName, callback) {
-    if (this.listeners[eventName]) {
-      this.listeners[eventName].push(callback);
-    }
-  },
-  off: function (eventName, callback) {
-    if (this.listeners[eventName]) {
-      const index = this.listeners[eventName].indexOf(callback);
-      if (index !== -1) {
-        this.listeners[eventName].splice(index, 1);
-      }
-    }
-  },
-  triggerChangeEvent: function (value) {
-    if (this.listeners.change) {
-      this.listeners.change.forEach(function (callback) {
-        callback(value);
-      });
-    }
-  }
-};
-export var userObj = {
-  _userData: null,
-  listeners: {
-    change: []
-  },
-  set userData(value) {
-    this._userData = value;
-    this.triggerChangeEvent(value);
-  },
-  get userData() {
-    return this._userData;
-  },
-  on: function (eventName, callback) {
-    if (this.listeners[eventName]) {
-      this.listeners[eventName].push(callback);
-    }
-  },
-  off: function (eventName, callback) {
-    if (this.listeners[eventName]) {
-      const index = this.listeners[eventName].indexOf(callback);
-      if (index !== -1) {
-        this.listeners[eventName].splice(index, 1);
-      }
-    }
-  },
-  triggerChangeEvent: function (value) {
-    if (this.listeners.change) {
-      this.listeners.change.forEach(function (callback) {
-        callback(value);
-      });
-    }
-  }
-};
-var apputils = (function () {
+import { Observable } from "./js/Observable.js";
+export const languageData = new Observable();
+export const isUndo = new Observable();
+export const continueBattle = new Observable();
+export const userData = new Observable();
+const apputils = (function () {
   return {
     def: def
   }
-  var isBattle = false;
   function def() {
+    let isBattle = false;
     // user data
-    var btc = 0;
-    var eth = 0;
-    var language;
-    var activeMenu;
-    userObj.on('change', updateUserData);
+    let btc = 0;
+    let eth = 0;
+    let language;
+    let activeMenu;
+    userData.on('change', updateUserData);
     function updateUserData(value) {
       if (value) {
         getUserData();
-        userObj.off('change', updateUserData);
+        userData.off('change', updateUserData);
       }
     }
     function getUserData() {
-      btc = userObj.userData.btc;
-      eth = userObj.userData.eth;
-      own_equipment = userObj.userData.ownitems;
-      equip_data = userObj.userData.equipment;
-      colnum = userObj.userData.dragdrop.colrow[0];
-      rownum = userObj.userData.dragdrop.colrow[1];
-      dragDrop_arr = userObj.userData.dragdrop.arr;
-      dragDrop_arr_str = userObj.userData.dragdrop.str;
-      dragDrop_pos = userObj.userData.dragdrop.pos;
-      dragDrop_bgc = userObj.userData.dragdrop.bgc;
-      dragDrop_opy = userObj.userData.dragdrop.opy;
-      language = userObj.userData.language;
-      activeMenu = userObj.userData.menu;
+      btc = userData.data.wallet.btc;
+      eth = userData.data.wallet.eth;
+      own_equipment = userData.data.ownitems;
+      equip_data = userData.data.equipment;
+      colnum = userData.data.dragdrop.colrow[0];
+      rownum = userData.data.dragdrop.colrow[1];
+      dragDrop_arr = userData.data.dragdrop.arr;
+      dragDrop_arr_str = userData.data.dragdrop.str;
+      dragDrop_pos = userData.data.dragdrop.pos;
+      dragDrop_bgc = userData.data.dragdrop.bgc;
+      dragDrop_opy = userData.data.dragdrop.opy;
+      language = userData.data.language;
+      activeMenu = userData.data.menu;
 
       // is battle ?
-      islanguage_data.on('change', (value) => {
-        if (continueBattleObj.continueBattleData) {
-          continueBattle(continueBattleObj.continueBattleData);
+      languageData.on('change', (value) => {
+        if (continueBattle.data) {
+          continueBattleSetup(continueBattle.data);
         }
       });
 
@@ -180,8 +52,7 @@ var apputils = (function () {
       fetch('lan/' + language + '.json')
         .then(response => response.json())
         .then(data => {
-          language_data = data;
-          islanguage_data.done = data;
+          languageData.data = data;
           // set the first login num of menu
           showmenu(activeMenu, data);
 
@@ -225,8 +96,8 @@ var apputils = (function () {
 
           document.querySelectorAll('.e-boots .item-all-btn')[0].textContent = data.item.equipment.boots["0"];
 
-          document.getElementById('message').setAttribute('placeholder', language_data.lobby.enterMessage);
-          document.getElementById('submit').textContent = language_data.lobby.submit;
+          document.getElementById('message').setAttribute('placeholder', data.lobby.enterMessage);
+          document.getElementById('submit').textContent = data.lobby.submit;
 
           document.querySelector('.settings-username .f-10').textContent = data.settings.username;
           document.querySelector('.lan-now').textContent = data.settings.language.now;
@@ -245,17 +116,17 @@ var apputils = (function () {
           document.querySelector('.battle-exit').innerHTML = data.battle.exit + '&#60;';
           document.querySelector('.reroll div').innerHTML = '&#62; ' + data.battle.reroll;
           update_rolltimes_btn();
-          document.querySelector('.battle-me-info div').innerHTML = language_data.battle.loading;
+          document.querySelector('.battle-me-info div').innerHTML = data.battle.loading;
 
           showEncyclopediaINFO(data);
 
-          equipItemAbility(language_data);
+          equipItemAbility(data);
 
-          updateOwnItemsUI(language_data);
+          updateOwnItemsUI(data);
           update_State_UI();
           updateDragBox();
 
-          document.querySelector('.nav-username .f-10.en-set').textContent = language_data.nav.username;
+          document.querySelector('.nav-username .f-10.en-set').textContent = data.nav.username;
 
           initStoreItem(data);
           menuAction();
@@ -272,9 +143,11 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
         });
     }
     function saveUserData() {
-      userObj.userData = {
-        btc: btc,
-        eth: eth,
+      userData.data = {
+        wallet: {
+          btc: btc,
+          eth: eth
+        },
         ownitems: own_equipment,
         equipment: equip_data,
         dragdrop: {
@@ -374,7 +247,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
-          textContent('.nav-guide', 0, language_data.nav.guide.item);
+          textContent('.nav-guide', 0, languageData.data.nav.guide.item);
         }
       })
       evt.click('.menu-btn', 2, () => {
@@ -403,10 +276,10 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
         display('.item-all-btn', 3, 'none');
         display('.equip', 0, 'flex');
       } else {
-        e.target.textContent = language_data.item.options.cannotEquip;
+        e.target.textContent = languageData.data.item.options.cannotEquip;
         e.target.style.color = '#c24347';
         setTimeout(() => {
-          e.target.innerHTML = `${language_data.item.options["0"]}`;
+          e.target.innerHTML = `${languageData.data.item.options["0"]}`;
           e.target.style.color = '';
         }, 1000);
       }
@@ -418,7 +291,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       display('.item-all-btn', 3, 'none');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.itemsEncyclopedia);
     })
     evt.click('.back-btn', 0, () => {
       showmenu(1);
@@ -432,7 +305,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       display('.item-all-btn', 3, 'none');
       display('.store', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.store);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.store);
     })
     let equip_nums = document.querySelectorAll('.equip .item-all-btn').length;
     let item_nums = 4 + equip_nums;
@@ -441,65 +314,65 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       display('.encyclopedia', 0, '');
       display('.e-helmet', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.helmet);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.helmet);
     })
     evt.click('.back-btn', 1, () => {
       display('.e-helmet', 0, '');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.itemsEncyclopedia);
     })
     // e-jacket
     evt.click('.item-all-btn', 1 + item_nums, () => {
       display('.encyclopedia', 0, '');
       display('.e-jacket', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.jacket);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.jacket);
     })
     evt.click('.back-btn', 2, () => {
       display('.e-jacket', 0, '');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.itemsEncyclopedia);
     })
     // e-weapon
     evt.click('.item-all-btn', 2 + item_nums, () => {
       display('.encyclopedia', 0, '');
       display('.e-weapon', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.weapon);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.weapon);
     })
     evt.click('.back-btn', 3, () => {
       display('.e-weapon', 0, '');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.itemsEncyclopedia);
     })
     // e-legstrap
     evt.click('.item-all-btn', 3 + item_nums, () => {
       display('.encyclopedia', 0, '');
       display('.e-legstrap', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.legStrap);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.legStrap);
     })
     evt.click('.back-btn', 4, () => {
       display('.e-legstrap', 0, '');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.itemsEncyclopedia);
     })
     // e-boots
     evt.click('.item-all-btn', 4 + item_nums, () => {
       display('.encyclopedia', 0, '');
       display('.e-boots', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.boots);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.boots);
     })
     evt.click('.back-btn', 5, () => {
       display('.e-boots', 0, '');
       display('.encyclopedia', 0, 'flex');
 
-      textContent('.nav-guide', 0, language_data.nav.guide.itemsEncyclopedia);
+      textContent('.nav-guide', 0, languageData.data.nav.guide.itemsEncyclopedia);
     })
     evt.click('.equip .open', 0, () => {
       if (document.querySelector('.dropbase').style.visibility === '') {
@@ -583,27 +456,27 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
             case '0':
               display('.e-helmet', 0, 'flex');
 
-              textContent('.nav-guide', 0, language_data.nav.guide.helmet);
+              textContent('.nav-guide', 0, languageData.data.nav.guide.helmet);
               break;
             case '1':
               display('.e-jacket', 0, 'flex');
 
-              textContent('.nav-guide', 0, language_data.nav.guide.jacket);
+              textContent('.nav-guide', 0, languageData.data.nav.guide.jacket);
               break;
             case '2':
               display('.e-weapon', 0, 'flex');
 
-              textContent('.nav-guide', 0, language_data.nav.guide.weapon);
+              textContent('.nav-guide', 0, languageData.data.nav.guide.weapon);
               break;
             case '3':
               display('.e-legstrap', 0, 'flex');
 
-              textContent('.nav-guide', 0, language_data.nav.guide.legStrap);
+              textContent('.nav-guide', 0, languageData.data.nav.guide.legStrap);
               break;
             case '4':
               display('.e-boots', 0, 'flex');
 
-              textContent('.nav-guide', 0, language_data.nav.guide.boots);
+              textContent('.nav-guide', 0, languageData.data.nav.guide.boots);
               break;
 
             default:
@@ -657,22 +530,22 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           ToMouse(c);
           c.style.zIndex = '2';
         })
-        let randomEnemiesNum = Math.floor(getRandomNumber(0, language_data.enemies.name.length));
+        let randomEnemiesNum = Math.floor(getRandomNumber(0, languageData.data.enemies.name.length));
         enemies_id = randomEnemiesNum;
-        contextmenuutils.addItem(language_data.enemies.name[randomEnemiesNum], (c) => {
+        contextmenuutils.addItem(languageData.data.enemies.name[randomEnemiesNum], (c) => {
           c.style.color = 'var(--color-high-light)';
           c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
           c.style.background = "var(--color-high-light-darkness)";
         })
-        contextmenuutils.addItem(language_data.map.enemies.contextmenu["0"], (c) => {
+        contextmenuutils.addItem(languageData.data.map.enemies.contextmenu["0"], (c) => {
           defaultset(c);
           battleSetup(c);
         })
-        contextmenuutils.addItem(language_data.map.enemies.contextmenu["1"], (c) => {
+        contextmenuutils.addItem(languageData.data.map.enemies.contextmenu["1"], (c) => {
           defaultset(c);
           c.addEventListener('click', () => {
             display('.map-info', 0, 'flex');
-            document.querySelector('.map-info-title').innerHTML = language_data.enemies.name[randomEnemiesNum] + '<br>' + language_data.enemies.info[randomEnemiesNum] + '<br><br>' + '\'' + language_data.map.enemies.info.chipCode + '：<br>\'' + JSON.stringify(enemies_items[enemies_id], null, 2).toUpperCase().replace(/],/g, '],<br><br>').replace(/:/g, ' >>>').replace('{', '').replace('}', '<br><br>>> ' + language_data.map.enemies.info.loading) + '<div class="barcode"></div>';
+            document.querySelector('.map-info-title').innerHTML = languageData.data.enemies.name[randomEnemiesNum] + '<br>' + languageData.data.enemies.info[randomEnemiesNum] + '<br><br>' + '\'' + languageData.data.map.enemies.info.chipCode + '：<br>\'' + JSON.stringify(enemies_items[enemies_id], null, 2).toUpperCase().replace(/],/g, '],<br><br>').replace(/:/g, ' >>>').replace('{', '').replace('}', '<br><br>>> ' + languageData.data.map.enemies.info.loading) + '<div class="barcode"></div>';
           })
         })
         function defaultset(c) {
@@ -718,7 +591,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     }, 5000);
 
     function saveContinueBattle() {
-      continueBattleObj.continueBattleData = {
+      continueBattle.data = {
         enemyId: enemies_id,
         getDmg: get_dmg,
         getDmgStatus: get_dmg_status,
@@ -733,7 +606,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       }
     }
 
-    function continueBattle(data) {
+    function continueBattleSetup(data) {
       enemies_id = data.enemyId;
       isBattle = true;
       showmenu(0);
@@ -807,7 +680,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       }
     }
     function update_ui_e_box(n, n1) {
-      innerHTML('.battle-enemy-box', n, `<div style="font-size: 10px;background: #1e588d;display:flex;justify-content:center;width:100%;">${e_get_def_status[n1].replace('N/A', '').replace('%DEF', ' ⛨')}${e_get_rd_status[n1].replace('N/A', '').replace('%RD', ' ✙')}</div><div style="color: #c24347;text-shadow: 1px 1px 5px #000, 1px 1px 5px #000;background: linear-gradient(to right, #551913, #c24347aa, #551913);"><sup>${n1 === 0 ? language_data.item.equip.helmet : n1 === 1 ? language_data.item.equip.jacket : n1 === 2 ? language_data.item.equip.leftWeapon : n1 === 3 ? language_data.item.equip.rightWeapon : n1 === 4 ? language_data.item.equip.legStrap : n1 === 5 ? language_data.item.equip.boots : ''}</sup> ${e_get_dmg[n1]}<sub>%</sub><sub style="font-size: 10px;color: #f7d967;">〚${e_get_dmg_status[n1] === 'N/A' ? '⛶' : e_get_dmg_status[n1] + ' 🩸'}〛</sub></div>`);
+      innerHTML('.battle-enemy-box', n, `<div style="font-size: 10px;background: #1e588d;display:flex;justify-content:center;width:100%;">${e_get_def_status[n1].replace('N/A', '').replace('%DEF', ' ⛨')}${e_get_rd_status[n1].replace('N/A', '').replace('%RD', ' ✙')}</div><div style="color: #c24347;text-shadow: 1px 1px 5px #000, 1px 1px 5px #000;background: linear-gradient(to right, #551913, #c24347aa, #551913);"><sup>${n1 === 0 ? languageData.data.item.equip.helmet : n1 === 1 ? languageData.data.item.equip.jacket : n1 === 2 ? languageData.data.item.equip.leftWeapon : n1 === 3 ? languageData.data.item.equip.rightWeapon : n1 === 4 ? languageData.data.item.equip.legStrap : n1 === 5 ? languageData.data.item.equip.boots : ''}</sup> ${e_get_dmg[n1]}<sub>%</sub><sub style="font-size: 10px;color: #f7d967;">〚${e_get_dmg_status[n1] === 'N/A' ? '⛶' : e_get_dmg_status[n1] + ' 🩸'}〛</sub></div>`);
     }
     function update_ui_e_hp() {
       if (e_get_dmg[0] > e_get_dmg[1]) {
@@ -906,7 +779,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
               update_ui_e_box_all();
               setTimeout(() => {
                 document.querySelector('.reroll').style.opacity = '';
-                document.querySelector('.reroll div').innerHTML = '&#62; ' + language_data.battle.reroll;
+                document.querySelector('.reroll div').innerHTML = '&#62; ' + languageData.data.battle.reroll;
                 document.querySelector('.reroll input').style.display = '';
               }, 1000)
             }, 1000);
@@ -918,13 +791,13 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     function update_rolltimes_btn() {
       switch (rolltimes) {
         case 2:
-          textContent('.roll', 0, language_data.battle.loadChip["0"]);
+          textContent('.roll', 0, languageData.data.battle.loadChip["0"]);
           break;
         case 1:
-          textContent('.roll', 0, language_data.battle.loadChip["1"]);
+          textContent('.roll', 0, languageData.data.battle.loadChip["1"]);
           break;
         case 0:
-          textContent('.roll', 0, language_data.battle.start);
+          textContent('.roll', 0, languageData.data.battle.start);
           break;
         default:
       }
@@ -941,13 +814,13 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       //   rolltimes = 2;
       // }
       // update_rolltimes_btn();
-      isUndoObj.isUndo = true;
-      continueBattleObj.on('change', update);
+      isUndo.data = true;
+      continueBattle.on('change', update);
       function update(value) {
         setTimeout(() => {
-          continueBattle(continueBattleObj.continueBattleData);
+          continueBattleSetup(continueBattle.data);
         }, 1500);
-        continueBattleObj.off('change', update);
+        continueBattle.off('change', update);
       }
     }
     evt.click('.roll', 0, () => {
@@ -955,13 +828,13 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
         StartRoll();
       } else {
         document.querySelector('.roll').style.color = '#c24347';
-        textContent('.roll', 0, language_data.battle.noLoad);
+        textContent('.roll', 0, languageData.data.battle.noLoad);
         setTimeout(() => {
           document.querySelector('.roll').style.color = '';
           update_rolltimes_btn();
         }, 1000);
         if (!document.querySelector('.force-start-btn')) {
-          createDIV('force-start-btn', language_data.battle.skip, document.querySelector('.roll-container'), (b) => {
+          createDIV('force-start-btn', languageData.data.battle.skip, document.querySelector('.roll-container'), (b) => {
             document.querySelector('.roll-container').insertBefore(b, document.querySelector('.roll'));
             b.addEventListener('click', () => {
               StartRoll();
@@ -1132,7 +1005,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       if (document.querySelector('.force-start-btn')) {
         document.querySelector('.force-start-btn').remove();
       }
-      continueBattleObj.continueBattleData = null;
+      continueBattle.data = null;
     }
     evt.click('.battle-exit', 0, () => {
       display('.gameover', 0, 'flex');
@@ -1145,7 +1018,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       update_rolltimes_btn();
       battle_arr_data = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
       ability_ui_update();
-      continueBattleObj.continueBattleData = null;
+      continueBattle.data = null;
     });
 
     function parseIntOrDefault(value, defaultValue) {
@@ -1154,7 +1027,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     }
     function save_equipdata(n, n1) {
       equip_data[n] = n1;
-      equipItemAbility(language_data);
+      equipItemAbility(languageData.data);
       dmg_ui_update();
       saveUserData();
     }
@@ -1186,7 +1059,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       switch (enemies_id) {
         case 0:
           document.querySelector('.enemy-ui-hp-base').style.background = '#3db3d0';
-          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #3db3d0;">${language_data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 6px;color: #3db3d0;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-top: 20px;margin-left: 70px;"></div>`);
+          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #3db3d0;">${languageData.data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 6px;color: #3db3d0;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-top: 20px;margin-left: 70px;"></div>`);
           evt.click('.battle-enemy-box', 0, () => {
             if (hctrl_p_to_e !== -1 && battle_arr_data[hctrl_p_to_e].includes('DMG') && e_get_dmg[0] !== -1) {
               e_get_dmg_status[0] = parseIntOrDefault(battle_arr_data[hctrl_p_to_e], 0) + parseIntOrDefault(e_get_dmg_status[0], 0);
@@ -1227,7 +1100,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           break;
         case 1:
           document.querySelector('.enemy-ui-hp-base').style.background = '#f7d967';
-          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #f7d967;">${language_data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 5px;color: #f7d967;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-left: 70px;"></div>`);
+          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #f7d967;">${languageData.data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 5px;color: #f7d967;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-left: 70px;"></div>`);
           evt.click('.battle-enemy-box', 0, () => {
             if (hctrl_p_to_e !== -1 && battle_arr_data[hctrl_p_to_e].includes('DMG') && e_get_dmg[0] !== -1) {
               e_get_dmg_status[0] = parseIntOrDefault(battle_arr_data[hctrl_p_to_e], 0) + parseIntOrDefault(e_get_dmg_status[0], 0);
@@ -1264,7 +1137,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           break;
         case 2:
           document.querySelector('.enemy-ui-hp-base').style.background = '#4b7e3f';
-          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #4b7e3f;">${language_data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 4px;color: #f7d967;opacity: 0.5;transition: all 500ms ease-in;"></pre>`);
+          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #4b7e3f;">${languageData.data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 4px;color: #f7d967;opacity: 0.5;transition: all 500ms ease-in;"></pre>`);
           evt.click('.battle-enemy-box', 0, () => {
             if (hctrl_p_to_e !== -1 && battle_arr_data[hctrl_p_to_e].includes('DMG') && e_get_dmg[1] !== -1) {
               e_get_dmg_status[1] = parseIntOrDefault(battle_arr_data[hctrl_p_to_e], 0) + parseIntOrDefault(e_get_dmg_status[1], 0);
@@ -1288,7 +1161,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           break;
         case 3:
           document.querySelector('.enemy-ui-hp-base').style.background = '#b74e6a';
-          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #b74e6a;">${language_data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 12px;color: #b74e6a;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-bottom: 70px;margin-left: 70px;"></div><div class="battle-enemy-box" style="margin-top: -120px;margin-right: 250px;"></div>`);
+          innerHTML('.battle-enemy', 0, `<div class="battle-enemies-name" style="font-size: 16px;color: #b74e6a;">${languageData.data.enemies.name[enemies_id]}</div><div class="battle-enemy-box" style="margin-top: 50px;margin-left: 35px;"></div><pre id="asciiArt${enemies_id}" style="height: 200px;display:flex;justify-content:center;align-items:center;font-family: monospace;white-space: pre;line-height: 1;font-size: 12px;color: #b74e6a;opacity: 0.5;transition: all 500ms ease-in;"></pre><div class="battle-enemy-box" style="margin-bottom: 70px;margin-left: 70px;"></div><div class="battle-enemy-box" style="margin-top: -120px;margin-right: 250px;"></div>`);
           evt.click('.battle-enemy-box', 0, () => {
             if (hctrl_p_to_e !== -1 && battle_arr_data[hctrl_p_to_e].includes('DMG') && e_get_dmg[0] !== -1) {
               e_get_dmg_status[0] = parseIntOrDefault(battle_arr_data[hctrl_p_to_e], 0) + parseIntOrDefault(e_get_dmg_status[0], 0);
@@ -1381,7 +1254,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           document.querySelector('.battle-me-info div').innerHTML =
             c === 0 ? currentEquipName.helmet : c === 1 ? currentEquipName.jacket : c === 2 ? currentEquipName.lweapon : c === 3 ? currentEquipName.rweapon : c === 4 ? currentEquipName.legstrap : c === 5 ? currentEquipName.boots : null;
           document.querySelector('.battle-me-info div').innerHTML += '<br><br>';
-          document.querySelector('.battle-me-info div').innerHTML += language_data.map.enemies.info.chipCode;
+          document.querySelector('.battle-me-info div').innerHTML += languageData.data.map.enemies.info.chipCode;
           document.querySelector('.battle-me-info div').innerHTML +=
             '<div style="font-size: 12px;width:100%;height: fit-content;">' + (c === 0 ? item_data.helmet : c === 1 ? item_data.jacket : c === 2 ? item_data.lweapon : c === 3 ? item_data.rweapon : c === 4 ? item_data.legstrap : c === 5 ? item_data.boots : null) + '</div>';
           get_hctrl = -1;
@@ -1389,7 +1262,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           setTimeout(() => {
             hctrl_p_to_e = -1;
           }, 200);
-          document.querySelector('.battle-me-info div').innerHTML = language_data.battle.loading;
+          document.querySelector('.battle-me-info div').innerHTML = languageData.data.battle.loading;
           setcolor(c, '#fff5');
           get_hctrl = c;
         }
@@ -1420,7 +1293,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     evt.click('.battle', 0, (e) => {
       if (e.target.parentElement && e.target.parentElement.className !== 'battle-me-box') {
         hctrl_p_to_e = -1;
-        document.querySelector('.battle-me-info div').innerHTML = language_data.battle.loading;
+        document.querySelector('.battle-me-info div').innerHTML = languageData.data.battle.loading;
         document.querySelectorAll('.battle-me-box').forEach(element => {
           element.style.background = '#fff5';
         });
@@ -1575,7 +1448,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     // get new items use this
     function saveOwnEquipment(t, item_id) {
       t.push(item_id);
-      updateOwnItemsUI(language_data);
+      updateOwnItemsUI(languageData.data);
     }
 
     function updateOwnItemsUI(languageData) {
@@ -1732,7 +1605,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           ToMouse(c);
         })
         if (equip_data[n] === item_id) {
-          contextmenuutils.addItem(language_data.item.equip.contextmenu["0"], (c) => {
+          contextmenuutils.addItem(languageData.data.item.equip.contextmenu["0"], (c) => {
             defaultset(c);
             c.addEventListener("click", () => {
               save_equipdata(n, -1);
@@ -1742,7 +1615,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
             })
           })
         } else {
-          contextmenuutils.addItem(language_data.item.equip.contextmenu["1"], (c) => {
+          contextmenuutils.addItem(languageData.data.item.equip.contextmenu["1"], (c) => {
             defaultset(c);
             c.addEventListener("click", () => {
               save_equipdata(n, item_id);
@@ -1849,7 +1722,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
               default:
                 break;
             }
-            contextmenuutils.addItem(language_data.item.equip.contextmenu["2"] + ` ${refund} BTC`, (c) => {
+            contextmenuutils.addItem(languageData.data.item.equip.contextmenu["2"] + ` ${refund} BTC`, (c) => {
               c.style.fontFamily = 'CyberwarRegular-7BX0E';
               defaultset(c);
               c.addEventListener("click", () => {
@@ -1878,7 +1751,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                   default:
                     break;
                 }
-                updateOwnItemsUI(language_data);
+                updateOwnItemsUI(languageData.data);
                 update_btc_UI();
                 saveUserData();
               })
@@ -1940,12 +1813,12 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                 contextmenuutils.init(document.body, (b, c) => {
                   ToMouse(c);
                 })
-                contextmenuutils.addItem(language_data.item.equipment.legstrap["0"] + '1%', (c) => {
+                contextmenuutils.addItem(languageData.data.item.equipment.legstrap["0"] + '1%', (c) => {
                   c.style.color = '#f7d967';
                   c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
                   c.style.background = "var(--color-high-light-darkness)";
                 })
-                contextmenuutils.addItem(language_data.battle.quantity + ':' + countOccurrences(own_equipment.legstrap, 0), (c) => {
+                contextmenuutils.addItem(languageData.data.battle.quantity + ':' + countOccurrences(own_equipment.legstrap, 0), (c) => {
                   c.style.color = 'var(--color-high-light)';
                   c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
                   c.style.background = "var(--color-high-light-darkness)";
@@ -1954,7 +1827,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                   if (get_dmg[i] !== -1 && get_dmg[i] > 0) {
                     switch (i) {
                       case 0:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.helmet, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.helmet, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -1969,7 +1842,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                         })
                         break;
                       case 1:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.jacket, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.jacket, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -1984,7 +1857,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                         })
                         break;
                       case 2:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.leftWeapon, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.leftWeapon, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -1999,7 +1872,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                         })
                         break;
                       case 3:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.rightWeapon, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.rightWeapon, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2014,7 +1887,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                         })
                         break;
                       case 4:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.legStrap, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.legStrap, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2029,7 +1902,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                         })
                         break;
                       case 5:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.boots, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.boots, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(0);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2072,12 +1945,12 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                 contextmenuutils.init(document.body, (b, c) => {
                   ToMouse(c);
                 })
-                contextmenuutils.addItem(language_data.item.equipment.legstrap["1"] + '2%', (c) => {
+                contextmenuutils.addItem(languageData.data.item.equipment.legstrap["1"] + '2%', (c) => {
                   c.style.color = '#f7d967';
                   c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
                   c.style.background = "var(--color-high-light-darkness)";
                 })
-                contextmenuutils.addItem(language_data.battle.quantity + ':' + countOccurrences(own_equipment.legstrap, 1), (c) => {
+                contextmenuutils.addItem(languageData.data.battle.quantity + ':' + countOccurrences(own_equipment.legstrap, 1), (c) => {
                   c.style.color = 'var(--color-high-light)';
                   c.style.textShadow = '1px 1px 5px #1e588d, 1px 1px 5px #1e588d';
                   c.style.background = "var(--color-high-light-darkness)";
@@ -2086,7 +1959,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                   if (get_dmg[i] !== -1 && get_dmg[i] > 0) {
                     switch (i) {
                       case 0:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.helmet, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.helmet, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2101,7 +1974,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                         })
                         break;
                       case 1:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.jacket, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.jacket, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2116,7 +1989,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                         })
                         break;
                       case 2:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.leftWeapon, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.leftWeapon, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2131,7 +2004,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                         })
                         break;
                       case 3:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.rightWeapon, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.rightWeapon, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2146,7 +2019,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                         })
                         break;
                       case 4:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.legStrap, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.legStrap, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2161,7 +2034,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                         })
                         break;
                       case 5:
-                        contextmenuutils.addItem('>>' + language_data.item.equip.boots, (c) => {
+                        contextmenuutils.addItem('>>' + languageData.data.item.equip.boots, (c) => {
                           defaultset(c, () => {
                             let index = own_equipment.legstrap.indexOf(1);
                             if (index !== -1 && get_dmg[i] > 0) {
@@ -2304,7 +2177,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     initEnemy();
     update();
 
-    function showmenu(n, languageData = language_data) {
+    function showmenu(n, _languageData = languageData.data) {
       document.querySelector('.dropbase').style.visibility = '';
       document.querySelector('.dragIn-arr-title').style.visibility = '';
       document.querySelector('.dragIn-arr').style.visibility = '';
@@ -2335,7 +2208,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
             textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
             textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
-            textContent('.nav-guide', 0, languageData.nav.guide.map);
+            textContent('.nav-guide', 0, _languageData.nav.guide.map);
           } else {
             display('.battle', 0, 'flex');
             display('.map', 0, '');
@@ -2361,7 +2234,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
             textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
             textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
-            textContent('.nav-guide', 0, languageData.nav.guide.battle);
+            textContent('.nav-guide', 0, _languageData.nav.guide.battle);
           }
           break;
         case 1:
@@ -2397,7 +2270,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           display('.encyclopedia', 0, '');
           display('.store', 0, '');
 
-          textContent('.nav-guide', 0, languageData.nav.guide.item);
+          textContent('.nav-guide', 0, _languageData.nav.guide.item);
           break;
         case 2:
           display('.battle', 0, '');
@@ -2424,7 +2297,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
-          textContent('.nav-guide', 0, languageData.nav.guide.state);
+          textContent('.nav-guide', 0, _languageData.nav.guide.state);
           break;
         case 3:
           display('.battle', 0, '');
@@ -2451,7 +2324,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           textShadow('.menu-btn', 3, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
           textShadow('.menu-btn', 4, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
 
-          textContent('.nav-guide', 0, languageData.nav.guide.lobby);
+          textContent('.nav-guide', 0, _languageData.nav.guide.lobby);
           break;
         case 4:
           display('.battle', 0, '');
@@ -2478,7 +2351,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           textShadow('.menu-btn', 3, '1px 1px 5px #3db3d0, 1px 1px 5px #c24347');
           textShadow('.menu-btn', 4, '1px 1px 5px #bec4e1, 1px 1px 5px #4ec4e1');
 
-          textContent('.nav-guide', 0, languageData.nav.guide.settings);
+          textContent('.nav-guide', 0, _languageData.nav.guide.settings);
           break;
         default:
           break;
@@ -3137,44 +3010,8 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
         }
       });
     }
-    function createStoreItem(title, imgID, buyInner, callback) {
-      const storeItem = document.querySelector('.store-item');
-
-      const newDiv = document.createElement('div');
-
-      newDiv.innerHTML = `
-        <div class="store-item-title">${title}</div>
-        <div class="store-item-img" id="${imgID}"></div>
-        <div class="buy">${buyInner}</div>
-      `;
-
-      storeItem.appendChild(newDiv);
-
-      const buyButton = newDiv.querySelector('.buy');
-      buyButton.addEventListener('click', (e) => {
-        callback(e.target);
-      });
-    }
-    function createStoreItem1(title, imgID, buyInner, callback) {
-      const storeItem = document.querySelectorAll('.store-item')[1];
-
-      const newDiv = document.createElement('div');
-
-      newDiv.innerHTML = `
-        <div class="store-item-title">${title}</div>
-        <div class="store-item-img" id="${imgID}"></div>
-        <div class="buy">${buyInner}</div>
-      `;
-
-      storeItem.appendChild(newDiv);
-
-      const buyButton = newDiv.querySelector('.buy');
-      buyButton.addEventListener('click', (e) => {
-        callback(e.target);
-      });
-    }
-    function createStoreItem2(title, imgID, buyInner, callback) {
-      const storeItem = document.querySelectorAll('.store-item')[2];
+    function createStoreItem(groupId, title, imgID, buyInner, callback) {
+      const storeItem = document.querySelectorAll('.store-item')[groupId];
 
       const newDiv = document.createElement('div');
 
@@ -3209,7 +3046,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       document.querySelectorAll('.store-topic>div')[0].textContent = languageData.item.store[7];
       document.querySelectorAll('.store-topic>div')[1].textContent = languageData.item.store[8];
       document.querySelectorAll('.store-topic>div')[2].textContent = languageData.item.store[9];
-      createStoreItem1(languageData.item.equipment.legstrap["0"] + '<br>' + languageData.item.store[0] + '1%' + languageData.item.store[1], 'store-0', itemStruct.cost.legstrap[0] + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem(1, languageData.item.equipment.legstrap["0"] + '<br>' + languageData.item.store[0] + '1%' + languageData.item.store[1], 'store-0', itemStruct.cost.legstrap[0] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.legstrap[0]) {
           storeItemInfo(itemStruct.cost.legstrap[0], 'store-info-0', languageData, cost => {
             btc -= cost;
@@ -3229,7 +3066,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           }
         }
       });
-      createStoreItem1(languageData.item.equipment.legstrap["1"] + '<br>' + languageData.item.store[0] + '2%' + languageData.item.store[1], 'store-1', itemStruct.cost.legstrap[1] + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem(1, languageData.item.equipment.legstrap["1"] + '<br>' + languageData.item.store[0] + '2%' + languageData.item.store[1], 'store-1', itemStruct.cost.legstrap[1] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.legstrap[1]) {
           storeItemInfo(itemStruct.cost.legstrap[1], 'store-info-1', languageData, cost => {
             btc -= cost;
@@ -3249,7 +3086,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           }
         }
       });
-      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[0], 'store-2', itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem(0, languageData.item.equipment.weapon["0"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[0], 'store-2', itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.weapon[0]) {
           storeItemInfo(itemStruct.cost.weapon[0], 'store-info-2', languageData, cost => {
             btc -= cost;
@@ -3268,7 +3105,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           }
         }
       });
-      createStoreItem(languageData.item.equipment.weapon["0"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[0], 'store-2', itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem(0, languageData.item.equipment.weapon["0"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[0], 'store-2', itemStruct.cost.weapon[0] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.weapon[0]) {
           storeItemInfo(itemStruct.cost.weapon[0], 'store-info-2', languageData, cost => {
             btc -= cost;
@@ -3287,7 +3124,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           }
         }
       });
-      createStoreItem(languageData.item.equipment.weapon["1"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[1], 'store-3', itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem(0, languageData.item.equipment.weapon["1"] + `(${languageData.item.store[5]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[1], 'store-3', itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.weapon[1]) {
           storeItemInfo(itemStruct.cost.weapon[1], 'store-info-3', languageData, cost => {
             btc -= cost;
@@ -3306,7 +3143,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           }
         }
       });
-      createStoreItem(languageData.item.equipment.weapon["1"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[1], 'store-3', itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem(0, languageData.item.equipment.weapon["1"] + `(${languageData.item.store[6]})` + '<br>' + languageData.item.store[4] + ' >>>' + itemStruct.ability.weapon[1], 'store-3', itemStruct.cost.weapon[1] + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.weapon[1]) {
           storeItemInfo(itemStruct.cost.weapon[1], 'store-info-3', languageData, cost => {
             btc -= cost;
@@ -3325,7 +3162,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           }
         }
       });
-      createStoreItem2(languageData.item.store[10] + '<br>' + `⇪ ${(colnum > 4 ? 5 : colnum + 1)} ✕ ${(rownum > 4 ? 5 + '<br>( ' + languageData.item.store[11] + ' ) ' : rownum + 1)}`, 'store-4', itemStruct.cost.thigh_bag_space + ' BTC' + languageData.item.store[2], buy => {
+      createStoreItem(2, languageData.item.store[10] + '<br>' + `⇪ ${(colnum > 4 ? 5 : colnum + 1)} ✕ ${(rownum > 4 ? 5 + '<br>( ' + languageData.item.store[11] + ' ) ' : rownum + 1)}`, 'store-4', itemStruct.cost.thigh_bag_space + ' BTC' + languageData.item.store[2], buy => {
         if (btc >= itemStruct.cost.thigh_bag_space && colnum <= 4 && rownum <= 4) {
           storeItemInfo(itemStruct.cost.thigh_bag_space, 'store-info-4', languageData, cost => {
             btc -= cost;

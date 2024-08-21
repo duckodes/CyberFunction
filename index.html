@@ -593,7 +593,7 @@
   <!-- Project -->
   <script type="module" src="main.js"></script>
   <script type="module">
-    import { userObj, islanguage_data, continueBattleObj, isUndoObj, language_data } from "/main.js";
+    import { userData, continueBattle, isUndo, languageData } from "/main.js";
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     // TODO: Add SDKs for Firebase products that you want to use
@@ -685,7 +685,7 @@
       }
     });
     message.addEventListener("focus", () => {
-      message.setAttribute('placeholder', language_data.lobby.enterMessage);
+      message.setAttribute('placeholder', languageData.data.lobby.enterMessage);
       message.style.setProperty('--message-placeholder-color', '');
       message.style.setProperty('--message-placeholder-opacity', '0.5');
     });
@@ -772,13 +772,15 @@
         const authRef = ref(db, `auth/${uid}`);
         get(authRef).then((snapshot) => {
           if (snapshot.exists()) {
-            userObj.userData = snapshot.val().data;
+            userData.data = snapshot.val().data;
           } else {
             //set default user data
             set(authRef, {
               data: {
-                btc: 0,
-                eth: 0,
+                wallet: {
+                  btc: 0,
+                  eth: 0,
+                },
                 ownitems: {
                   helmet: [0],
                   jacket: [-1],
@@ -801,7 +803,7 @@
               }
             });
             get(authRef).then(snapshot => {
-              snapshot ? userObj.userData = snapshot.val().data : null;
+              snapshot ? userData.data = snapshot.val().data : null;
             }).catch((error) => {
               console.error(error);
             });
@@ -810,9 +812,9 @@
         }).catch((error) => {
           console.error(error);
         });
-        userObj.on('change', value => {
+        userData.on('change', value => {
           user.getIdToken().then(void 0).catch(e => {
-            if (window.confirm(language_data.beforeunload)) {
+            if (window.confirm(languageData.data.beforeunload)) {
               signOutUser();
             }
           });
@@ -822,11 +824,11 @@
 
           // user public data
           set(ref(db, `public/${user.uid}/wallet`), {
-            btc: value.btc,
-            eth: value.eth
+            btc: value.wallet.btc,
+            eth: value.wallet.eth
           });
         });
-        islanguage_data.on('change', (value) => {
+        languageData.on('change', (value) => {
           updateMessage();
         });
 
@@ -834,22 +836,22 @@
         const battleRef = ref(db, `battle/${uid}`);
         get(battleRef).then((snapshot) => {
           if (snapshot.exists()) {
-            continueBattleObj.continueBattleData = snapshot.val().data;
+            continueBattle.data = snapshot.val().data;
           } else {
             console.log("No data available");
           }
         }).catch((error) => {
           console.error(error);
         });
-        continueBattleObj.on('change', value => {
+        continueBattle.on('change', value => {
           set(battleRef, {
             data: value
           });
         });
-        isUndoObj.on('change', value => {
+        isUndo.on('change', value => {
           get(battleRef).then((snapshot) => {
             if (snapshot.exists()) {
-              continueBattleObj.continueBattleData = snapshot.val().data;
+              continueBattle.data = snapshot.val().data;
             } else {
               console.log("No data available");
             }
@@ -900,7 +902,7 @@
       }).then(() => {
         // Profile updated!
         settings_username_input.value = auth.currentUser.displayName;
-        nav_username.innerHTML = `${auth.currentUser.displayName}<br><div class="f-10 en-set">${language_data.nav.username}</div>`;
+        nav_username.innerHTML = `${auth.currentUser.displayName}<br><div class="f-10 en-set">${languageData.data.nav.username}</div>`;
         console.log('Profile updated!');
 
         // user public data
@@ -951,7 +953,7 @@
             contextmenuutils.init(document.querySelector('.lobby'), (b, c) => {
               ToMouse(c);
             })
-            contextmenuutils.addItem(language_data.footer.menuBtnText["2"], (c) => {
+            contextmenuutils.addItem(languageData.data.footer.menuBtnText["2"], (c) => {
               defaultset(c);
             })
             function defaultset(c) {
@@ -1020,13 +1022,13 @@
     function checkMessage(value) {
       return new Promise((resolve, reject) => {
         if (auth.currentUser.uid === null) {
-          reject(language_data.lobby.checkMessage["0"]);
+          reject(languageData.data.lobby.checkMessage["0"]);
           message.style.setProperty('--message-placeholder-color', '#f7d967');
         } else if (/^\s+$/.test(value)) {
-          reject(language_data.lobby.checkMessage["1"]);
+          reject(languageData.data.lobby.checkMessage["1"]);
           message.style.setProperty('--message-placeholder-color', '#f00');
         } else if (value.trim() === "") {
-          reject(language_data.lobby.checkMessage["2"]);
+          reject(languageData.data.lobby.checkMessage["2"]);
           message.style.setProperty('--message-placeholder-color', '#f00');
         } else {
           resolve(value);
@@ -1043,7 +1045,7 @@
       let hours = date.getHours();
       let minutes = date.getMinutes();
 
-      const period = hours >= 12 ? hours < 13 ? language_data.lobby.time["<13"] : hours < 16 ? language_data.lobby.time["<16"] : hours < 18 ? language_data.lobby.time["<18"] : language_data.lobby.time[">=18"] : hours < 5 ? language_data.lobby.time["<5"] : hours < 8 ? language_data.lobby.time["<8"] : language_data.lobby.time["<12"];
+      const period = hours >= 12 ? hours < 13 ? languageData.data.lobby.time["<13"] : hours < 16 ? languageData.data.lobby.time["<16"] : hours < 18 ? languageData.data.lobby.time["<18"] : languageData.data.lobby.time[">=18"] : hours < 5 ? languageData.data.lobby.time["<5"] : hours < 8 ? languageData.data.lobby.time["<8"] : languageData.data.lobby.time["<12"];
 
       hours = hours % 12;
       hours = hours ? hours : 12;
