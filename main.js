@@ -1777,7 +1777,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           dragDrop_arr_str.push(document.getElementById(`draggable-${dragDrop_arr[i]}`).getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(`draggable-${dragDrop_arr[i]}`.replace('-', ''))));
         }
       }
-      DragIn_Element.innerHTML = dragDrop_arr_str;
+      DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
     }
     function update_battleLegstrap() {
       document.querySelector('.legstrap-box').innerHTML = '';
@@ -2387,7 +2387,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       draggable.style.top = dragDrop_pos[parseNumberFromString(draggableID.replace('-', ''))][1] + 'px';
       draggable.style.backgroundColor = dragDrop_bgc[parseNumberFromString(draggableID.replace('-', ''))];
       draggable.style.opacity = dragDrop_opy[parseNumberFromString(draggableID.replace('-', ''))];
-      DragIn_Element.innerHTML = dragDrop_arr_str;
+      DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
       //console.log(draggableID);
     }
 
@@ -2415,7 +2415,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
         dragDrop_arr = dragDrop_arr.filter(item => item !== parseNumberFromString(e.target.id.replace('-', '')));
         dragDrop_arr_str = dragDrop_arr_str.filter(item => item !== e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
         console.log(dragDrop_arr);
-        DragIn_Element.innerHTML = dragDrop_arr_str;
+        DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
       });
       draggable.addEventListener('mousedown', (e) => {
         if (isBattle)
@@ -2434,7 +2434,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
         dragDrop_arr = dragDrop_arr.filter(item => item !== parseNumberFromString(e.target.id.replace('-', '')));
         dragDrop_arr_str = dragDrop_arr_str.filter(item => item !== e.target.getAttribute('data-content') + 'x' + countOccurrences(own_equipment.legstrap, parseNumberFromString(e.target.id.replace('-', ''))));
         console.log(dragDrop_arr);
-        DragIn_Element.innerHTML = dragDrop_arr_str;
+        DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
       });
 
       draggable.addEventListener('touchmove', (e) => {
@@ -2684,7 +2684,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
           saveUserData();
           console.log(dragDrop_arr);
-          DragIn_Element.innerHTML = dragDrop_arr_str;
+          DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
         } else if (dropzoneCol + requiredWidth <= colnum && dropzoneRow + requiredHeight <= rownum) {
           // 優先尋找放下位置附近的格子
           const nearbyPositions = [];
@@ -2741,7 +2741,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
               dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
               saveUserData();
               console.log(dragDrop_arr);
-              DragIn_Element.innerHTML = dragDrop_arr_str;
+              DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
               break;
             }
           }
@@ -2781,7 +2781,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                   dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
                   saveUserData();
                   console.log(dragDrop_arr);
-                  DragIn_Element.innerHTML = dragDrop_arr_str;
+                  DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
                   return;
                 } else {
                   dragDrop_arr = dragDrop_arr.filter(item => item !== parseNumberFromString(e.target.id.replace('-', '')));
@@ -2793,7 +2793,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                   dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
                   saveUserData();
                   console.log(dragDrop_arr);
-                  DragIn_Element.innerHTML = dragDrop_arr_str;
+                  DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
                   update_battleLegstrap();
                   return;
                 }
@@ -2810,7 +2810,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
           saveUserData();
           console.log(dragDrop_arr);
-          DragIn_Element.innerHTML = dragDrop_arr_str;
+          DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
           update_battleLegstrap();
         }
       });
@@ -2879,7 +2879,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
           saveUserData();
           console.log(dragDrop_arr);
-          DragIn_Element.innerHTML = dragDrop_arr_str;
+          DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
         } else if (dropzoneCol + requiredWidth <= colnum && dropzoneRow + requiredHeight <= rownum) {
           // 優先尋找放下位置附近的格子
           const nearbyPositions = [];
@@ -2936,7 +2936,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
               dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
               saveUserData();
               console.log(dragDrop_arr);
-              DragIn_Element.innerHTML = dragDrop_arr_str;
+              DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
               break;
             }
           }
@@ -2976,7 +2976,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                   dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
                   saveUserData();
                   console.log(dragDrop_arr);
-                  DragIn_Element.innerHTML = dragDrop_arr_str;
+                  DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
                   return;
                 } else {
                   dragDrop_arr = dragDrop_arr.filter(item => item !== parseNumberFromString(e.target.id.replace('-', '')));
@@ -2988,7 +2988,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
                   dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
                   saveUserData();
                   console.log(dragDrop_arr);
-                  DragIn_Element.innerHTML = dragDrop_arr_str;
+                  DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
                   update_battleLegstrap();
                   return;
                 }
@@ -3005,7 +3005,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           dragDrop_opy[parseNumberFromString(e.target.id.replace('-', ''))] = e.target.style.opacity;
           saveUserData();
           console.log(dragDrop_arr);
-          DragIn_Element.innerHTML = dragDrop_arr_str;
+          DragIn_Element.innerHTML = dragDrop_arr_str.filter(item => item !== "").join(", ");
           update_battleLegstrap();
         }
       });
@@ -3023,9 +3023,10 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
 
       storeItem.appendChild(newDiv);
 
-      const buyButton = newDiv.querySelector('.buy');
-      buyButton.addEventListener('click', (e) => {
-        callback(e.target);
+      storeItem.addEventListener('click', (e) => {
+        if (e.target.matches('.buy')) {
+          callback(e.target);
+        }
       });
     }
     function storeItemInfo(cost, storeInfoImg, languageData, callback) {
