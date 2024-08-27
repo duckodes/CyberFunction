@@ -1,5 +1,5 @@
 console.log('CFO ver.0.0.0');
-import { Observable } from "./js/Observable.js";
+import { Observable } from "./js/observable.js";
 export const languageData = new Observable();
 export const isUndo = new Observable();
 export const continueBattle = new Observable();

@@ -814,8 +814,13 @@
         });
         userData.on('change', value => {
           user.getIdToken().then(void 0).catch(e => {
-            if (window.confirm(languageData.data.beforeunload)) {
-              signOutUser();
+            confirmLoop();
+            function confirmLoop() {
+              if (window.confirm(languageData.data.beforeunload)) {
+                signOutUser();
+              } else {
+                confirmLoop();
+              }
             }
           });
           set(authRef, {
