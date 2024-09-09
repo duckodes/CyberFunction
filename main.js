@@ -1,5 +1,6 @@
 console.log('CFO ver.0.0.0');
 import { Observable } from "./js/Observable.js";
+import { updateCSSVariable, getProperty } from "./js/CssFunction.js";
 export const languageData = new Observable();
 export const isUndo = new Observable();
 export const continueBattle = new Observable();
@@ -2080,11 +2081,11 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     function update_State_UI() {
       switch (equip_data[0]) {
         case 0:
-          document.querySelector('.s-helmet').style.setProperty('--state-helmet-bg', getProperty('--items-helmet-0'));
+          updateCSSVariable('css/root.css', '--state-helmet-bg', getProperty('--items-helmet-0'));
           break;
 
         default:
-          document.querySelector('.s-helmet').style.setProperty('--state-helmet-bg', 'none');
+          updateCSSVariable('css/root.css', '--state-helmet-bg', 'none');
           break;
       }
       switch (equip_data[1]) {
@@ -2097,26 +2098,26 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       }
       switch (equip_data[2]) {
         case 0:
-          document.querySelector('.s-weapon-l').style.setProperty('--state-weapon-l-bg', getProperty('--items-weapon-0'));
+          updateCSSVariable('css/root.css', '--state-weapon-l-bg', getProperty('--items-weapon-0'));
           break;
         case 1:
-          document.querySelector('.s-weapon-l').style.setProperty('--state-weapon-l-bg', getProperty('--items-weapon-1'));
+          updateCSSVariable('css/root.css', '--state-weapon-l-bg', getProperty('--items-weapon-1'));
           break;
 
         default:
-          document.querySelector('.s-weapon-l').style.setProperty('--state-weapon-l-bg', 'none');
+          updateCSSVariable('css/root.css', '--state-weapon-l-bg', 'none');
           break;
       }
       switch (equip_data[3]) {
         case 0:
-          document.querySelector('.s-weapon-r').style.setProperty('--state-weapon-r-bg', getProperty('--items-weapon-0'));
+          updateCSSVariable('css/root.css', '--state-weapon-r-bg', getProperty('--items-weapon-0'));
           break;
         case 1:
-          document.querySelector('.s-weapon-r').style.setProperty('--state-weapon-r-bg', getProperty('--items-weapon-1'));
+          updateCSSVariable('css/root.css', '--state-weapon-r-bg', getProperty('--items-weapon-1'));
           break;
 
         default:
-          document.querySelector('.s-weapon-r').style.setProperty('--state-weapon-r-bg', 'none');
+          updateCSSVariable('css/root.css', '--state-weapon-r-bg', 'none');
           break;
       }
       switch (equip_data[4]) {
@@ -2370,8 +2371,8 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
 
     function updateDragBox() {
       dropzone.innerHTML = '';
-      document.documentElement.style.setProperty('--col-num', `${colnum}`);
-      document.documentElement.style.setProperty('--row-num', `${rownum}`);
+      updateCSSVariable('css/root.css', '--col-num', `${colnum}`);
+      updateCSSVariable('css/root.css', '--row-num', `${rownum}`);
       for (let i = 0; i < rownum * colnum; i++) {
         dropzone.innerHTML += '<div></div>';
       }
@@ -3390,9 +3391,6 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
   }
   function opacity(element, n, style) {
     document.querySelectorAll(element)[n].style.opacity = style;
-  }
-  function getProperty(property) {
-    return getComputedStyle(document.documentElement).getPropertyValue(property);
   }
 
   function centerMapScroll() {

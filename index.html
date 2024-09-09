@@ -12,7 +12,6 @@
 
   <!-- HTML -->
 
-
   <!-- Custom Styles -->
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="css/font.css">
@@ -593,7 +592,8 @@
   <!-- Project -->
   <script type="module" src="main.js"></script>
   <script type="module">
-    import { userData, continueBattle, isUndo, languageData } from "/main.js";
+    import { userData, continueBattle, isUndo, languageData } from "./main.js";
+    import { updateCSSVariable, getCSSVariable } from "./js/CssFunction.js";
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     // TODO: Add SDKs for Firebase products that you want to use
@@ -716,22 +716,25 @@
       signOutUser();
     });
 
-    // set user profile data
+    // show user profile data
     const parameterID = getParameterByName('pid', location.href);
     if (parameterID !== null && parameterID !== '') {
-      const publicRef = ref(db, `public/${parameterID}`);
+      showProfile(parameterID);
       history.pushState({}, '', '/');
-      get(publicRef).then((snapshot) => {
+    }
+    function showProfile(userID) {
+      get(ref(db, `public/${userID}`)).then((snapshot) => {
         if (snapshot.exists()) {
           document.querySelector('.profile-id').onclick = () => {
+            document.querySelector('.profile-id').innerHTML = '';
             document.querySelector('.profile-id').style.display = '';
           };
-          document.querySelector('.profile-id').style.display = 'flex';
           document.querySelector('.profile-id').innerHTML += `
               <div>${snapshot.val().profile.username}</div>
               <div>BTC: ${snapshot.val().wallet.btc}</div>
               <div>ETH: ${snapshot.val().wallet.eth}</div>
               <div class="close-btn">&times;</div>`;
+          document.querySelector('.profile-id').style.display = 'flex';
         }
       }).catch((error) => {
         console.error(error);
@@ -963,7 +966,8 @@
             })
             function defaultset(c) {
               c.addEventListener('click', () => {
-                location.href = truncateAfterLastSlash(location.href) + '?pid=' + getCSSVariable('css/root.css', '--' + element.parentElement.id);
+                showProfile(getCSSVariable('css/root.css', '--' + element.parentElement.id));
+                contextmenuutils.remove();
               });
             }
             function ToMouse(c) {
@@ -1073,66 +1077,6 @@
         return url;
       }
       return url.slice(0, lastIndex + 1);
-    }
-    function updateCSSVariable(targetHref, variableName, variableValue) {
-      const styleSheets = document.styleSheets;
-
-      let targetStyleSheet = null;
-      for (const sheet of styleSheets) {
-        if (sheet.href && sheet.href.includes(targetHref)) {
-          targetStyleSheet = sheet;
-          break;
-        }
-      }
-
-      if (targetStyleSheet) {
-        let ruleFound = false;
-
-        for (let i = 0; i < targetStyleSheet.cssRules.length; i++) {
-          const rule = targetStyleSheet.cssRules[i];
-
-          if (rule.selectorText === ':root') {
-            rule.style.setProperty(variableName, variableValue);
-            ruleFound = true;
-            break;
-          }
-        }
-
-        if (!ruleFound) {
-          targetStyleSheet.insertRule(`:root { ${variableName}: ${variableValue}; }`, targetStyleSheet.cssRules.length);
-        }
-      } else {
-        console.warn('Error sheet href not found');
-      }
-    }
-    function getCSSVariable(targetHref, variableName) {
-      const styleSheets = document.styleSheets;
-
-      let targetStyleSheet = null;
-      for (const sheet of styleSheets) {
-        if (sheet.href && sheet.href.includes(targetHref)) {
-          targetStyleSheet = sheet;
-          break;
-        }
-      }
-
-      if (targetStyleSheet) {
-        let variableValue = '';
-
-        for (let i = 0; i < targetStyleSheet.cssRules.length; i++) {
-          const rule = targetStyleSheet.cssRules[i];
-
-          if (rule.selectorText === ':root') {
-            variableValue = rule.style.getPropertyValue(variableName).trim();
-            break;
-          }
-        }
-
-        return variableValue;
-      } else {
-        console.warn('找不到指定路徑的樣式表');
-        return '';
-      }
     }
   </script>
 </body>
