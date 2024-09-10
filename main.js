@@ -1,6 +1,6 @@
 console.log('CFO ver.0.0.0');
 import { Observable } from "./js/Observable.js";
-import { updateCSSVariable, getProperty } from "./js/CssFunction.js";
+import { updateCSSVariable, getRootProperty } from "./js/CssFunction.js";
 export const languageData = new Observable();
 export const isUndo = new Observable();
 export const continueBattle = new Observable();
@@ -2081,7 +2081,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     function update_State_UI() {
       switch (equip_data[0]) {
         case 0:
-          updateCSSVariable('css/root.css', '--state-helmet-bg', getProperty('--items-helmet-0'));
+          updateCSSVariable('css/root.css', '--state-helmet-bg', getRootProperty('--items-helmet-0'));
           break;
 
         default:
@@ -2098,10 +2098,10 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       }
       switch (equip_data[2]) {
         case 0:
-          updateCSSVariable('css/root.css', '--state-weapon-l-bg', getProperty('--items-weapon-0'));
+          updateCSSVariable('css/root.css', '--state-weapon-l-bg', getRootProperty('--items-weapon-0'));
           break;
         case 1:
-          updateCSSVariable('css/root.css', '--state-weapon-l-bg', getProperty('--items-weapon-1'));
+          updateCSSVariable('css/root.css', '--state-weapon-l-bg', getRootProperty('--items-weapon-1'));
           break;
 
         default:
@@ -2110,10 +2110,10 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       }
       switch (equip_data[3]) {
         case 0:
-          updateCSSVariable('css/root.css', '--state-weapon-r-bg', getProperty('--items-weapon-0'));
+          updateCSSVariable('css/root.css', '--state-weapon-r-bg', getRootProperty('--items-weapon-0'));
           break;
         case 1:
-          updateCSSVariable('css/root.css', '--state-weapon-r-bg', getProperty('--items-weapon-1'));
+          updateCSSVariable('css/root.css', '--state-weapon-r-bg', getRootProperty('--items-weapon-1'));
           break;
 
         default:

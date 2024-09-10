@@ -58,8 +58,8 @@ function getCSSVariable(targetHref, variableName) {
         return '';
     }
 }
-function getProperty(property) {
+function getRootProperty(property) {
     return getComputedStyle(document.documentElement).getPropertyValue(property);
 }
 
-export { updateCSSVariable, getCSSVariable, getProperty };
+export { updateCSSVariable, getCSSVariable, getRootProperty };
