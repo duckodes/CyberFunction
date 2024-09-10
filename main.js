@@ -3024,10 +3024,8 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
 
       storeItem.appendChild(newDiv);
 
-      storeItem.addEventListener('click', (e) => {
-        if (e.target.matches('.buy')) {
-          callback(e.target);
-        }
+      newDiv.querySelector('.buy').addEventListener('click', (e) => {
+        callback(e.target);
       });
     }
     function storeItemInfo(cost, storeInfoImg, languageData, callback) {
