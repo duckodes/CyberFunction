@@ -56,8 +56,7 @@ body {
   align-items: center;
   justify-content: center;
 }
-
-.profile-id>div {
+.profile-id div {
   color: #fff;
   font-family: 'Courier New', Courier, monospace;
 }

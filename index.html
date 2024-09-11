@@ -733,6 +733,7 @@
               <div>${snapshot.val().profile.username}</div>
               <div>BTC: ${snapshot.val().wallet.btc}</div>
               <div>ETH: ${snapshot.val().wallet.eth}</div>
+              <div><span style="font-size: 25px;">⎆</span> ${ToAMPMYMD(parseInt(auth.currentUser.metadata.lastLoginAt))}</div>
               <div class="close-btn">&times;</div>`;
           document.querySelector('.profile-id').style.display = 'flex';
         }
@@ -1049,6 +1050,7 @@
     function ToAMPMYMD(timestamp) {
       const date = new Date(timestamp);
 
+      const year = date.getFullYear() !== new Date().getFullYear() ? `${date.getFullYear()}/` : '';
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
       const day = date.getDate().toString().padStart(2, '0');
       let hours = date.getHours();
@@ -1061,7 +1063,7 @@
 
       minutes = minutes < 10 ? '0' + minutes : minutes;
 
-      return `${month}/${day}/${hours}:${minutes} ${period}`;
+      return `${year}${month}/${day} ${period} ${hours}:${minutes}`;
     }
     function getParameterByName(name, url) {
       name = name.replace(/[\[\]]/g, '\\$&');
