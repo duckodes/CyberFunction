@@ -161,5 +161,6 @@
             "POSSESSES DUAL ATTACKING CAPABILITIES"
         ]
     },
-    "beforeunload": "Your session has expired. Please log in again."
+    "beforeunload": "Your session has expired. Please log in again.",
+    "singledevice": "You are logged in on another device. Please log in again."
 }

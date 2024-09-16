@@ -162,7 +162,7 @@ onAuthStateChanged(auth, (user) => {
             id: generateDeviceId()
         });
         onChildChanged(ref(db, `public/${uid}/device`), (data) => {
-            confirm('login from other device');
+            confirm(languageData.data.singledevice);
             signOut(auth).then(() => {
                 location.reload();
             }).catch((error) => {
@@ -506,8 +506,9 @@ function generateDeviceId() {
     const platform = navigator.platform;
     const language = navigator.language || navigator.userLanguage;
     const screenResolution = `${window.screen.width}x${window.screen.height}`;
+    const domain = window.location.hostname;
 
-    let baseString = userAgent + platform + language + screenResolution;
+    let baseString = userAgent + platform + language + screenResolution + domain;
 
     const hash = function (str) {
         let hash = 0;
