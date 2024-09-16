@@ -62,7 +62,7 @@ const userSignInGoogle = async () => {
             const user = result.user;
             // IdP data available using getAdditionalUserInfo(result)
 
-            UpdateProfile(userCredential.user.email.replace(/@.*?(?=@|$)/g, ''));
+            UpdateProfile(auth.currentUser.email.replace(/@.*?(?=@|$)/g, ''));
             // ...
         }).catch((error) => {
             // Handle Errors here.
