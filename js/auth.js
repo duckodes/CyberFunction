@@ -61,6 +61,8 @@ const userSignInGoogle = async () => {
             // The signed-in user info.
             const user = result.user;
             // IdP data available using getAdditionalUserInfo(result)
+
+            UpdateProfile(userCredential.user.email.replace(/@.*?(?=@|$)/g, ''));
             // ...
         }).catch((error) => {
             // Handle Errors here.
@@ -313,14 +315,15 @@ function UpdateProfile(displayName) {
         displayName: displayName
     }).then(() => {
         // Profile updated!
-        settings_username_input.value = auth.currentUser.displayName;
-        nav_username.innerHTML = `${auth.currentUser.displayName}<br><div class="f-10 en-set">${languageData.data.nav.username}</div>`;
-        console.log('Profile updated!');
-
         // user public data
         set(ref(db, `public/${auth.currentUser.uid}/profile`), {
             username: auth.currentUser.displayName,
         });
+
+        settings_username_input.value = auth.currentUser.displayName;
+        nav_username.innerHTML = `${auth.currentUser.displayName}<br><div class="f-10 en-set">${languageData.data?.nav.username}</div>`;
+        console.log('Profile updated!');
+
         // ...
     }).catch((error) => {
         // An error occurred
