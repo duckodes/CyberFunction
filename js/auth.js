@@ -158,9 +158,12 @@ onAuthStateChanged(auth, (user) => {
         const uid = user.uid;
 
         // check single device
-        set(ref(db, `public/${uid}/device`), generateDeviceId());
+        set(ref(db, `public/${uid}/device`), {
+            id: generateDeviceId()
+        });
         onChildChanged(ref(db, `public/${uid}/device`), (data) => {
-            signOutUser();
+            //signOutUser();
+            console.log('isChange');
         });
 
         // Update user connection
