@@ -5,7 +5,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDatabase, ref, query, limitToFirst, limitToLast, push, onChildAdded, onChildRemoved, set, child, remove, get, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, query, limitToFirst, limitToLast, push, onChildAdded, onChildChanged, onChildRemoved, set, child, remove, get, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -271,6 +271,12 @@ onAuthStateChanged(auth, (user) => {
             }).catch((error) => {
                 console.error(error);
             });
+        });
+
+        // check single device
+        set(ref(db, `public/${uid}/token`), user.accessToken);
+        onChildChanged(ref(db, `public/${uid}/token`), (data) => {
+          signOutUser();
         });
 
         // console.log(user);
