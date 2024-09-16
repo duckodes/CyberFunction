@@ -518,7 +518,11 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       rweapon: ['3%DMG', '1%DMG', '3%DMG', '1%DMG', '3%DMG', '1%DMG']
     }];
     centerMapScroll();
-    document.body.addEventListener('click', (e) => { });
+    document.body.addEventListener('click', (e) => {
+      if (checkArrsExclude(battle_arr_data, ['N/A', '0%DMG', '0%DEF', '0%RD'], 4)) {
+        document.querySelector('.force-start-btn')?.remove();
+      }
+    });
     evt.click('.map-info', 0, (e) => {
       if (e.target === document.querySelector('.map-info')) {
         display('.map-info', 0, '');
@@ -825,7 +829,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       }
     }
     evt.click('.roll', 0, () => {
-      if (checkArrEx(battle_arr_data, 'N/A', 4)) {
+      if (checkArrsExclude(battle_arr_data, ['N/A', '0%DMG', '0%DEF', '0%RD'], 4)) {
         StartRoll();
       } else {
         document.querySelector('.roll').style.color = '#c24347';
@@ -854,9 +858,6 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
           let random_boots_ability = get_dmg[5] === -1 ? 'N/A' : item_data.boots[Math.floor(getRandomNumber(0, 6))];
           battle_arr_data = [random_helmet_ability, random_jacket_ability, random_lweapon_ability, random_rweapon_ability, random_legstrap_ability, random_boots_ability];
           ability_ui_update();
-          if (document.querySelector('.force-start-btn')) {
-            document.querySelector('.force-start-btn').remove();
-          }
           rolltimes--;
           saveContinueBattle();
         } else {
@@ -1003,9 +1004,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       e_get_dmg_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
       e_get_def_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
       e_get_rd_status = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
-      if (document.querySelector('.force-start-btn')) {
-        document.querySelector('.force-start-btn').remove();
-      }
+      document.querySelector('.force-start-btn')?.remove();
       continueBattle.data = null;
     }
     evt.click('.battle-exit', 0, () => {
@@ -3341,7 +3340,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     // 使用 every() 方法來檢查每個元素是否都是 tar
     return arr.every(element => element === tar);
   }
-  function checkArrEx(arr, tar, excludeIndex) {
+  function checkArrsExclude(arr, tar, excludeIndex) {
     // 使用 every() 方法來檢查每個元素是否都是 tar，並且排除特定的索引
     return arr.every((element, index) => {
       // 檢查是否為要排除的索引，如果是則返回 true (即不排除)
@@ -3349,7 +3348,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
         return true;
       }
       // 否則檢查是否都是 tar
-      return element === tar;
+      return tar.includes(element);
     });
   }
   function findRandomNonNegativeOne(arr) {
@@ -3415,8 +3414,8 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       document.querySelectorAll('.map-enemies')[i].style.marginLeft = `${getRandomNumber(-100, 100)}px`;
       document.querySelectorAll('.map-enemies')[i].style.marginTop = `${getRandomNumber(-100, 100)}px`;
     }
-    storageutils.set('enemies-m-left' + i, document.querySelectorAll('.map-enemies')[i].style.marginLeft);
-    storageutils.set('enemies-m-top' + i, document.querySelectorAll('.map-enemies')[i].style.marginTop);
+    storageutils.set('enemies-m-left' + i, document.querySelectorAll('.map-enemies')[i]?.style.marginLeft);
+    storageutils.set('enemies-m-top' + i, document.querySelectorAll('.map-enemies')[i]?.style.marginTop);
   }
   function isOnTheHour() {
     const now = new Date();

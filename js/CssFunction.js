@@ -54,7 +54,7 @@ function getCSSVariable(targetHref, variableName) {
 
         return variableValue;
     } else {
-        console.warn('找不到指定路徑的樣式表');
+        console.warn('Error sheet href not found');
         return '';
     }
 }
