@@ -301,7 +301,7 @@ function createUser() {
         });
 }
 function signOutUser() {
-    set(ref(db, `public/${auth.currentUser.uid}/status`), 'offline');
+    set(ref(db, `public/${auth.currentUser.uid}/status`), serverTimestamp());
     signOut(auth).then(() => {
         location.reload();
     }).catch((error) => {
