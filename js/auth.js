@@ -162,8 +162,12 @@ onAuthStateChanged(auth, (user) => {
             id: generateDeviceId()
         });
         onChildChanged(ref(db, `public/${uid}/device`), (data) => {
-            //signOutUser();
-            console.log('isChange');
+            confirm('login from other device');
+            signOut(auth).then(() => {
+                location.reload();
+            }).catch((error) => {
+                console.log(error);
+            });
         });
 
         // Update user connection
