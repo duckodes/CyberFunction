@@ -156,6 +156,13 @@ onAuthStateChanged(auth, (user) => {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
         const uid = user.uid;
+
+        // check single device
+        set(ref(db, `public/${uid}/device`), generateDeviceId());
+        onChildChanged(ref(db, `public/${uid}/device`), (data) => {
+            signOutUser();
+        });
+
         // Update user connection
         set(ref(db, `public/${uid}/status`), 'online');
         onDisconnect(ref(db, `public/${uid}/status`)).set(serverTimestamp());
@@ -271,12 +278,6 @@ onAuthStateChanged(auth, (user) => {
             }).catch((error) => {
                 console.error(error);
             });
-        });
-
-        // check single device
-        set(ref(db, `public/${uid}/token`), user.accessToken);
-        onChildChanged(ref(db, `public/${uid}/token`), (data) => {
-          signOutUser();
         });
 
         // console.log(user);
@@ -492,6 +493,28 @@ function truncateAfterLastSlash(url) {
         return url;
     }
     return url.slice(0, lastIndex + 1);
+}
+function generateDeviceId() {
+    const userAgent = navigator.userAgent;
+    const platform = navigator.platform;
+    const language = navigator.language || navigator.userLanguage;
+    const screenResolution = `${window.screen.width}x${window.screen.height}`;
+
+    let baseString = userAgent + platform + language + screenResolution;
+
+    const hash = function (str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = (hash << 5) - hash + char;
+            hash |= 0; // Convert to 32-bit integer
+        }
+        return hash;
+    };
+
+    const deviceId = hash(baseString).toString(16);
+
+    return deviceId;
 }
 function checkToken(user) {
     user.getIdToken().then(void 0).catch(e => {
