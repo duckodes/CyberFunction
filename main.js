@@ -1426,7 +1426,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       // boots
       switch (equip_data[5]) {
         case 0:
-          setItemData(item_data.boots, '0%DEF', '1%DEF', '0%DEF', '1%DEF', '1%DEF', '0%DEF');
+          setItemData(item_data.boots, ...itemStruct.ability.boots[0]);
           currentEquipName.boots = languageData.item.equipment.boots["0"];
           break;
 
