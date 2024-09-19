@@ -133,7 +133,8 @@
             "0": "[⚠︎] please login account",
             "1": "[error] cannot consist solely of spaces",
             "2": "[error] cannot be blank"
-        }
+        },
+        "report": "Confirm to report this comment."
     },
     "settings": {
         "username": "CODE",

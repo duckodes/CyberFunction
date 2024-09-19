@@ -26,7 +26,7 @@ const db = getDatabase();
 
 // ref
 const lobbyRef = ref(db, 'lobby');
-const limitlobbyRef = query(lobbyRef, limitToLast(10));
+const limitlobbyRef = query(lobbyRef, limitToLast(15));
 
 // element
 const sign_container = document.querySelector('.sign-container');
@@ -414,6 +414,15 @@ function updateMessage() {
         document.querySelectorAll(".msg-del").forEach(element => {
             element.addEventListener("click", () => {
                 remove(child(lobbyRef, element.parentElement.parentElement.id));
+            });
+        });
+        document.querySelectorAll('.msg-report').forEach(element => {
+            element.addEventListener("click", () => {
+                if (window.confirm(languageData.data.lobby.report)) {
+                    get(ref(db, `lobby/${element.parentElement.parentElement.id}`)).then((snapshot) => {
+                        set(ref(db, `report/${snapshot.key}`), snapshot.val());
+                    })
+                }
             });
         });
     });
