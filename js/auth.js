@@ -26,7 +26,7 @@ const db = getDatabase();
 
 // ref
 const lobbyRef = ref(db, 'lobby');
-const limitlobbyRef = query(lobbyRef, limitToLast(15));
+const limitlobbyRef = query(lobbyRef, limitToLast(10));
 
 // element
 const sign_container = document.querySelector('.sign-container');
