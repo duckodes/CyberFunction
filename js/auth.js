@@ -256,7 +256,14 @@ onAuthStateChanged(auth, (user) => {
             });
 
             // Update user connection
-            set(ref(db, `public/${uid}/status`), 'online');
+            get(ref(db, `public/${uid}`)).then(snapshot => {
+                if (snapshot.val().status !== 'online') {
+                    set(ref(db, `public/${uid}/status`), 'online');
+                    onDisconnect(ref(db, `public/${uid}/status`)).set(serverTimestamp());
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
         });
         languageData.on('change', (value) => {
             updateMessage();
