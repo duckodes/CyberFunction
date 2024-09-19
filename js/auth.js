@@ -254,6 +254,9 @@ onAuthStateChanged(auth, (user) => {
                 btc: value.wallet.btc,
                 eth: value.wallet.eth
             });
+
+            // Update user connection
+            set(ref(db, `public/${uid}/status`), 'online');
         });
         languageData.on('change', (value) => {
             updateMessage();
