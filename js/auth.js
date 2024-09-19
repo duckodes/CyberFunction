@@ -5,7 +5,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDatabase, ref, query, limitToFirst, limitToLast, push, onChildAdded, onChildChanged, onChildRemoved, set, child, remove, get, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, query, limitToFirst, limitToLast, push, onChildAdded, onChildChanged, onChildRemoved, set, child, remove, get, onDisconnect, serverTimestamp, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -158,16 +158,17 @@ onAuthStateChanged(auth, (user) => {
         const uid = user.uid;
 
         // check single device
-        set(ref(db, `public/${uid}/device`), {
-            id: generateDeviceId()
-        });
-        onChildChanged(ref(db, `public/${uid}/device`), (data) => {
-            confirm(languageData.data.singledevice);
-            signOut(auth).then(() => {
-                location.reload();
-            }).catch((error) => {
-                console.log(error);
-            });
+        set(ref(db, `public/${uid}/device`), generateDeviceId());
+        onValue(ref(db, `public/${uid}/device`), (snap) => {
+            if (snap.val() !== generateDeviceId()) {
+                confirmLoop(languageData.data.singledevice, () => {
+                    signOut(auth).then(() => {
+                        location.reload();
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                });
+            }
         });
 
         // Update user connection
@@ -534,15 +535,15 @@ function generateDeviceId() {
 
     return deviceId;
 }
+function confirmLoop(confirmText, callback) {
+    if (window.confirm(confirmText)) {
+        callback();
+    } else {
+        confirmLoop(confirmText, callback);
+    }
+}
 function checkToken(user) {
     user.getIdToken().then(void 0).catch(e => {
-        confirmLoop();
-        function confirmLoop() {
-            if (window.confirm(languageData.data.beforeunload)) {
-                signOutUser();
-            } else {
-                confirmLoop();
-            }
-        }
+        confirmLoop(languageData.data.beforeunload, signOutUser());
     });
 }
