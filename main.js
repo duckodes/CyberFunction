@@ -3242,9 +3242,8 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
     func(div);
   }
   function createRadarChart({ parentElement = document.body, labels = ['A', 'B', 'C', 'D', 'E', 'F'], data = [5, 4, 3, 2, 4, 5], radius = 50, mainColor = '#ddd', dataColor = '#00f', dataFill = '#00f2' }) {
-    document.querySelectorAll('.radar-chart-container').forEach(element => {
-      element.remove();
-    });
+    document.querySelector('.radar-chart-container')?.remove();
+    document.querySelector('.radar-chart-open')?.remove();
     const container = document.createElement('div');
     container.className = 'radar-chart-container';
     container.onclick = () => {
