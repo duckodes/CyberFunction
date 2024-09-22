@@ -1,10 +1,12 @@
 console.log('CFO ver.0.0.0');
 import { Observable } from "./js/Observable.js";
-import { updateCSSVariable, getRootProperty } from "./js/CssFunction.js";
-export const languageData = new Observable();
-export const isUndo = new Observable();
-export const continueBattle = new Observable();
-export const userData = new Observable();
+import { updateCSSVariable, getRootProperty } from "./js/cssvar.js";
+
+const languageData = new Observable();
+const isUndo = new Observable();
+const continueBattle = new Observable();
+const userData = new Observable();
+
 const apputils = (function () {
   return {
     def: def
@@ -457,27 +459,27 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
             case '0':
               display('.e-helmet', 0, 'flex');
 
-              textContent('.nav-guide', 0, languageData.data.nav.guide.helmet);
+              textContent('.nav-guide', 0, languageData.data?.nav.guide.helmet);
               break;
             case '1':
               display('.e-jacket', 0, 'flex');
 
-              textContent('.nav-guide', 0, languageData.data.nav.guide.jacket);
+              textContent('.nav-guide', 0, languageData.data?.nav.guide.jacket);
               break;
             case '2':
               display('.e-weapon', 0, 'flex');
 
-              textContent('.nav-guide', 0, languageData.data.nav.guide.weapon);
+              textContent('.nav-guide', 0, languageData.data?.nav.guide.weapon);
               break;
             case '3':
               display('.e-legstrap', 0, 'flex');
 
-              textContent('.nav-guide', 0, languageData.data.nav.guide.legStrap);
+              textContent('.nav-guide', 0, languageData.data?.nav.guide.legStrap);
               break;
             case '4':
               display('.e-boots', 0, 'flex');
 
-              textContent('.nav-guide', 0, languageData.data.nav.guide.boots);
+              textContent('.nav-guide', 0, languageData.data?.nav.guide.boots);
               break;
 
             default:
@@ -3615,3 +3617,5 @@ const scrollmousedrag = (function () {
 }())
 scrollmousedrag.idrag('idrag-map');
 scrollmousedrag.idrag('idrag-battle');
+
+export { languageData, isUndo, continueBattle, userData };

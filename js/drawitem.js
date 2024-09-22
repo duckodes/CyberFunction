@@ -4,7 +4,7 @@ function drawItem(chestItems = [
     { name: "超稀有物品", probability: 0.08 },
     { name: "傳說物品", probability: 0.02 }
 ]) {
-    const random = Math.random(); // 產生 0 到 1 之間的隨機數
+    const random = Math.random(); // random 0~1
     let cumulativeProbability = 0;
 
     for (const item of chestItems) {

@@ -1,5 +1,6 @@
 import { userData, continueBattle, isUndo, languageData } from "../main.js";
-import { updateCSSVariable, getCSSVariable } from "./CssFunction.js";
+import { updateCSSVariable, getCSSVariable } from "./cssvar.js";
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -156,7 +157,6 @@ onAuthStateChanged(auth, (user) => {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
         const uid = user.uid;
-
         // check single device
         set(ref(db, `public/${uid}/device`), generateDeviceId());
         onValue(ref(db, `public/${uid}/device`), (snap) => {
