@@ -1042,6 +1042,7 @@
     flex-direction: column;
     overflow: auto;
     width: 100dvw;
+    margin-bottom: 100px;
     max-width: 350px;
 }
 
