@@ -119,6 +119,12 @@ export class AudioEffect {
     setEffectVolume(volume) {
         this.effectVolume = volume;
     }
+
+    suspended() {
+        if (this.context.state === 'suspended') {
+            this.context.resume();
+        }
+    }
 }
 
 // export class AudioEffect {

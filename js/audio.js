@@ -15,9 +15,7 @@ document.querySelector('.canvas').addEventListener('click', () => {
 });
 document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
-        if (this.context.state === 'suspended') {
-            this.context.resume();
-        }
+        audioEffect.suspended();
     }
 });
 
