@@ -5,18 +5,21 @@ export class AudioEffect {
         this.soundEffects = {};
     }
 
-    loadBackgroundMusic(urls) {
-        this.backgroundMusic = urls.map(url => {
+    async loadBackgroundMusic(urls) {
+        this.backgroundMusic = await Promise.all(urls.map(async (url) => {
             const audio = new Audio(url);
             audio.loop = false;
             audio.addEventListener('ended', () => this.playNextTrack());
+            await audio.load();
             return audio;
-        });
+        }));
     }
 
     playBackgroundMusic() {
         if (this.backgroundMusic.length > 0) {
-            this.backgroundMusic[this.currentTrackIndex].play();
+            this.backgroundMusic[this.currentTrackIndex].play().catch(error => {
+                console.error('Playback failed:', error);
+            });
         }
     }
 
@@ -30,18 +33,69 @@ export class AudioEffect {
         this.backgroundMusic[this.currentTrackIndex].pause();
         this.currentTrackIndex = (this.currentTrackIndex + 1) % this.backgroundMusic.length;
         this.backgroundMusic[this.currentTrackIndex].currentTime = 0;
-        this.backgroundMusic[this.currentTrackIndex].play();
+        this.playBackgroundMusic();
     }
 
-    loadSoundEffect(name, url) {
-        this.soundEffects[name] = new Audio(url);
-        this.soundEffects[name].load();
+    async loadSoundEffect(name, url) {
+        const audio = new Audio(url);
+        await audio.load();
+        this.soundEffects[name] = audio;
     }
 
     playSoundEffect(name) {
         if (this.soundEffects[name]) {
             this.soundEffects[name].currentTime = 0;
-            this.soundEffects[name].play();
+            this.soundEffects[name].play().catch(error => {
+                console.error('Playback failed:', error);
+            });
         }
     }
 }
+
+// export class AudioEffect {
+//     constructor() {
+//         this.backgroundMusic = [];
+//         this.currentTrackIndex = 0;
+//         this.soundEffects = {};
+//     }
+
+//     loadBackgroundMusic(urls) {
+//         this.backgroundMusic = urls.map(url => {
+//             const audio = new Audio(url);
+//             audio.loop = false;
+//             audio.addEventListener('ended', () => this.playNextTrack());
+//             return audio;
+//         });
+//     }
+
+//     playBackgroundMusic() {
+//         if (this.backgroundMusic.length > 0) {
+//             this.backgroundMusic[this.currentTrackIndex].play();
+//         }
+//     }
+
+//     pauseBackgroundMusic() {
+//         if (this.backgroundMusic.length > 0) {
+//             this.backgroundMusic[this.currentTrackIndex].pause();
+//         }
+//     }
+
+//     playNextTrack() {
+//         this.backgroundMusic[this.currentTrackIndex].pause();
+//         this.currentTrackIndex = (this.currentTrackIndex + 1) % this.backgroundMusic.length;
+//         this.backgroundMusic[this.currentTrackIndex].currentTime = 0;
+//         this.backgroundMusic[this.currentTrackIndex].play();
+//     }
+
+//     loadSoundEffect(name, url) {
+//         this.soundEffects[name] = new Audio(url);
+//         this.soundEffects[name].load();
+//     }
+
+//     playSoundEffect(name) {
+//         if (this.soundEffects[name]) {
+//             this.soundEffects[name].currentTime = 0;
+//             this.soundEffects[name].play();
+//         }
+//     }
+// }
