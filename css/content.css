@@ -1042,8 +1042,11 @@
     flex-direction: column;
     overflow: auto;
     overflow-x: hidden;
-    width: 100dvw;
+    width: 100%;
     margin-bottom: 100px;
+}
+
+.settings>* {
     max-width: 350px;
 }
 
