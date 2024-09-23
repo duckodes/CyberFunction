@@ -73,8 +73,8 @@ function createAudioInput(id, value, text) {
     label.textContent = text;
     const div = document.createElement('div');
     div.textContent = value * 100;
-    label.appendChild(div);
     label.appendChild(input);
+    label.appendChild(div);
     document.querySelector('.settings').appendChild(label);
     return {
         input: input,

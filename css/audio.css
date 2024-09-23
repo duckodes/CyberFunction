@@ -1,3 +1,16 @@
+label[for="audio-ms"]>div {
+    width: 10%;
+    text-align: center;
+}
+label[for="audio-bg"]>div {
+    width: 10%;
+    text-align: center;
+}
+label[for="audio-fx"]>div {
+    width: 10%;
+    text-align: center;
+}
+
 label[for="audio-ms"] {
     color: var(--color-high-light);
     font-size: 17px;
@@ -40,6 +53,7 @@ label[for="audio-fx"] {
     width: 60%;
     padding: 10px;
 }
+
 .audio-slider:hover::-webkit-slider-thumb {
     background: var(--color-high-light);
 }

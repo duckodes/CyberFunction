@@ -63,6 +63,12 @@ export class AudioEffect {
         this.backgroundSource.startTime = this.context.currentTime; // Record when playback starts
     }
 
+    pauseBackgroundMusic() {
+        if (this.isPlaying) {
+            this.stopCurrentTrack();
+        }
+    }
+
     stopCurrentTrack() {
         if (this.backgroundSource) {
             // Update currentTime based on how long the track played
@@ -112,12 +118,6 @@ export class AudioEffect {
 
     setEffectVolume(volume) {
         this.effectVolume = volume;
-    }
-
-    pauseBackgroundMusic() {
-        if (this.isPlaying) {
-            this.stopCurrentTrack();
-        }
     }
 }
 
