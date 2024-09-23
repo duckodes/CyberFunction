@@ -8,7 +8,7 @@ audioEffect.loadBackgroundMusic([
     '../audio/background/Audio2.mp3'
 ]);
 window.addEventListener('blur', () => {
-    //audioEffect.pauseBackgroundMusic();
+    audioEffect.pauseBackgroundMusic();
 });
 document.querySelector('.canvas').addEventListener('click', () => {
     audioEffect.playBackgroundMusic();

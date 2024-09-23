@@ -9,6 +9,7 @@ export class AudioEffect {
         this.effectVolume = 0.5;
         this.backgroundSource = null;
         this.isPlaying = false;
+        this.currentTime = 0; // Track the current playback time
         this.musicGainNode = this.context.createGain();
         this.musicGainNode.gain.value = this.musicVolume * this.masterVolume;
         this.musicGainNode.connect(this.context.destination);
@@ -26,28 +27,51 @@ export class AudioEffect {
     }
 
     playBackgroundMusic() {
-        if (this.backgroundMusic.length > 0 && !this.isPlaying) {
-            this.playTrack(this.currentTrackIndex);
-            this.isPlaying = true;
+        if (this.backgroundMusic.length > 0) {
+            if (!this.isPlaying) {
+                // If music was previously paused, resume from the saved current time
+                this.playTrack(this.currentTrackIndex, this.currentTime);
+            } else {
+                // If music is already playing, do nothing
+                return;
+            }
         }
     }
 
-    playTrack(index) {
+    playTrack(index, startTime = 0) {
         this.stopCurrentTrack();
         this.currentTrackIndex = index;
         this.backgroundSource = this.context.createBufferSource();
         this.backgroundSource.buffer = this.backgroundMusic[this.currentTrackIndex];
 
         this.backgroundSource.connect(this.musicGainNode);
+        this.backgroundSource.onended = () => {
+            if (this.isPlaying) {
+                this.playNextTrack();
+            }
+        };
 
-        this.backgroundSource.onended = () => this.playNextTrack();
-        this.backgroundSource.start(0);
+        // Ensure startTime is valid
+        startTime = isFinite(startTime) && startTime >= 0 ? startTime : 0;
+
+        // Start playback from the specified time
+        this.backgroundSource.start(0, startTime);
+        this.isPlaying = true;
+
+        // Store the current playback time when starting
+        this.currentTime = startTime;
+        this.backgroundSource.startTime = this.context.currentTime; // Record when playback starts
     }
 
     stopCurrentTrack() {
         if (this.backgroundSource) {
+            // Update currentTime based on how long the track played
+            const now = this.context.currentTime;
+            const elapsedTime = now - this.backgroundSource.startTime;
+            this.currentTime += elapsedTime; // Update currentTime with the elapsed time
             this.backgroundSource.stop();
             this.backgroundSource.disconnect();
+            this.isPlaying = false; // Mark as not playing
         }
     }
 
@@ -88,6 +112,12 @@ export class AudioEffect {
 
     setEffectVolume(volume) {
         this.effectVolume = volume;
+    }
+
+    pauseBackgroundMusic() {
+        if (this.isPlaying) {
+            this.stopCurrentTrack();
+        }
     }
 }
 
