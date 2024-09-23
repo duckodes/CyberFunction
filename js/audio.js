@@ -1,4 +1,5 @@
 import { AudioEffect } from "./AudioEffect.js";
+import { languageData } from "../main.js";
 const audioEffect = new AudioEffect();
 
 // BG
@@ -38,3 +39,45 @@ document.querySelectorAll('.item-all-btn').forEach(e => {
 document.querySelector('.lan-now').addEventListener('click', () => {
     audioEffect.playSoundEffect('click4');
 });
+
+languageData.on('change', data => {
+    const audioMS = createAudioInput('audio-ms', '1', data.audio.master);
+    const audioBG = createAudioInput('audio-bg', '0.25', data.audio.background);
+    const audioFX = createAudioInput('audio-fx', '0.5', data.audio.effect);
+    audioMS.input.addEventListener("input", e => {
+        audioEffect.setMasterVolume(e.target.value);
+        audioMS.div.textContent = parseInt(e.target.value * 100);
+    });
+    audioBG.input.addEventListener("input", e => {
+        audioEffect.setMusicVolume(e.target.value);
+        audioBG.div.textContent = parseInt(e.target.value * 100);
+    });
+    audioFX.input.addEventListener("input", e => {
+        audioEffect.setEffectVolume(e.target.value);
+        audioFX.div.textContent = parseInt(e.target.value * 100);
+    });
+    audioFX.input.addEventListener("change", () => {
+        audioEffect.playSoundEffect('click1');
+    })
+});
+function createAudioInput(id, value, text) {
+    const input = document.createElement('input');
+    input.className = 'audio-slider';
+    input.id = id;
+    input.type = 'range';
+    input.max = '1';
+    input.step = 'any';
+    input.value = value;
+    const label = document.createElement('label');
+    label.htmlFor = id;
+    label.textContent = text;
+    const div = document.createElement('div');
+    div.textContent = value * 100;
+    label.appendChild(div);
+    label.appendChild(input);
+    document.querySelector('.settings').appendChild(label);
+    return {
+        input: input,
+        div: div
+    };
+}

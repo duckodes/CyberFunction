@@ -266,9 +266,7 @@ onAuthStateChanged(auth, (user) => {
                 console.error(error);
             });
         });
-        languageData.on('change', (value) => {
-            updateMessage();
-        });
+        languageData.on('change', updateMessage);
 
         // is battle ?
         const battleRef = ref(db, `battle/${uid}`);

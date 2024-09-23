@@ -162,6 +162,11 @@
             "具有雙攻擊性"
         ]
     },
+    "audio": {
+        "master": "主音量",
+        "background": "背景音樂",
+        "effect": "音效"
+    },
     "beforeunload": "您的會話已經過期，請重新登入。",
     "singledevice": "您已在其他裝置登入，請重新登入。"
 }

@@ -162,6 +162,11 @@
             "POSSESSES DUAL ATTACKING CAPABILITIES"
         ]
     },
+    "audio": {
+        "master": "Master Volume",
+        "background": "Background Music",
+        "effect": "Sound Effects"
+    },
     "beforeunload": "Your session has expired. Please log in again.",
     "singledevice": "You are logged in on another device. Please log in again."
 }
