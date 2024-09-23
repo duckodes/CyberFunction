@@ -22,9 +22,6 @@ audioEffect.loadSoundEffect('click4', '../audio/click/click4.mp3');
 document.querySelector('.sign-action').addEventListener('click', () => {
     audioEffect.playSoundEffect('click2');
 });
-document.querySelector('.sign-action').addEventListener('touchend', () => {
-    audioEffect.playSoundEffect('click2');
-});
 document.querySelector('.username-update').addEventListener('click', () => {
     audioEffect.playSoundEffect('click1');
 });
