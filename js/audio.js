@@ -13,6 +13,20 @@ window.addEventListener('blur', () => {
 document.querySelector('.canvas').addEventListener('click', () => {
     audioEffect.playBackgroundMusic();
 });
+document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+        audioEffect.loadBackgroundMusic([
+            '../audio/background/Audio1.mp3',
+            '../audio/background/Audio2.mp3'
+        ]);
+        window.addEventListener('blur', () => {
+            audioEffect.pauseBackgroundMusic();
+        });
+        document.querySelector('.canvas').addEventListener('click', () => {
+            audioEffect.playBackgroundMusic();
+        });
+    }
+});
 
 // FX
 audioEffect.loadSoundEffect('click1', '../audio/click/click1.mp3');
