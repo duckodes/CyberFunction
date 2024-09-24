@@ -157,6 +157,7 @@ onAuthStateChanged(auth, (user) => {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
         const uid = user.uid;
+        window.addEventListener('focus', () => checkToken(user));
         // check single device
         set(ref(db, `public/${uid}/device`), generateDeviceId());
         onValue(ref(db, `public/${uid}/device`), (snap) => {
