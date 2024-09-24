@@ -28,14 +28,27 @@ export class AudioEffect {
 
     playBackgroundMusic() {
         if (this.backgroundMusic.length > 0) {
+            if (this.context.state === "suspended") {
+                this.context.resume().then(() => {
+                    this.playTrack(this.currentTrackIndex, this.currentTime);
+                });
+                return;
+            }
+    
             if (!this.isPlaying) {
                 // If music was previously paused, resume from the saved current time
                 this.playTrack(this.currentTrackIndex, this.currentTime);
-            } else {
-                // If music is already playing, do nothing
-                return;
             }
         }
+        // if (this.backgroundMusic.length > 0) {
+        //     if (!this.isPlaying) {
+        //         // If music was previously paused, resume from the saved current time
+        //         this.playTrack(this.currentTrackIndex, this.currentTime);
+        //     } else {
+        //         // If music is already playing, do nothing
+        //         return;
+        //     }
+        // }
     }
 
     async playTrack(index, startTime = 0) {
