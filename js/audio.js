@@ -11,6 +11,7 @@ window.addEventListener('blur', () => {
     audioEffect.pauseBackgroundMusic();
 });
 document.querySelector('.canvas').addEventListener('click', () => {
+    audioEffect.isPlaying = false;
     audioEffect.playBackgroundMusic();
 });
 
