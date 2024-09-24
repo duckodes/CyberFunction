@@ -7,15 +7,6 @@ audioEffect.loadBackgroundMusic([
     '../audio/background/Audio1.mp3',
     '../audio/background/Audio2.mp3'
 ]);
-window.addEventListener('focus', () => {
-    play();
-})
-function play() {
-    if (audioEffect.context.state === "interrupted") {
-        audioEffect.context.resume().then(() => play());
-        return;
-    }
-}
 window.addEventListener('blur', () => {
     audioEffect.pauseBackgroundMusic();
 });
