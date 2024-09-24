@@ -38,56 +38,29 @@ export class AudioEffect {
         }
     }
 
-    async playTrack(index, startTime = 0) {
-        // this.stopCurrentTrack();
-        // this.currentTrackIndex = index;
-        // this.backgroundSource = this.context.createBufferSource();
-        // this.backgroundSource.buffer = this.backgroundMusic[this.currentTrackIndex];
-
-        // this.backgroundSource.connect(this.musicGainNode);
-        // this.backgroundSource.onended = () => {
-        //     if (this.isPlaying) {
-        //         this.playNextTrack();
-        //     }
-        // };
-
-        // // Ensure startTime is valid
-        // startTime = isFinite(startTime) && startTime >= 0 ? startTime : 0;
-
-        // // Start playback from the specified time
-        // this.backgroundSource.start(0, startTime);
-        // this.isPlaying = true;
-
-        // // Store the current playback time when starting
-        // this.currentTime = startTime;
-        // this.backgroundSource.startTime = this.context.currentTime; // Record when playback starts
-        if (this.context.state === "interrupted") {
-            await this.context.resume();
-            return this.playTrack(index, startTime); // 重新调用 playTrack
-        }
-
-        // 确保索引有效
-        if (index < 0 || index >= this.backgroundMusic.length) return;
-
+    playTrack(index, startTime = 0) {
+        this.stopCurrentTrack();
         this.currentTrackIndex = index;
-        this.currentTime = startTime;
-
-        // 如果之前有播放的音轨，先停止
-        if (this.backgroundSource) {
-            this.backgroundSource.stop();
-        }
-
         this.backgroundSource = this.context.createBufferSource();
-        this.backgroundSource.buffer = this.backgroundMusic[index];
+        this.backgroundSource.buffer = this.backgroundMusic[this.currentTrackIndex];
+
         this.backgroundSource.connect(this.musicGainNode);
-        this.backgroundSource.start(0, startTime); // 从指定时间开始播放
+        this.backgroundSource.onended = () => {
+            if (this.isPlaying) {
+                this.playNextTrack();
+            }
+        };
+
+        // Ensure startTime is valid
+        startTime = isFinite(startTime) && startTime >= 0 ? startTime : 0;
+
+        // Start playback from the specified time
+        this.backgroundSource.start(0, startTime);
         this.isPlaying = true;
 
-        // 可以添加事件监听器，播放完后处理状态
-        this.backgroundSource.onended = () => {
-            this.isPlaying = false;
-            this.currentTime = 0; // 重置当前时间
-        };
+        // Store the current playback time when starting
+        this.currentTime = startTime;
+        this.backgroundSource.startTime = this.context.currentTime; // Record when playback starts
     }
 
     pauseBackgroundMusic() {
