@@ -44,29 +44,6 @@ export class AudioEffect {
             return this.playTrack(index, startTime);
         }
 
-        // // 确保索引有效
-        // if (index < 0 || index >= this.backgroundMusic.length) return;
-
-        // this.currentTrackIndex = index;
-        // this.currentTime = startTime;
-
-        // // 如果之前有播放的音轨，先停止
-        // if (this.backgroundSource) {
-        //     this.backgroundSource.stop();
-        // }
-
-        // this.backgroundSource = this.context.createBufferSource();
-        // this.backgroundSource.buffer = this.backgroundMusic[index];
-        // this.backgroundSource.connect(this.musicGainNode);
-        // this.backgroundSource.start(0, startTime); // 从指定时间开始播放
-        // this.isPlaying = true;
-
-        // // 可以添加事件监听器，播放完后处理状态
-        // this.backgroundSource.onended = () => {
-        //     this.isPlaying = false;
-        //     this.currentTime = 0; // 重置当前时间
-        // };
-
         this.stopCurrentTrack();
         this.currentTrackIndex = index;
         this.backgroundSource = this.context.createBufferSource();
