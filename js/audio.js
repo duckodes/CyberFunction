@@ -13,11 +13,6 @@ window.addEventListener('blur', () => {
 document.querySelector('.canvas').addEventListener('click', () => {
     audioEffect.playBackgroundMusic();
 });
-document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-        audioEffect.suspended();
-    }
-});
 
 // FX
 audioEffect.loadSoundEffect('click1', '../audio/click/click1.mp3');
