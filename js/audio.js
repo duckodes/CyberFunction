@@ -7,11 +7,13 @@ audioEffect.loadBackgroundMusic([
     '../audio/background/Audio1.mp3',
     '../audio/background/Audio2.mp3'
 ]);
+window.addEventListener('focus', () => {
+    audioEffect.isPlaying = false;
+});
 window.addEventListener('blur', () => {
     audioEffect.pauseBackgroundMusic();
 });
 document.querySelector('.canvas').addEventListener('click', () => {
-    audioEffect.isPlaying = false;
     audioEffect.playBackgroundMusic();
 });
 
