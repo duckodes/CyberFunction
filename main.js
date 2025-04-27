@@ -535,7 +535,7 @@ Online Status: ${navigator.onLine ? 'Online' : 'Offline'}`;
       evt.click('.map-enemies', i, (e) => {
         contextmenuutils.init(document.querySelector('.map'), (b, c) => {
           ToMouse(c);
-          c.style.zIndex = '2';
+          // c.style.zIndex = '2';
         })
         let randomEnemiesNum = Math.floor(getRandomNumber(0, languageData.data.enemies.name.length));
         enemies_id = randomEnemiesNum;
