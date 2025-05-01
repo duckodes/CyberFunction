@@ -26,7 +26,7 @@ const provider = new GoogleAuthProvider();
 const db = getDatabase();
 
 // ref
-const lobbyRef = ref(db, 'lobby');
+const lobbyRef = ref(db, 'cyberfunction/lobby');
 const limitlobbyRef = query(lobbyRef, limitToLast(10));
 
 // element
@@ -132,8 +132,10 @@ if (parameterID !== null && parameterID !== '') {
     history.pushState({}, '', '/');
 }
 function showProfile(userID) {
-    get(ref(db, `public/${userID}`)).then((snapshot) => {
+    console.log('a');
+    get(ref(db, `cyberfunction/public/${userID}`)).then((snapshot) => {
         if (snapshot.exists()) {
+            console.log('b');
             document.querySelector('.profile-id').onclick = () => {
                 document.querySelector('.profile-id').innerHTML = '';
                 document.querySelector('.profile-id').style.display = '';
@@ -159,8 +161,8 @@ onAuthStateChanged(auth, (user) => {
         const uid = user.uid;
         window.addEventListener('focus', () => checkToken(user));
         // check single device
-        set(ref(db, `public/${uid}/device`), generateDeviceId());
-        onValue(ref(db, `public/${uid}/device`), (snap) => {
+        set(ref(db, `cyberfunction/public/${uid}/device`), generateDeviceId());
+        onValue(ref(db, `cyberfunction/public/${uid}/device`), (snap) => {
             if (snap.val() !== generateDeviceId()) {
                 confirmLoop(languageData.data.singledevice, () => {
                     signOut(auth).then(() => {
@@ -173,8 +175,8 @@ onAuthStateChanged(auth, (user) => {
         });
 
         // Update user connection
-        set(ref(db, `public/${uid}/status`), 'online');
-        onDisconnect(ref(db, `public/${uid}/status`)).set(serverTimestamp());
+        set(ref(db, `cyberfunction/public/${uid}/status`), 'online');
+        onDisconnect(ref(db, `cyberfunction/public/${uid}/status`)).set(serverTimestamp());
 
         // setup
         JsBarcode("#barcode", uid, {
@@ -202,7 +204,7 @@ onAuthStateChanged(auth, (user) => {
         nav_username.innerHTML = `${user.displayName}<br><div class="f-10 en-set"></div>`;
 
         // user private data
-        const authRef = ref(db, `auth/${uid}`);
+        const authRef = ref(db, `cyberfunction/auth/${uid}`);
         get(authRef).then((snapshot) => {
             if (snapshot.exists()) {
                 userData.data = snapshot.val().data;
@@ -252,16 +254,19 @@ onAuthStateChanged(auth, (user) => {
             });
 
             // user public data
-            set(ref(db, `public/${uid}/wallet`), {
+            set(ref(db, `cyberfunction/public/${uid}/wallet`), {
                 btc: value.wallet.btc,
                 eth: value.wallet.eth
             });
+            set(ref(db, `cyberfunction/public/${uid}/profile`), {
+               username: user.displayName
+            });
 
             // Update user connection
-            get(ref(db, `public/${uid}`)).then(snapshot => {
+            get(ref(db, `cyberfunction/public/${uid}`)).then(snapshot => {
                 if (snapshot.val().status !== 'online') {
-                    set(ref(db, `public/${uid}/status`), 'online');
-                    onDisconnect(ref(db, `public/${uid}/status`)).set(serverTimestamp());
+                    set(ref(db, `cyberfunction/public/${uid}/status`), 'online');
+                    onDisconnect(ref(db, `cyberfunction/public/${uid}/status`)).set(serverTimestamp());
                 }
             }).catch((error) => {
                 console.error(error);
@@ -270,7 +275,7 @@ onAuthStateChanged(auth, (user) => {
         languageData.on('change', updateMessage);
 
         // is battle ?
-        const battleRef = ref(db, `battle/${uid}`);
+        const battleRef = ref(db, `cyberfunction/battle/${uid}`);
         get(battleRef).then((snapshot) => {
             if (snapshot.exists()) {
                 continueBattle.data = snapshot.val().data;
@@ -327,7 +332,7 @@ function createUser() {
         });
 }
 function signOutUser() {
-    set(ref(db, `public/${auth.currentUser.uid}/status`), serverTimestamp());
+    set(ref(db, `cyberfunction/public/${auth.currentUser.uid}/status`), serverTimestamp());
     signOut(auth).then(() => {
         location.reload();
     }).catch((error) => {
@@ -340,7 +345,7 @@ function UpdateProfile(displayName) {
     }).then(() => {
         // Profile updated!
         // user public data
-        set(ref(db, `public/${auth.currentUser.uid}/profile`), {
+        set(ref(db, `cyberfunction/public/${auth.currentUser.uid}/profile`), {
             username: auth.currentUser.displayName,
         });
 
@@ -418,8 +423,8 @@ function updateMessage() {
         document.querySelectorAll('.msg-report').forEach(element => {
             element.addEventListener("click", () => {
                 if (window.confirm(languageData.data.lobby.report)) {
-                    get(ref(db, `lobby/${element.parentElement.parentElement.id}`)).then((snapshot) => {
-                        set(ref(db, `report/${snapshot.key}`), snapshot.val());
+                    get(ref(db, `cyberfunction/lobby/${element.parentElement.parentElement.id}`)).then((snapshot) => {
+                        set(ref(db, `cyberfunction/report/${snapshot.key}`), snapshot.val());
                     })
                 }
             });
